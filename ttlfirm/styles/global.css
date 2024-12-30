@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.main {
+  width: 100vw;
+  min-height: 100vh;
+  pointer-events: auto;
+  /* position: fixed; */
+  /* display: flex; */
+  /* justify-content: center; */
+  padding: 0px;
+  margin: 0px;
+}
+
+.btn {
+  @apply bg-amber-600 text-[#1c314e] rounded-sm px-4 py-3 uppercase font-serif text-xs tracking-wider font-semibold opacity-85 cursor-pointer transition-all  hover:bg-transparent hover:border hover:outline-none hover:border-yellow-900 hover:text-white;
+}
+
+.cursor_pointer{
+    @apply cursor-pointer;
+}
+
+.dropdown {
+  @apply absolute right-0 top-full mt-3 w-full p-5 rounded-lg bg-[#1c314e] opacity-95  flex flex-col justify-start items-start z-[100] ;
+}
