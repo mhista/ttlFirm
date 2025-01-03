@@ -8,7 +8,7 @@ const PracticeContainer = ({image1, image2, title, subtitle}) => {
   return (
     <div className={`flex justify-around items-center `} onMouseEnter={()=> setIsHovered(true)} onMouseLeave={()=> setIsHovered(false)}>
   <Link href="#">
-  <div className={`${isHovered ?"text-white bg-amber-600 opacity-70":"text-black bg-white"} h-[290px] w-[350px] shadow-lg  flex flex-col items-start justify-around gap-4 pl-10 py-8`}>
+  <div className={`${isHovered ?"text-white bg-amber-600 opacity-70":"text-black bg-white"} h-[290px] w-[300px] sm:w-[350px] shadow-lg  flex flex-col items-start justify-around gap-4 pl-10 py-8`}>
         <Image
           className=""
           src= {  isHovered ?image1: image2}

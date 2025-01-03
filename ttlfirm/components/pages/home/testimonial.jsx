@@ -39,7 +39,7 @@ const TestimonialCarousel = () => {
         <hr className="bg-amber-600 h-1 w-14" />
       </div>
       <h2 className=" font-bold text-center text-3xl sm:text-4xl md:text-5xl">What our clients say</h2>
-      <div className="max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-6xl mx-auto sm:py-10 px-12 sm:px-4">
+      <div className="max-w-sm sm:max-w-xl md:max-w-3xl lg:max-w-6xl mx-auto sm:py-10 px-12 sm:px-4">
         <Swiper
           modules={[Navigation, Pagination]}
           navigation

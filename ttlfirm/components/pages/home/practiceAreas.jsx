@@ -13,7 +13,7 @@ const PracticeArea = () => {
 
       </div>
       <h1 className="font-bold text-3xl  lg:text-4xl">Our legal practice areas</h1>
-   <div className="w-full flex flex-col md:flex-row  flex-wrap  lg:px-0 gap-5 items-center justify-center">
+   <div className="w-full flex flex-col md:flex-row  flex-wrap px-10 lg:px-0 gap-5 items-center justify-center">
    <PracticeContainer image1={'/assets/images/biz.png'} image2={'/assets/images/biz2.png'} title={'Business Law'}
     subtitle={'lorem Ipsum is simply dummy text of the printing and typesettin industry that remains essentially unchanged after Print License Version'}/>
     <PracticeContainer image1={'/assets/images/car1.png'} image2={'/assets/images/car2.png'} title={'Personal Injury'}
