@@ -16,8 +16,9 @@ const Footer = () => {
   ];
   return (
     <footer className="relative bottom-0 w-full bg-[#1c314e] h-[1000px] sm:h-[600px] lg:h-[600px] m-0 p-0">
+      {/* <div className={`absolute w-full z-20 bg-black opacity-40 h-[500] text-center top-0`}></div> */}
       <Image
-        className={`text-white  absolute opacity-5 bottom-0 left-16 lg:left-32 top-20`}
+        className={`text-white  absolute opacity-5 bottom-0 left- top-20`}
         src="/assets/images/logo.png"
         width={300}
         height={300}

@@ -37,7 +37,7 @@ return (<form className="flex w-full flex-col gap-6 px-5 text-white">
     </div>
     <div>
       <textarea
-        className="w-full flex rounded-lg h-[100px] mt-2 p-3 text-sm outline-0 outline-none  border border-gray-100 bg-transparent focus:border-amber-600"
+        className="w-full flex rounded-lg h-[100px] mt-2 p-3 text-sm outline-0 outline-none  border border-gray-100 bg-transparent focus:border-amber-600 resize-none"
         placeholder="Please provide a brief description of your inquiry"
       />
     </div>
