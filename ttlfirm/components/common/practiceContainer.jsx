@@ -18,7 +18,7 @@ const PracticeContainer = ({image1, image2, title, subtitle}) => {
         />
         <h1 className="font-bold text-2xl ">{title}</h1>
         <hr className={`${isHovered ? "bg-white" :"bg-amber-600"} h-1 w-14`} />
-        <p className=" w-[300px]  overflow-hidden text-ellipsis text-pretty">
+        <p className="w-[280px] mx-auto overflow-hidden text-ellipsis text-pretty">
           {subtitle}
         </p>
         <div
