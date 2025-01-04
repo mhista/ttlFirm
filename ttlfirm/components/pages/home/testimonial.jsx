@@ -39,7 +39,7 @@ const TestimonialCarousel = () => {
         <hr className="bg-amber-600 h-1 w-14" />
       </div>
       <h2 className=" font-bold text-center text-3xl sm:text-4xl md:text-5xl">What our clients say</h2>
-      <div className="max-w-sm sm:max-w-xl md:max-w-3xl lg:max-w-6xl mx-auto sm:py-10 px-12 sm:px-4">
+      <div className="max-w-[350px] sm:max-w-xl md:max-w-3xl lg:max-w-6xl mx-[5px] sm:py-10 px-4 sm:px-4">
         <Swiper
           modules={[Navigation, Pagination]}
           navigation
@@ -75,7 +75,7 @@ const TestimonialCarousel = () => {
         >
           {testimonials.map((testimonial) => (
             <SwiperSlide key={testimonial.id}>
-              <div className="flex flex-col sm:flex-row gap-3 items-center bg-white my-5  p-6 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 h-[455px] sm:h-[250px]">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-center bg-white my-5  py-8 px-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 h-[460px] sm:h-[250px]">
                 <div className=" sm:w-1/4">
                   <Image
                     className="rounded-lg sm:rounded-none relative z-30 w-[270px] sm:w-[250px] h-[200px] object-cover"
@@ -85,7 +85,7 @@ const TestimonialCarousel = () => {
                     alt="law"
                   />
                 </div>
-                <div className="flex flex-col justify-between sm:justify-normal h-full mt-4 sm:w-3/4 gap-2">
+                <div className="flex flex-col justify-between sm:justify-normal h-full mt-4 sm:w-3/4 gap-3">
                   <div>
                     <p className="italic text-gray-500 text-sm md:text-base">
                       {testimonial.text}
