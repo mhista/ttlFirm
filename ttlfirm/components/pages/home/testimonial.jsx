@@ -1,11 +1,51 @@
 "use client";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import { Navigation, Pagination } from "swiper/modules";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {register} from "swiper/element/bundle";
+import useSwiperRef from "@utils/swiper_navigation_hook";
+import { FaAngleLeft, FaAngleRight  } from "react-icons/fa6";
+register();
 const TestimonialCarousel = () => {
+  const [nextEl, nextElRef] = useSwiperRef();
+  const [prevEl, prevElRef] = useSwiperRef();
+
+  const swiperRef = useRef(null);
+  useEffect(() => {
+    const swiperContainer = swiperRef.current;
+  
+    const params = {
+      loop: true,
+      // pagination:true,
+      // navigation: true,
+      centeredSlides:true,
+      autoplay:true,
+      breakpoints:{
+        // Small screens (e.g., mobile)
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 10,
+        },
+        // Medium screens (e.g., tablets)
+        768: {
+          slidesPerView: 1.2,
+          spaceBetween: 30,
+        },
+        // Large screens (e.g., desktops)
+        1024: {
+          slidesPerView: 1.3,
+          spaceBetween: 30,
+        },
+        // Extra-large screens
+        1280: {
+          slidesPerView: 1.5,
+          spaceBetween: 30,
+        },
+      }
+    };
+    Object.assign(swiperContainer, params);
+    swiperContainer.initialize();
+  }, []);
   const testimonials = [
     {
       id: 1,
@@ -39,43 +79,12 @@ const TestimonialCarousel = () => {
         <hr className="bg-amber-600 h-1 w-14" />
       </div>
       <h2 className=" font-bold text-center text-3xl sm:text-4xl md:text-5xl">What our clients say</h2>
-      <div className="max-w-[350px] sm:max-w-xl md:max-w-3xl lg:max-w-6xl mx-[5px] sm:py-10 px-4 sm:px-4">
-        <Swiper
-          modules={[Navigation, Pagination]}
-          navigation
-          pagination={{ clickable: true }}
-          autoplay={true}
-          // slidesPerView={1.3} // Show one full slide with parts of adjacent slides
-          // spaceBetween={30} // Add space between slides
-          centeredSlides={true} // Center the active slide
-          loop={true} // Make the carousel infinite
-          className="rounded-lg"
-          breakpoints={{
-            // Small screens (e.g., mobile)
-            640: {
-              slidesPerView: 1,
-              spaceBetween: 10,
-            },
-            // Medium screens (e.g., tablets)
-            768: {
-              slidesPerView: 1.2,
-              spaceBetween: 30,
-            },
-            // Large screens (e.g., desktops)
-            1024: {
-              slidesPerView: 1.3,
-              spaceBetween: 30,
-            },
-            // Extra-large screens
-            1280: {
-              slidesPerView: 1.5,
-              spaceBetween: 30,
-            },
-          }}
+      <div className="relative max-w-[350px] sm:max-w-xl md:max-w-3xl lg:max-w-6xl mx-[5px] sm:py-10 px-4 sm:px-4">
+        <swiper-container ref={swiperRef} init="false"
         >
           {testimonials.map((testimonial) => (
-            <SwiperSlide key={testimonial.id}>
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-center bg-white my-5  py-8 px-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 h-[460px] sm:h-[250px]">
+            <swiper-slide key={testimonial.id}>
+              <div className=" flex flex-col sm:flex-row gap-2 sm:gap-3 items-center bg-white my-5  py-8 px-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 h-[460px] sm:h-[240px]">
                 <div className=" sm:w-1/4">
                   <Image
                     className="rounded-lg sm:rounded-none relative z-30 w-[270px] sm:w-[250px] h-[200px] object-cover"
@@ -97,9 +106,21 @@ const TestimonialCarousel = () => {
                   </div>
                 </div>
               </div>
-            </SwiperSlide>
+            </swiper-slide>
           ))}
-        </Swiper>
+        </swiper-container>
+        <button ref={prevElRef} onClick={
+          () => {
+          console.log(prevElRef);
+            
+            swiperRef.current.swiper.slidePrev()}} className="swiper-button-prev absolute  z-50 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2.5 rounded-lg shadow-lg hover:bg-gray-700 transition left-[20px] sm:left-[2px] md:left-[70px] lg:left-[185px]">
+        <FaAngleLeft />
+
+      </button>
+      <button ref={nextElRef} onClick={() => swiperRef.current.swiper.slideNext()} className="swiper-button-next  absolute  top-1/2 transform -translate-y-1/2 bg-amber-600 text-white p-2.5 rounded-lg shadow-lg hover:bg-amber-500 transition right-[20px] sm:right-[2px] md:right-[70px]  lg:right-[185px] z-50">
+      <FaAngleRight />
+
+      </button>
       </div>
     </div>
   );
