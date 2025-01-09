@@ -12,7 +12,7 @@ const WhyChooseUs = () => {
               Why Trust us
             </h3>
           </div>
-          <h1 className="font-bold  text-white text-3xl font-serif ">
+          <h1 className="font-bold  text-white text-3xl font-lora ">
             Why clients choose our legal team
           </h1>
         </div>

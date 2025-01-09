@@ -4,7 +4,7 @@ const Consultation = ()=>{
     return (<div className="relative w-full flex flex-col items-center gap-7 md:px-20 lg:px-24 py-10 md:py-20 text-white ">
     <div className=" flex flex-row items-center gap-3">
           <hr className="bg-white h-[2px] w-14" />
-          <h3 className="text-center text-md uppercase font-serif inline font-bold">
+          <h3 className="text-center text-md uppercase font-lora inline font-bold">
             Free case evaluation
           </h3>
           <hr className="bg-white h-[2px] w-14" />

@@ -21,7 +21,7 @@ const Header = ({}) => {
       ></img>
 
       <div className={`text-white absolute flex flex-col items-center justify-center w-full h-[500px] z-40 gap-5 top-10 md:top-50`}>
-        <h1 className=" font-serif text-5xl  lg:text-7xl w-5/6 md:px-16 text-center">
+        <h1 className="font-lora text-5xl  lg:text-7xl w-5/6 md:px-16 text-center">
           We <span className="text-amber-600">Always Find</span> Solutions for
           all legal case
         </h1>

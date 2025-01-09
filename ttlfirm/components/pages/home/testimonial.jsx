@@ -73,7 +73,7 @@ const TestimonialCarousel = () => {
     <div className="relative flex flex-col items-center gap-4 py-10 md:py-20 ">
       <div className="flex flex-row items-center justify-center gap-3">
         <hr className="bg-amber-600 h-1 w-14" />
-        <h3 className="text-amber-600 text-lg uppercase font-serif inline font-bold">
+        <h3 className="text-amber-600 text-lg uppercase font-lora inline font-bold">
           What they say
         </h3>
         <hr className="bg-amber-600 h-1 w-14" />

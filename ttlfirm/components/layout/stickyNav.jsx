@@ -50,11 +50,11 @@ const StickyNav = ({ isSticky = false }) => {
   const menuLinks = [
     { href: "/", label: "Home", isDropdown: false },
 
-    { href: "#practice", label: "Practice Areas", isDropdown: false },
-    { href: "#firm", label: "Our Team", isDropdown: true },
-    { href: "#result", label: "Results", isDropdown: true },
-    { href: "#blog", label: "Blog", isDropdown: false },
-    { href: "#videos", label: "Videos", isDropdown: false },
+    { href: "/practice", label: "Practice Areas", isDropdown: false },
+    { href: "/profile", label: "Attorney Profile", isDropdown: false },
+    { href: "/about", label: "About", isDropdown: false },
+    { href: "/blog", label: "Blog", isDropdown: false },
+    // { href: "#videos", label: "Videos", isDropdown: false },
   ];
   return (
     <div

@@ -15,7 +15,7 @@ const Rootlayout = ({ children }) => {
         content="width=device-width, initial-scale=1.0"
       ></meta>
       <body>
-        <main className="main">
+        <main className="main font-jost">
           <Header />
 
           {children}
