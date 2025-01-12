@@ -4,11 +4,11 @@ import Link from "next/link";
 
 const BlogContainer = ()=>{
     return (
-        <div className="bg-white flex flex-col items-center">
-          <div className="">
+        <div className="bg-white flex flex-col items-center z-[60]">
+          <div className="z-[60]">
             <Image
               className=" relative z-30  w-[300px]  h-[170px] sm:w-[450px] sm:h-[220px] md:w-[530px]  md:h-[250px]  lg:w-[800px] lg:h-[300px] object-cover hover:opacity-90"
-              src="/assets/images/lawyer.jpg"
+              src="/assets/images/work.jpg"
               width={300}
               height={250}
               alt="law"

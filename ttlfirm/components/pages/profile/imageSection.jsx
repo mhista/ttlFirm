@@ -3,10 +3,10 @@ import Link from "next/link";
 import { socialLinks2 } from "@components/common/mediaButttons2";
 const ImageSection = ()=>{
     return (
-        <div>
+        <div className="z-[60] ">
         <Image
-          className="rounded relative z-30 w-[300px]  h-[350px] sm:w-[450px] sm:h-[500px] md:w-[260px]  md:h-[300px]  lg:w-[700px] lg:h-[500px] object-cover "
-          src="/assets/images/lawyer.jpg"
+          className="rounded relative  w-[300px]  h-[350px] sm:w-[450px] sm:h-[500px] md:w-[260px]  md:h-[300px]  lg:w-[700px] lg:h-[500px] object-cover z-[60]"
+          src="/assets/images/lawyer2.jpg"
           width={300}
           height={250}
           alt="law"

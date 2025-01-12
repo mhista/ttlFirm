@@ -13,34 +13,20 @@ const Area = ({ title }) => {
 
 const Profile = () => {
   const educationAndBarAdmission = [
-    "BA, Rutgers University, New Jersey, 2001",
-    "Master of Law, Seton Hall University School of Law, New Jersey, 2007",
-    "Admitted to the New Jersey Bar, 2013",
-    "Member of the New Jersey State Bar Association",
-    "Member of the New Jersey Women Lawyers Association",
-    "Speaker at New Jersey Legal Professionals Development Seminars",
+    "University of Arizona, James E. Rogers College of Law J.D. (2019)",
+    "Nigerian Law School, B.L. (2016)",
+    "University of Nigeria, Enugu Campus LL.B. (2015)",
   ];
   const awardAndRecognitions = [
     {
-      recognition: "Leading Lawyer in New Jersey for Dispute Resolution",
-      award: "Recognized by The Legal500 (2015–2018)",
-    },
-    {
-      recognition: "Leading Lawyer in New Jersey for Family Law",
-      award: "Honored at the New Jersey Legal Awards, 2016",
-    },
-    {
-      recognition: "Best Legal Team in New Jersey for International Trade",
-      award: "Awarded at the New Jersey Legal Awards, 2018",
-    },
-    {
-      recognition: "Leading Lawyer in New Jersey for Private Clients Practice",
-      award: "Recognized by The Legal500, 2018",
+      recognition: "Bar Admission",
+      award:
+        "Admitted to the State bar of New Jersey with the ability to waive into multiple states",
     },
   ];
 
   return (
-    <div className="relative w-full flex flex-col md:flex-row justify-center md:items-start md:justify-around items-center mt-6 md:my-8 md:gap-7 md:px-7">
+    <div className="relative w-full flex flex-col md:flex-row justify-center md:items-start md:justify-around items-center pt-6 md:py-8 md:gap-7 md:px-7 z-[60] bg-white">
       <ImageSection />
       <div className="md:w-full">
         {/* biography */}
@@ -48,38 +34,103 @@ const Profile = () => {
           <div className="flex flex-col gap-4 p-8  sm:pt-0 ">
             <h1 className="font-lora text-2xl font-medium">Biography</h1>
             <p className="text-pretty text-gray-500">
-              Onwuzuruoha Turuchi is the founding attorney of Turichi Law Firm, a
-              legal practice dedicated to championing justice for individuals in
-              cases involving accidents, medical malpractice, and victim
-              advocacy. With a steadfast commitment to her clients, Onwuzuruoha has
-              built a reputation as a compassionate advocate and a formidable
-              legal strategist. A graduate of [Insert University Name] with a
-              specialization in personal injury and healthcare law, Onwuzuruoha
-              brings a wealth of experience and an unwavering dedication to each
-              case she handles. Her journey in the legal profession began with a
-              deep desire to make a difference in the lives of those who have
-              suffered from injustice, and she has since become a trusted ally
-              for countless clients seeking fair compensation and resolution.
-              Onwuzuruoha's approach is marked by her ability to combine empathy with
-              tenacity. She takes the time to understand each client’s unique
-              story, ensuring they feel heard and supported throughout the legal
-              process. Her attention to detail and commitment to achieving
-              favorable outcomes have earned her recognition within the legal
-              community and heartfelt gratitude from her clients. Outside the
-              courtroom, Onwuzuruoha is passionate about giving back to the
-              community. She actively participates in initiatives that raise
-              awareness about legal rights and provides pro bono services to
-              underserved populations. As the driving force behind Turichi Law
-              Firm, Onwuzuruoha Turuchi continues to redefine what it means to
-              advocate for justice, one client at a time.
+              Meet Turuchi S. Iheanachor, Esq.: A Passionate Advocate for
+              Justice
+              <br />
+              <br />
+              Turuchi S. Iheanachor is a results-driven attorney fueled by an
+              unwavering commitment to justice and advocacy. Specializing in
+              personal injury law, Turuchi combines her legal acumen, tenacity,
+              and compassion to fight for individuals who have suffered injuries
+              or injustices. Her mission is clear: to deliver aggressive
+              representation tailored to the unique needs of every client,
+              ensuring they receive the compensation and justice they deserve.{" "}
+              <br />
+              <br /> With a diverse legal background, Turuchi’s journey into the
+              legal profession has been marked by her dedication to serving her
+              community. She finds profound fulfillment in standing up for
+              individuals against powerful entities, from large insurance
+              companies to municipal agencies. Her practice extends beyond
+              personal injury to include immigration law, workers' compensation,
+              municipal matters, and a range of other legal services. Whether
+              navigating the complexities of immigration, pursuing workers'
+              compensation claims, or resolving municipal disputes, Turuchi
+              serves as a steadfast ally and guide for her clients every step of
+              the way. <br />
+              <br /> Turuchi has a unique advantage, having previously
+              represented large insurance companies, agencies, and
+              municipalities as a defense attorney in high-stakes cases
+              involving construction accidents, motor vehicle collisions, and
+              catastrophic injuries. This invaluable experience allows her to
+              anticipate and counter the strategies of opposing counsel, giving
+              her clients a distinct edge. Committed to staying ahead of legal
+              developments, Turuchi employs a strategic approach that ensures
+              every case is handled with precision and care.
+            </p>
+            <h1 className="font-lora text-xl font-medium">
+              A Global Perspective and Proven Expertise
+            </h1>
+            <p className="text-pretty text-gray-500">
+              Turuchi earned her Juris Doctor from the University of Arizona
+              James E. Rogers College of Law and is licensed to practice in New
+              Jersey, with the ability to waive into other jurisdictions. Her
+              academic foundation is complemented by her international
+              experience, holding a Bachelor of Laws (LL.B.) from the University
+              of Nigeria and a Barrister-at-Law designation from the Nigerian
+              Law School.
+              <br />
+              <br /> During law school, Turuchi distinguished herself as a
+              leader and advocate. She served as an Editor for the Journal of
+              Environmental Law and Policy, a Supreme Court Teaching Fellow, and
+              a student advocate in both the Domestic Violence Clinic and Civil
+              Rights Restoration Clinic. Her dedication to public service
+              included providing pro bono legal representation to survivors of
+              intimate partner violence and assisting individuals with criminal
+              convictions as they sought to rebuild their lives. She also served
+              as philanthropy chair for the Law Women’s Association and
+              secretary for the Black Law Students Association.
+            </p>
+            <h1 className="font-lora text-xl font-medium">
+              Compassionate Representation That Delivers Results
+            </h1>
+            <p className="text-pretty text-gray-500">
+              Since completing law school, Attorney Turuchi has earned a
+              reputation as a skilled and relentless litigator, passionately
+              advocating for her clients across a broad spectrum of legal
+              matters. With a proven history of success, she has recovered
+              millions of dollars in settlements and verdicts for individuals
+              injured by negligence, consistently delivering justice for her
+              clients. Turuchi approaches each case with unwavering
+              determination, fighting fiercely to ensure those who have suffered
+              harm receive the compensation they deserve. <br />
+              <br /> She understands the profound physical, emotional, and
+              financial challenges that injuries impose on individuals and their
+              families. With compassion, integrity, and a personalized approach,
+              Turuchi guides her clients through every step of the legal
+              process, empowering them with clarity and support during even the
+              most difficult times.
+              <br />
+              <br />
+              Whether pursuing compensation for personal injury, navigating the
+              complexities of immigration law, or addressing workers’
+              compensation and municipal matters, Attoney Turuchi is the
+              advocate you need in your corner. Her unmatched dedication,
+              strategic expertise, and steadfast commitment to her clients’
+              rights make her an indispensable ally in achieving justice and
+              securing the best possible outcomes.
+              <br />
+              <br />
+              Let AttorneyTuruchi be your voice for justice. Contact her today
+              to secure the representation you deserve.
             </p>
           </div>
           {/* practice area */}
           <div className="flex flex-col p-8 gap-4 ">
             <h1 className="font-lora text-2xl font-medium">Practice Areas</h1>
-            <Area title={"Business Law"} />
             <Area title={"Personal Injury"} />
-            <Area title={"Estate Litigation"} />
+            <Area title={"Immigration Law"} />
+            <Area title={"Workers' Compensation"} />
+            <Area title={"Municipal Matters"} />
           </div>
           <span className="flex justify-center items-center md:justify-center">
             <hr className=" w-[90%] opacity-85 bg-amber-600 my-5" />
@@ -116,7 +167,7 @@ const Profile = () => {
           </span>
           {/* honors and awards */}
           <div className="flex flex-col p-8 gap-4 ">
-            <h1 className="font-lora text-2xl font-medium">Honors & Awards</h1>
+            <h1 className="font-lora text-2xl font-medium">Honors</h1>
             {awardAndRecognitions.map((items, index) => (
               <span className="flex flex-col gap-4" key={index}>
                 <hr className="bg-amber-600 h-[2px] w-14" />

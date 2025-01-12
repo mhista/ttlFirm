@@ -1,9 +1,9 @@
 const InputField = ({ labelName, placeholder }) => {
     return (
       <div className=" w-full flex flex-col">
-        <label className="text-gray-400">{labelName}</label>
+        {/* <label className="text-gray-400">{labelName}</label> */}
         <input
-          className="w-full flex rounded-lg mt-2 py-2.5 px-2 text-sm text-gray-300 outline-0 outline-none  border border-gray-100 bg-transparent focus:border-amber-600"
+          className="w-full flex mt-2 py-5 pl-2 pr-20  text-black outline-0 outline-none  border text-start border-gray-100 bg-white "
           type="text"
           id="name"
           name="name"
@@ -15,33 +15,29 @@ const InputField = ({ labelName, placeholder }) => {
 
 const Form = ()=>{
 return (<form className="flex w-full flex-col gap-6 px-5 text-white">
-    <h1 className="font-serif text-4xl">
-      CONTACT <span className="text-amber-600">US</span>
-    </h1>
-    <p className="font-sans text-sm">
-      Complete the form and we will get back to you as soon as possible
-    </p>
-    <div className="flex w-full gap-4">
-      <InputField labelName="First Name" placeholder="Enter first name" />
-      <InputField labelName="Last Name" placeholder="Enter last name" />
+ <div className="flex w-full gap-4">
+      <InputField labelName="Full Name" placeholder="Full name" />
+      {/* <InputField labelName="Last Name" placeholder="last name" /> */}
     </div>
-    <div className="flex w-full gap-4">
+<div className="flex flex-wrap w-full gap-4">
       <InputField
         labelName="Phone number"
-        placeholder="Enter phone number"
+        placeholder="Phone number"
       />
       <InputField
         labelName="Email address"
-        placeholder="Enter email address"
+        placeholder="Email address"
       />
     </div>
+   
+    
     <div>
       <textarea
-        className="w-full flex rounded-lg h-[100px] mt-2 p-3 text-sm outline-0 outline-none  border border-gray-100 bg-transparent focus:border-amber-600 resize-none"
+        className="w-full flex  h-[100px] mt-2 p-3 outline-0 outline-none  border border-gray-100 bg-white text-black  resize-none"
         placeholder="Please provide a brief description of your inquiry"
       />
     </div>
-    <button className="btn rounded-lg text-white w-full md:w-32">SUBMIT</button>
+    <button className="btn rounded-lg text-white w-full hover:text-black">SUBMIT</button>
   </form>)
 }
 

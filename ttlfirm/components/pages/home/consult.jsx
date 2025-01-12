@@ -10,16 +10,16 @@ const Consultation = ()=>{
           <hr className="bg-white h-[2px] w-14" />
 
       </div>
-      <p className="text-4xl w-1/2 text-center font-bold">
+      <p className="text-3xl w-1/2 text-center font-bold">
         Need help with any legal issues? feel free to
       </p>
       <Link href='#' className="btn2 w-40 text-center">
         Consult Us
       </Link>
-      <div className="absolute h-[100px] w-[150px] bg-white opacity-20 top-1 right-10"></div>
-      <div className="absolute h-[100px] w-[150px] bg-white opacity-20 top-10 right-0"></div>
-      <div className="absolute h-[100px] w-[150px] bg-white opacity-20 bottom-0 left-0"></div>
-      <div className="absolute h-[50px] w-[50px] bg-white opacity-20 top-24 left-28"></div>
+      <div className="absolute h-[50px] w-[70px] md:h-[100px] md:w-[150px] bg-white opacity-20 top-1 right-10"></div>
+      <div className="absolute h-[50px] w-[70px] md:h-[100px] md:w-[150px] bg-white opacity-20 top-10 right-0"></div>
+      <div className="absolute h-[50px] w-[70px] md:h-[100px] md:w-[150px] bg-white opacity-20 bottom-0 left-0"></div>
+      <div className="absolute h-[30px] w-[30px] bg-white opacity-20 top-24 left-20"></div>
 
 
 

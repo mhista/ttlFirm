@@ -7,8 +7,8 @@ import Link from "next/link";
 
 const AboutUs = () => {
   return (
-    <div>
-    <div className="relative flex flex-col md:pl-8 mb-8">
+    <div className="z-[60] bg-white">
+    <div className="relative flex flex-col md:pl-8 mb-8 z-[60] bg-white">
       <div className="flex flex-col p-8 sm:p-16 md:flex-row-reverse justify-center md:items-start md:justify-around items-center mt-6  md:mt-8 sm:gap-7 md:px-0 ">
         <div className="relative w-full flex items-end justify-center  md:w-1/2">
           <Image

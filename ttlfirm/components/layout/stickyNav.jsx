@@ -30,10 +30,10 @@ const StickyNav = ({ isSticky = false }) => {
         window.requestAnimationFrame(() => {
           setScrollState((prevState) => ({
             isSticky:
-              currentScrollY > 100 &&
+              currentScrollY > 250 &&
               (currentScrollY < lastScrollY ||
                 currentScrollY + windowHeight < bodyHeight),
-            isScrollingUp: currentScrollY < lastScrollY && currentScrollY > 100,
+            isScrollingUp: currentScrollY < lastScrollY && currentScrollY > 250,
           }));
           setLastScrollY(currentScrollY);
           ticking = false;
@@ -59,7 +59,7 @@ const StickyNav = ({ isSticky = false }) => {
   return (
     <div
       className={`
-        transition-all w-full duration-[400ms] z-[60] ${
+        transition-all w-full duration-[400ms] z-[70] ${
           scrollState.isSticky
             ? "fixed bg-[#1c314e] top-0  ease-in-out"
             : " absolute bg-transparent sm:top-10 sm:bg-gradient-to-b sm:from-black sm:to-transparent ease-in"
@@ -71,16 +71,16 @@ const StickyNav = ({ isSticky = false }) => {
         <Link href="/">
           <Image
             className={`text-white cursor-pointer ${
-              scrollState.isSticky ? "w-28" : "md:w-28 pt-2"
+              scrollState.isSticky ? "w-[58px] md:w-[65px]" : "md:w-28 pt-2"
             }`}
             src="/assets/images/logo.png"
-            width={59}
-            height={59}
+            width={65}
+            height={65}
             alt="Turuchi"
           ></Image>
         </Link>
         {/* MENU */}
-        <div className="hidden md:flex justify-between items-center text-white uppercase gap-4 md:gap-6 font-semibold md:font-medium">
+        <div className="hidden md:flex justify-between items-center text-white uppercase gap-4 md:gap-6 font-semibold md:font-normal lg:font-medium md:text-sm lg:text-base">
           {menuLinks.map((link, index) => ({
             ...(link.isDropdown ? (
               <span key={index} className="cursor-pointer hover:text-amber-600">
@@ -119,6 +119,7 @@ const StickyNav = ({ isSticky = false }) => {
                   <span
                     key={index}
                     className="cursor-pointer hover:text-amber-600"
+                    onClick={() => setToggleDropdown((prev) => !prev)}
                   >
                     {link.label}
                   </span>
@@ -127,6 +128,7 @@ const StickyNav = ({ isSticky = false }) => {
                     href={link.href}
                     key={index}
                     className="hover:text-amber-600"
+                    onClick={() => setToggleDropdown((prev) => !prev)}
                   >
                     {link.label}
                   </Link>

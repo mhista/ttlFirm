@@ -1,44 +1,53 @@
 import Nav from "@/components/layout/nav";
 import Image from "next/image";
-import Link from "next/link"; 
+import Link from "next/link";
 import StickyNav from "@/components/layout/stickyNav";
-
 
 const Header = ({}) => {
   const height = 500;
   return (
-    <div className={`relative w-full h-[500px]`}>
+    <div className={`relative w-full h-[600px] sm:h-[500px] md:h-[600px]`}>
       {/* NAVBAR */}
       <Nav />
       {/* STICKY NAV */}
       <StickyNav />
       {/* background opacity */}
-      <div className={`absolute w-full z-20 bg-black opacity-40 h-[500px] text-center top-0`}></div>
+      <div
+        className={`absolute w-full z-20 bg-black opacity-40 h-[600px] sm:h-[500px] md:h-[600px] text-center top-0`}
+      ></div>
       {/* background image */}
       <img
         src="/assets/images/bgg.jpg"
-        className={`absolute w-full object-cover h-[500px] z-10 top-0`}
+        className={`absolute w-full object-cover h-[600px] sm:h-[500px] md:h-[600px] z-10 top-0`}
       ></img>
-
-      <div className={`text-white absolute flex flex-col items-center justify-center w-full h-[500px] z-40 gap-5 top-10 md:top-50`}>
-        <h1 className="font-lora text-5xl  lg:text-7xl w-5/6 md:px-16 text-center">
-          We <span className="text-amber-600">Always Find</span> Solutions for
-          all legal case
-        </h1>
-        <p className="text-center w-5/6 md:text-lg md:w-2/4">
-          {/* Turuchilaw firm is a leading expert in legal profession. Our team of
+      <div className="w-full relative h-[600px] sm:h-[500px] md:h-[600px] flex flex-col sm:flex-row justify-center sm:items-center gap-7 pt-9 sm:pt-16 sm:pl-9 md:pl-0 lg:pl-9">
+        <div className=" flex items-start w-[50%] pl-8 md:h-[200px]">
+          <Image
+            // sm:w-[450px] sm:h-[500px] md:h-[600px] md:w-[260px]  md:h-[300px]  lg:w-[450px] lg:h-[500px]
+            className="rounded  z-40 opacity-80  object-cover"
+            src="/assets/images/lawyer.jpg"
+            width={300}
+            height={250}
+            alt="law"
+          />
+        </div>
+        <div
+          className={`text-white  flex flex-col items-start justify-center pl-8 w-full gap-5 z-40 md:pt-20`}
+        >
+          <h1 className="font-lora text-3xl md:text-5xl lg:text-7xl w-5/6 ">
+            Turuchi <span className="text-amber-600">Law firm</span>
+          </h1>
+          <p className="text-sm w-5/6 md:text-lg ">
+            {/* Turuchilaw firm is a leading expert in legal profession. Our team of
           experts provides you with unparalleled legal advice and support. */}
-           We
-          understand that every case is unique, so we're here to help you
-          navigate through it with confidence and support. 
-
-        </p>
-        <Link href="#" className="btn">
+            We understand that every case is unique, so we're here to help you
+            navigate through it with confidence and support.
+          </p>
+          <Link href="#" className="btn">
             Ask For Consultation
-        </Link>
-       
+          </Link>
+        </div>
       </div>
-
     </div>
   );
 };

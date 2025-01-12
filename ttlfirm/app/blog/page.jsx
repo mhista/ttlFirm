@@ -7,9 +7,10 @@ import { FaArrowRightLong } from "react-icons/fa6";
 
 const Blog = () => {
   return (
-    <div className="flex flex-col md:flex-row w-full bg-zinc-100 gap-10 py-10 md:px-12 md:py-14">
+    <div className="bg-zinc-100 z-[60] relative">
+    <div className="relative flex flex-col md:flex-row w-full bg-zinc-100 gap-10 md:px-12 py-10  md:py-14 z-[60] ">
       {/* list of blogs */}
-      <div className="flex flex-col w-full items-center gap-10">
+      <div className="flex flex-col w-full items-center gap-10 z-[60]">
         {/* each blog */}
         <BlogContainer />
         <BlogContainer />
@@ -26,7 +27,7 @@ const Blog = () => {
               <Image
                 // sm:w-[450px] sm:h-[500px] md:w-[260px]  md:h-[300px]  lg:w-[450px] lg:h-[500px]
                 className=" z-30 w-[75px]  h-[80px] object-cover "
-                src="/assets/images/lawyer.jpg"
+                src="/assets/images/muni.jpg"
                 width={300}
                 height={250}
                 alt="law"
@@ -95,6 +96,7 @@ const Blog = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
