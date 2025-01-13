@@ -49,34 +49,91 @@ const TestimonialCarousel = () => {
   const testimonials = [
     {
       id: 1,
-      name: "Dianne Russell",
-      role: "Business Owner",
+      name: "Kimberly Zamora",
+      role: "Client",
       image: "https://via.placeholder.com/150", // Replace with real images
-      text: "Working with Turuchi Law Firm was a game-changer for my business. Their team provided expert legal advice that saved me from a potentially damaging lawsuit. They were professional, responsive, and genuinely cared about my case. I can't recommend them highly enough",
+      text: "Originally, I had little to no faith in my case but my lawyer, Turuchi assured me that she would fight hard and to be patient. She is so passionate in this line of work and it’s so admirable. She honestly gave me more than a win; she gave me happiness!",
     },
     {
       id: 2,
-      name: "John Doe",
-      role: "Civil Litigation client",
+      name: "John Peterson",
+      role: "Client",
       image: "https://via.placeholder.com/150",
-      text: "The attorneys at Turuchi Law Firm were incredibly knowledgeable and compassionate during my legal battle. They walked me through every step of the process and ensured I understood my rights. Thanks to them, I was able to get justice and peace of mind",
+      text: "I cannot thank Turuchi enough for the amazing work she did on my case. She was thorough, professional, and always had my best interests at heart. I wouldn’t hesitate to recommend her to anyone in need of legal assistance!",
     },
     {
       id: 3,
-      name: "Jane Eze",
-      role: "Real Estate Investor",
+      name: "Sandra Mitchell",
+      role: "Client",
       image: "https://via.placeholder.com/150",
-      text: "Turuchi Law Firm's attention to detail and dedication to my case was exceptional.  ",
+      text: "Turuchi’s attention to detail and expertise were evident from the start. She walked me through every step of the process, and the outcome was better than I could have imagined. I’m so grateful for her support.",
+    },
+    {
+      id: 4,
+      name: "Michael Adeyemi",
+      role: "Client",
+      image: "https://via.placeholder.com/150",
+      text: "Attorney Turuchi was a lifesaver during a very stressful time in my life. She was not only knowledgeable but also incredibly kind and patient. Her dedication to my case made all the difference.",
+    },
+    {
+      id: 5,
+      name: "Chloe Ramirez",
+      role: "Client",
+      image: "https://via.placeholder.com/150",
+      text: "Working with Turuchi was the best decision I made. She explained everything in plain terms, kept me informed, and achieved a great result. She is an excellent lawyer who truly cares about her clients.",
+    },
+    {
+      id: 6,
+      name: "Daniel Owens",
+      role: "Client",
+      image: "https://via.placeholder.com/150",
+      text: "She exceeded all my expectations. Her professionalism and expertise gave me confidence throughout the entire process. I couldn’t have asked for better representation.",
+    },
+    {
+      id: 7,
+      name: "Aisha Hassan",
+      role: "Client",
+      image: "https://via.placeholder.com/150",
+      text: "I was so impressed with Turuchi’s ability to simplify complex legal issues. She was always available to answer my questions and fought tirelessly for the best possible outcome.",
+    },
+    {
+      id: 8,
+      name: "Victor Thompson",
+      role: "Client",
+      image: "https://via.placeholder.com/150",
+      text: "She took my case when I thought I had no hope. Her dedication and thorough research turned everything around. I can’t recommend her highly enough!",
+    },
+    {
+      id: 9,
+      name: "Grace Udo",
+      role: "Client",
+      image: "https://via.placeholder.com/150",
+      text: "Turuchi was exceptional in handling my matter. Her knowledge of the law and ability to strategize were instrumental in achieving a favorable outcome. I’m so grateful for her help!",
+    },
+    {
+      id: 10,
+      name: "James Carter",
+      role: "Client",
+      image: "https://via.placeholder.com/150",
+      text: "She went above and beyond for me. Her professionalism, compassion, and unwavering commitment made the entire process smooth and successful. I’m forever thankful for her support.",
+    },
+    {
+      id: 11,
+      name: "Emily Zhang",
+      role: "Client",
+      image: "https://via.placeholder.com/150",
+      text: "From start to finish, Turuchi was incredible. She took the time to understand my situation, communicated clearly, and delivered outstanding results. I highly recommend her to anyone seeking legal help.",
     },
   ];
+  
   return (
     <div className="relative flex flex-col items-center gap-4 py-10 md:py-20 ">
       <div className="flex flex-row items-center justify-center gap-3">
-        <hr className="bg-amber-600 h-1 w-14" />
+        <hr className="bg-amber-600 h-1 w-14" data-aos="fade-right"/>
         <h3 className="text-amber-600 text-lg uppercase font-lora inline font-bold">
           What they say
         </h3>
-        <hr className="bg-amber-600 h-1 w-14" />
+        <hr className="bg-amber-600 h-1 w-14" data-aos="fade-left"/>
       </div>
       <h2 className=" font-bold text-center text-3xl sm:text-4xl md:text-5xl">What our clients say</h2>
       <div className="relative max-w-[350px] sm:max-w-xl md:max-w-3xl lg:max-w-6xl mx-[5px] sm:py-10 px-4 sm:px-4">
@@ -84,8 +141,8 @@ const TestimonialCarousel = () => {
         >
           {testimonials.map((testimonial) => (
             <swiper-slide key={testimonial.id}>
-              <div className=" flex flex-col sm:flex-row gap-2 sm:gap-3 items-center bg-white my-5  py-8 px-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 h-[460px] sm:h-[240px]">
-                <div className=" sm:w-1/4">
+              <div className=" flex flex-col sm:flex-row gap-2 sm:gap-3 items-center bg-white my-5  py-8 px-4 rounded-lg shadow transition-transform duration-300 transform hover:scale-105 h-[350px] sm:h-[240px]">
+                {/* <div className=" sm:w-1/4">
                   <Image
                     className="rounded-lg sm:rounded-none relative z-30 w-[270px] sm:w-[250px] h-[200px] object-cover"
                     src="/assets/images/lawyer.jpg"
@@ -93,10 +150,10 @@ const TestimonialCarousel = () => {
                     height={600}
                     alt="law"
                   />
-                </div>
-                <div className="flex flex-col justify-between sm:justify-normal h-full mt-4 sm:w-3/4 gap-3">
+                </div> */}
+                <div className="flex flex-col justify-between sm:justify-normal h-full mt-4  gap-3 px-5">
                   <div>
-                    <p className="italic text-gray-500 text-sm md:text-base">
+                    <p className="italic text-gray-500  md:text-lg">
                       {testimonial.text}
                     </p>
                   </div>

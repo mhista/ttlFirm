@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "aos": "^2.3.4",
     "lodash": "^4.17.21",
     "next": "15.1.2",
     "react": "^19.0.0",

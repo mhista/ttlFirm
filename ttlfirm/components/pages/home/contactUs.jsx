@@ -12,7 +12,7 @@ const ContactUs = () => {
 <h1 className="font-lora text-xl ">and we will get back to you</h1>
      </div>
       <div className="w-full flex flex-col md:flex-row items-center justify-between px-5 md:px-10 gap-6 md:gap-8">
-        <div className="w-full flex flex-col items-center sm:items-start gap-8 sm:p-10 md:p-0 md:pb-12 ">
+        <div className="w-full flex flex-col items-center sm:items-start gap-8 sm:p-10 md:p-0 md:pb-12 " data-aos="fade-right">
           <h1 className="font-serif text-5xl md:text-6xl opacity-90">
             Free Consultation
           </h1>
@@ -56,7 +56,7 @@ const ContactUs = () => {
             ))}
           </div>
         </div>
-        <div className="relative section1 w-full flex flex-col justify-around items-center gap-5 md:gap-10 z-30 md:py-20">
+        <div className="relative section1 w-full flex flex-col justify-around items-center gap-5 md:gap-10 z-30 md:py-20" data-aos="fade-left">
           <div className="w-full flex flex-col md:flex-row  flex-wrap  lg:px-0 gap-12 items-center justify-center">
             <Form />
           </div>

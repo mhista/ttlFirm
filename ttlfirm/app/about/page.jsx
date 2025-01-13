@@ -13,7 +13,7 @@ const AboutUs = () => {
         <div className="relative w-full flex items-end justify-center  md:w-1/2">
           <Image
             className="rounded relative z-30 w-[250px]  h-[350px] sm:w-[450px] sm:h-[500px] md:w-[260px]  md:h-[300px]  lg:w-[450px] lg:h-[500px] object-cover md:mt-9"
-            src="/assets/images/lawyer.jpg"
+            src="/assets/images/laws.jpg"
             width={300}
             height={250}
             alt="law"
@@ -21,7 +21,7 @@ const AboutUs = () => {
           <Image
             // sm:w-[450px] sm:h-[500px] md:w-[260px]  md:h-[300px]  lg:w-[450px] lg:h-[500px]
             className="rounded absolute z-30 w-[120px]  h-[150px] -bottom-5 left-5 object-cover "
-            src="/assets/images/laws.jpg"
+            src="/assets/images/lawyer.jpg"
             width={300}
             height={250}
             alt="law"
@@ -73,7 +73,7 @@ const AboutUs = () => {
         <div className="relative w-full flex items-end justify-center md:w-full">
           <Image
             className="rounded relative z-30 w-[250px]  h-[350px] sm:w-[450px] sm:h-[500px] md:w-[300px]  md:h-[300px]  lg:w-[450px] lg:h-[500px] object-cover "
-            src="/assets/images/laws.jpg"
+            src="/assets/images/lawyer2.jpg"
             width={300}
             height={250}
             alt="law"
@@ -81,7 +81,7 @@ const AboutUs = () => {
           <Image
             // sm:w-[450px] sm:h-[500px] md:w-[260px]  md:h-[300px]  lg:w-[450px] lg:h-[500px]
             className="rounded absolute z-30 w-[120px]  h-[150px] -bottom-5 -right-5 object-cover "
-            src="/assets/images/lawyer.jpg"
+            src="/assets/images/laws.jpg"
             width={300}
             height={250}
             alt="law"

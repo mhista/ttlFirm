@@ -3,13 +3,14 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
-const PracticeContainer = ({ image1, title, subtitle }) => {
+const PracticeContainer = ({ image1, title, subtitle, aos }) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div
       className={`flex justify-around items-center `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      data-aos={aos}
     >
       <Link href="#">
         <div className={`flex flex-col gap-7`}>

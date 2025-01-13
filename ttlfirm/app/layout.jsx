@@ -1,6 +1,8 @@
+
 import "@styles/global.css";
 import Header from "@components/layout/header";
 import Footer from "@components/layout/footer";
+
 
 export const metadata = {
   title: "turuchilawfirm",
@@ -8,6 +10,7 @@ export const metadata = {
 };
 
 const Rootlayout = ({ children }) => {
+
   return (
     <html lang="en">
       <meta
