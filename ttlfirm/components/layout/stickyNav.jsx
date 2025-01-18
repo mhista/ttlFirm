@@ -154,7 +154,12 @@ const StickyNav = ({ isSticky = false }) => {
               }))}
               <hr className="w-full bg-gray-300"></hr>
               <div className="w-full text-white flex items-center justify-between">
-                <Link href={`/contact`} className="btn rounded-lg text-white">
+                <Link href={`/contact`} className="btn rounded-lg text-white"
+                onClick={()=>
+                  setToggleDropdown((prev) =>!prev)
+                
+                }
+                >
                   Contact us
                 </Link>
                 <div className="flex justify-between items-center gap-4 pr-4 text-lg">

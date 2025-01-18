@@ -17,7 +17,7 @@ const WhyChooseUs = () => {
           </h1>
         </div>
         <hr className="hidden md:block bg-gray-600 h-[90px] w-[0.9px] ml-11 mt-7" />
-        <div className=" w-full md:w-[60%] text-sm lg:text-base text-gray-200 peer-invalid: md:pl-10 sm:text-center md:text-left  text-balance" >
+        <div className=" w-full md:w-[60%] lg:text-base text-gray-200 peer-invalid: md:pl-10 sm:text-center md:text-left  text-balance" >
           We believe in the power of personalized attention
           and transparent communication. We work tirelessly to understand your
           unique circumstances, crafting tailored strategies that align with

@@ -49,7 +49,7 @@ const Header = ({}) => {
           >
             Turuchi <span className="text-amber-600">Law firm</span>
           </h1>
-          <p className="text-sm w-5/6 md:text-lg " data-aos="zoom-in-up">
+          <p className="text-base w-5/6 md:text-lg " data-aos="zoom-in-up">
             {/* Turuchilaw firm is a leading expert in legal profession. Our team of
           experts provides you with unparalleled legal advice and support. */}
             We understand that every case is unique, so we're here to help you

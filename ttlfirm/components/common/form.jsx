@@ -14,7 +14,7 @@ const InputField = ({ labelName, placeholder }) => {
   };
 
 const Form = ()=>{
-return (<form className="flex w-full flex-col gap-6 px-5 text-white">
+return (<form className="flex w-full flex-col gap-6 px-2 sm:px-5 text-white">
  <div className="flex w-full gap-4">
       <InputField labelName="Full Name" placeholder="Full name" />
       {/* <InputField labelName="Last Name" placeholder="last name" /> */}

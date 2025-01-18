@@ -42,7 +42,7 @@ const Footer = () => {
               height={90}
               alt="Turuchi"
             ></Image>
-            <p className="text-sm w-5/6  text-white">
+            <p className="text-base sm:text-sm lg:text-base w-5/6  text-white">
             {/* Turuchilaw firm is a leading expert in legal profession. Our team of
           experts provides you with unparalleled legal advice and support. */}
             We understand that every case is unique, so we're here to help you
@@ -96,7 +96,7 @@ const Footer = () => {
           </div>
           <div className=" flex w-full flex-col gap-5 item-center md:items-start justify-center text-white md:ml-4">
             <h1 className="font-lora sm:text-sm text-xl">PRACTICE AREAS</h1>
-            <div className=" flex flex-col items-start text-white  gap-4 md:gap-6 font-semibold md:font-normal md:text-sm lg:font-semibold">
+            <div className=" flex flex-col items-start text-white  gap-4 md:gap-6 font-semibold md:font-normal md:text-base lg:font-semibold">
               {footerLinks.map((link, index) => ({
                 ...(link.isDropdown ? (
                   <span
@@ -119,7 +119,7 @@ const Footer = () => {
           </div>
           <div className="hidden md:flex w-full flex-col gap-5 item-center md:items-start justify-center text-white">
           <h1 className="font-lora md:text-sm text-xl">NAVIGATION</h1>
-          <div className=" flex flex-col items-start text-white  gap-4 md:gap-6 font-semibold md:font-normal md:text-sm lg:font-semibold">
+          <div className=" flex flex-col items-start text-white  gap-4 md:gap-6 font-semibold md:font-normal md:text-base lg:font-semibold">
 
           {menuLinks.map((link, index) => ({
             ...(link.isDropdown ? (

@@ -13,7 +13,7 @@ const ContactUs = () => {
 <h1 className="font-lora text-xl ">and we will get back to you</h1>
      </div>
       <div className="w-full flex flex-col md:flex-row items-center justify-between px-5 md:px-10 gap-6 md:gap-8">
-        <div className="w-full flex flex-col items-center sm:items-start gap-8 sm:p-10 md:p-0 md:pb-12 ">
+        <div className="w-full flex flex-col  sm:items-start gap-8 sm:p-10 md:p-0 md:pb-12 ">
           <h1 className="font-serif text-5xl md:text-6xl opacity-90">
             Free Consultation
           </h1>
@@ -49,7 +49,7 @@ const ContactUs = () => {
             </Link>
           </div>
 
-          <div className="flex justify-between items-start gap-4 pr-4 text-lg text-dark">
+          <div className="flex items-start gap-4 pr-4 text-lg text-dark">
             {socialLinks2.map((link, index) => (
               <Link key={index} href={link.href}>
                 {link.icon}
