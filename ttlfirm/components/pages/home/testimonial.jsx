@@ -129,11 +129,11 @@ const TestimonialCarousel = () => {
   return (
     <div className="relative flex flex-col items-center gap-4 py-10 md:py-20 ">
       <div className="flex flex-row items-center justify-center gap-3">
-        <hr className="bg-amber-600 h-1 w-14" data-aos="fade-right"/>
+        <hr className="bg-amber-600 h-1 w-14" />
         <h3 className="text-amber-600 text-lg uppercase font-lora inline font-bold">
           What they say
         </h3>
-        <hr className="bg-amber-600 h-1 w-14" data-aos="fade-left"/>
+        <hr className="bg-amber-600 h-1 w-14" />
       </div>
       <h2 className=" font-bold text-center text-3xl sm:text-4xl md:text-5xl">What our clients say</h2>
       <div className="relative max-w-[350px] sm:max-w-xl md:max-w-3xl lg:max-w-6xl mx-[5px] sm:py-10 px-4 sm:px-4">
@@ -170,12 +170,12 @@ const TestimonialCarousel = () => {
           () => {
           console.log(prevElRef);
             
-            swiperRef.current.swiper.slidePrev()}} className="swiper-button-prev absolute  z-50 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2.5 rounded-lg shadow-lg hover:bg-gray-700 transition left-[20px] sm:left-[2px] md:left-[70px] lg:left-[185px]">
-        <FaAngleLeft />
+            swiperRef.current.swiper.slidePrev()}} className="swiper-button-prev absolute  z-50 top-1/2 transform -translate-y-1/2 md:bg-gray-800 text-gray-800 md:text-white p-2.5 rounded-lg md:shadow-lg md:hover:bg-gray-700 transition left-[15px] sm:left-[2px] md:left-[70px] lg:left-[185px]">
+        <FaAngleLeft className="text-xl md:text-base"/>
 
       </button>
-      <button ref={nextElRef} onClick={() => swiperRef.current.swiper.slideNext()} className="swiper-button-next  absolute  top-1/2 transform -translate-y-1/2 bg-amber-600 text-white p-2.5 rounded-lg shadow-lg hover:bg-amber-500 transition right-[20px] sm:right-[2px] md:right-[70px]  lg:right-[185px] z-50">
-      <FaAngleRight />
+      <button ref={nextElRef} onClick={() => swiperRef.current.swiper.slideNext()} className="swiper-button-next  absolute  top-1/2 transform -translate-y-1/2 md:bg-amber-600 text-amber-600 md:text-white p-2.5 rounded-lg md:shadow-lg md:hover:bg-amber-500 transition right-[15px] sm:right-[2px] md:right-[70px]  lg:right-[185px] z-50">
+      <FaAngleRight className="text-xl md:text-base"/>
 
       </button>
       </div>
