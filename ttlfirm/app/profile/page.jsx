@@ -1,5 +1,7 @@
 import ImageSection from "@components/pages/profile/imageSection";
+import Section4 from "@components/common/section4";
 
+import Consultation from "@components/pages/home/consult";
 const Area = ({ title }) => {
   return (
     <span className="flex gap-2 items-center opacity-85">
@@ -26,6 +28,7 @@ const Profile = () => {
   ];
 
   return (
+    <div>
     <div className="relative w-full flex flex-col md:flex-row justify-center md:items-start md:justify-around items-center pt-6 md:py-8 md:gap-7 md:px-7 z-[60] bg-white">
       <ImageSection />
       <div className="md:w-full">
@@ -179,7 +182,13 @@ const Profile = () => {
           </div>
         </div>
       </div>
+     
     </div>
+    <Section4>
+        <Consultation/>
+      </Section4>
+      </div>
+    
   );
 };
 

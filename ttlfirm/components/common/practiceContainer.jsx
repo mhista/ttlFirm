@@ -3,7 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
-const PracticeContainer = ({ image1, title, subtitle, aos }) => {
+const PracticeContainer = ({ image1, title, subtitle, aos, id }) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div
@@ -12,7 +12,7 @@ const PracticeContainer = ({ image1, title, subtitle, aos }) => {
       onMouseLeave={() => setIsHovered(false)}
       data-aos={aos}
     >
-      <Link href="#">
+      <Link href={`/practice/${id}`}>
         <div className={`flex flex-col gap-7`}>
           <Image
             className="rounded-xl h-[190px] object-cover sm:w-[430px] sm:h-[250px] md:w-[300px] md:h-[190px]"

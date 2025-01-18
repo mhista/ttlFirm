@@ -17,6 +17,7 @@ const StickyNav = ({ isSticky = false }) => {
     isScrollingUp: false,
   });
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [selectedLink, setSelectedLink] = useState('Home');
 
   useEffect(() => {
     let ticking = false;
@@ -59,7 +60,7 @@ const StickyNav = ({ isSticky = false }) => {
   return (
     <div
       className={`
-        transition-all w-full duration-[400ms] z-[70] ${
+        transition-all w-full duration-[400ms] z-[75] ${
           scrollState.isSticky
             ? "fixed bg-[#1c314e] top-0  ease-in-out"
             : " absolute bg-transparent sm:top-10 sm:bg-gradient-to-b sm:from-black sm:to-transparent ease-in"
@@ -83,33 +84,44 @@ const StickyNav = ({ isSticky = false }) => {
         <div className="hidden md:flex justify-between items-center text-white uppercase gap-4 md:gap-6 font-semibold md:font-normal lg:font-medium md:text-sm lg:text-base">
           {menuLinks.map((link, index) => ({
             ...(link.isDropdown ? (
-              <span key={index} className="cursor-pointer hover:text-amber-600">
+              <span key={index} className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`} 
+              onClick={() => {
+                setSelectedLink(link.label);
+              }}
+              >
                 {link.label}
               </span>
             ) : (
               <Link
                 href={link.href}
                 key={index}
-                className="hover:text-amber-600"
+                className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"}  hover:text-amber-600`}
+                onClick={() => {
+                setSelectedLink(link.label);
+              }}
               >
                 {link.label}
               </Link>
             )),
           }))}
         </div>
-        <Link href="" className="btn hidden md:flex">
+        <Link href={`/contact`} className="btn hidden md:flex">
           Contact us
         </Link>
         <div className="relative md:hidden">
           {!toggleDropdown ? (
             <FiMenu
-              className="md:hidden w-8 h-8 text-white hover:cursor-pointer hover:text-yellow-600 transition-all duration-[400ms]"
-              onClick={() => setToggleDropdown((prev) => !prev)}
+              className={`md:hidden w-8 h-8 text-white hover:cursor-pointer hover:text-yellow-600 transition-all duration-[400ms]`}
+              onClick={() => {
+                setToggleDropdown((prev) => !prev)
+              }}
             />
           ) : (
             <FaXmark
               className="md:hidden w-8 h-8 text-white hover:cursor-pointer hover:text-yellow-600 transition-all duration-[400ms]"
-              onClick={() => setToggleDropdown((prev) => !prev)}
+              onClick={() => {
+                setToggleDropdown((prev) => !prev)
+              }}
             />
           )}
           {toggleDropdown && (
@@ -118,8 +130,11 @@ const StickyNav = ({ isSticky = false }) => {
                 ...(link.isDropdown ? (
                   <span
                     key={index}
-                    className="cursor-pointer hover:text-amber-600"
-                    onClick={() => setToggleDropdown((prev) => !prev)}
+                    className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`} 
+                    onClick={() => {
+                      setSelectedLink(link.label);
+                      setToggleDropdown((prev) =>!prev)
+                    }}
                   >
                     {link.label}
                   </span>
@@ -127,8 +142,11 @@ const StickyNav = ({ isSticky = false }) => {
                   <Link
                     href={link.href}
                     key={index}
-                    className="hover:text-amber-600"
-                    onClick={() => setToggleDropdown((prev) => !prev)}
+                    className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`} 
+                    onClick={() => {
+                      setSelectedLink(link.label);
+                      setToggleDropdown((prev) => !prev)
+                    }}
                   >
                     {link.label}
                   </Link>
@@ -136,7 +154,7 @@ const StickyNav = ({ isSticky = false }) => {
               }))}
               <hr className="w-full bg-gray-300"></hr>
               <div className="w-full text-white flex items-center justify-between">
-                <Link href="" className="btn rounded-lg text-white">
+                <Link href={`/contact`} className="btn rounded-lg text-white">
                   Contact us
                 </Link>
                 <div className="flex justify-between items-center gap-4 pr-4 text-lg">

@@ -7,8 +7,6 @@ import StickyNav from "@/components/layout/stickyNav";
 import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import dynamic from "next/dynamic";
-import { once } from "lodash";
 
 const Header = ({}) => {
   useEffect(() => {
@@ -43,7 +41,7 @@ const Header = ({}) => {
           />
         </div>
         <div
-          className={`text-white  flex flex-col items-start justify-center pl-8 w-full gap-5 z-40 md:pt-20`}
+          className={`text-white  flex flex-col items-start justify-center pl-8 w-full gap-5 z-40 md:pt-20 lg:pt-14`}
         >
           <h1
             className="font-lora text-3xl md:text-5xl lg:text-7xl w-5/6 "

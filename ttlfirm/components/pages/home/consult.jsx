@@ -13,7 +13,7 @@ const Consultation = ()=>{
       <p className="text-3xl w-1/2 text-center font-bold" data-aos="fade-in">
         Need help with any legal issues? feel free to
       </p>
-      <Link href='#' className="btn2 w-40 text-center">
+      <Link href={`/contact`} className="btn2 w-40 text-center">
         Consult Us
       </Link>
       <div className="absolute h-[50px] w-[70px] md:h-[100px] md:w-[150px] bg-white opacity-20 top-1 right-10"></div>

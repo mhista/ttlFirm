@@ -2,6 +2,7 @@ import Form from "@components/common/form";
 import Link from "next/link";
 import { FaEnvelope, FaPhone, FaLocationDot } from "react-icons/fa6";
 import { socialLinks } from "@components/common/mediaButtons";
+import { socialLinks2 } from "@components/common/mediaButttons2";
 
 const ContactUs = () => {
   return (
@@ -48,8 +49,8 @@ const ContactUs = () => {
             </Link>
           </div>
 
-          <div className="flex justify-between items-center gap-4 pr-4 text-lg text-dark">
-            {socialLinks.map((link, index) => (
+          <div className="flex justify-between items-start gap-4 pr-4 text-lg text-dark">
+            {socialLinks2.map((link, index) => (
               <Link key={index} href={link.href}>
                 {link.icon}
               </Link>
