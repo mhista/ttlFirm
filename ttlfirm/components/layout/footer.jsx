@@ -21,7 +21,7 @@ const Footer = () => {
     // { href: "#videos", label: "Videos", isDropdown: false },
   ];
   return (
-    <footer className="relative bottom-0 w-full bg-[#1c314e] h-[760px] sm:h-[300px] md:h-[320px] lg:h-[350px] m-0 p-0">
+    <footer className="relative bottom-0 w-full bg-[#1c314e] h-[780px] sm:h-[300px] md:h-[320px] lg:h-[350px] m-0 p-0">
       {/* <div className={`absolute w-full z-20 bg-black opacity-40 h-[500] text-center top-0`}></div> */}
       {/* <Image
         className={`text-white  absolute opacity-5 bottom-0 left- top-20`}
