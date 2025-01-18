@@ -10,7 +10,7 @@ const PracticeContainer = ({ image1, title, subtitle, aos, id }) => {
       className={`flex justify-around items-center `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      data-aos={aos}
+     
     >
       <Link href={`/practice/${id}`}>
         <div className={`flex flex-col gap-7`}>

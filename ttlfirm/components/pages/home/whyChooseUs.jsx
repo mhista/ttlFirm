@@ -6,18 +6,18 @@ const WhyChooseUs = () => {
       {/* why choose */}
       <div className="w-full flex flex-col md:flex-row gap-3 md:gap-5 sm:items-center sm:justify-center justify-around px-5 md:px-0 ">
         <div className="flex flex-col items-start sm:items-center md:items-start gap-3 sm:w-full md:w-1/3 ">
-          <div className=" flex flex-row items-center justify-center gap-3 " data-aos="fade-right">
+          <div className=" flex flex-row items-center justify-center gap-3 ">
             <hr className="bg-amber-600 h-[2px] w-14" />
             <h3 className="text-amber-600  uppercase inline font-bold">
               Why Trust us
             </h3>
           </div>
-          <h1 className="font-bold  text-white text-3xl font-lora " data-aos="fade-right">
+          <h1 className="font-bold  text-white text-3xl font-lora ">
             Why clients choose our legal team
           </h1>
         </div>
         <hr className="hidden md:block bg-gray-600 h-[90px] w-[0.9px] ml-11 mt-7" />
-        <div className=" w-full md:w-[60%] text-sm lg:text-base text-gray-200 peer-invalid: md:pl-10 sm:text-center md:text-left  text-balance" data-aos="zoom-in">
+        <div className=" w-full md:w-[60%] text-sm lg:text-base text-gray-200 peer-invalid: md:pl-10 sm:text-center md:text-left  text-balance" >
           We believe in the power of personalized attention
           and transparent communication. We work tirelessly to understand your
           unique circumstances, crafting tailored strategies that align with

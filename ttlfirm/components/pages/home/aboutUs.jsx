@@ -11,11 +11,11 @@ const AboutUs = () => {
           width={500}
           height={600}
           alt="law"
-          data-aos="zoom-in"
+          
         />
           <div className="hidden lg:block lg:absolute h-14 w-14 bg-amber-600 bottom-3 z-20 -left-3 md:left-3 opacity-25"></div>
           
-        <div className="flex flex-col  gap-4 md:gap-3  w-full mt-10 sm:mt-0 md:pr-7 lg:mx-24" data-aos="fade-up">
+        <div className="flex flex-col  gap-4 md:gap-3  w-full mt-10 sm:mt-0 md:pr-7 lg:mx-24" >
           <div className="flex flex-col gap-5 sm:p-10 sm:pb-0 md:p-0">
             <div className="flex flex-col gap-8">
               <hr className="bg-amber-600 h-[2px] w-14" />

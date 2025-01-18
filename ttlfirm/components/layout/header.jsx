@@ -10,7 +10,7 @@ import "aos/dist/aos.css";
 
 const Header = ({}) => {
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true, disable: "phone" });
+    AOS.init({ duration: 1000, once: true,});
   }, []);
   const height = 500;
   return (

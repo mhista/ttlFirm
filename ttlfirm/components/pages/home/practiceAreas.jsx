@@ -5,11 +5,11 @@ const PracticeArea = () => {
   return (
     <div className="relative section1 w-full flex flex-col justify-around items-center gap-5 md:gap-10 z-30 py-20">
         <div className="flex flex-row items-center gap-3">
-          <hr className="bg-amber-600 h-[2px] w-14" data-aos="fade-right"/>
+          <hr className="bg-amber-600 h-[2px] w-14" />
           <h3 className="text-amber-600 text-lg uppercase font-jost inline font-bold">
             What we do
           </h3>
-          <hr className="bg-amber-600 h-[2px] w-14" data-aos="fade-left"/>
+          <hr className="bg-amber-600 h-[2px] w-14" />
 
       </div>
       <h1 className="font-lora text-4xl pl-10 sm:pl-0">Our legal practice areas</h1>
