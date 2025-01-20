@@ -27,7 +27,7 @@ const Nav = () => {
             <span className="text-sm">732-210-6410</span>
           </Link>
           <Link
-            href=""
+            href={`mailto:info@turuchilawfirm.com`}
             className=" flex justify-between hover:text-blue-200  items-center gap-2"
           >
             <FaEnvelope />

@@ -32,7 +32,7 @@ const ScrollToTop = () => {
   return (
     <> {isVisible && (<div 
           onClick={scrollToTop}
-    className="fixed bottom-5 right-5 bg-amber-600 rounded-lg p-3 shadow-lg z-[80]"
+    className="fixed bottom-5 right-5 bg-amber-600 rounded-lg p-3 shadow-lg z-[80] cursor-pointer"
     >
      
         <FaAngleUp
