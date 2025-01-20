@@ -13,7 +13,7 @@ import WhyChooseUs from "@components/pages/home/whyChooseUs";
 const Home = () => {
   return (
     <div className="relative h-[full]">
-    <div className="absolute z-[70]  w-[85%] md:w-[60%] justify-center items-center right-[28px] sm:right-[48px] md:right-11 lg:right-14 top-[-50px] md:top-[-90px] md:pr-4 bg-zinc-100  flex flex-row shadow-2xl border-amber-600 border-opacity-90 border-t-[3px] gap:3 md:gap-5">
+    <div className="absolute z-[70]  w-[85%] md:w-[60%] justify-center items-center right-[28px] sm:right-[48px] md:right-11 lg:right-14 top-[-48px] md:top-[-90px] md:pr-4 bg-zinc-100  flex flex-row shadow-2xl border-amber-600 border-opacity-90 border-t-[3px] gap:3 md:gap-5">
         <Countdown countToUse={500} subtitle={'Legal Cases Handled'} sign={'+'} timer={10}/>
         <div className="w-[1px] bg-[#1f385b] h-[70px] md:h-[100px] opacity-75 mr-4 md:mr-0"></div>
         <Countdown countToUse={8} subtitle={'Years of Industry Experience'} timer={100}/>
