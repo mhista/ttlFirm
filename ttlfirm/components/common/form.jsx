@@ -38,7 +38,7 @@ const handleSubmit = async (e) => {
     setStatus("Sending...");
 
     try {
-      console.log(formData)
+      // console.log(formData)
         const response = await fetch("/api/email", {
             method: "POST",
             // headers: {
@@ -47,7 +47,7 @@ const handleSubmit = async (e) => {
             body: JSON.stringify(formData),
         });
 
-        const result = await response.json();
+        const result = response.json();
 
         if (response.ok) {
             setStatus("Message sent successfully!");

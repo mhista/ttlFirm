@@ -2,10 +2,10 @@ import nodemailer from "nodemailer";
 
 export const POST= async(req, res)=> {
         const { name, email, message, phone } = req.body;
-
-        if (!name || !email || !message || !phone) {
-            return new Response('Missing required fields', {status:400});
-        }
+        console.log(req.body)
+        // if (!name || !email || !message || !phone) {
+        //     return new Response('Missing required fields', {status:400});
+        // }
 
         try {
             // Configure the transporter
@@ -13,16 +13,16 @@ export const POST= async(req, res)=> {
                 service: "gmail", // Or your email service provider
                 auth: {
                     user: 'diweesomchi@gmail.com', // Your email address
-                    pass: '@Diwe07068884102', // Your email password or app-specific password
+                    pass: 'qxkx zcyn cvbd nizp', // Your email password or app-specific password
                 },
             });
                 console.log("sending")
             // Email options
             const mailOptions = {
-                from: "name", // Sender email address
+                from: "diwescollection@gmail.com", // Sender email address
                 to:"diweesomchi@gmail.com", // Recipient email address
-                subject:"phone", // Email subject
-                text: message, // Email content in plain text
+                subject:"hello", // Email subject
+                text: "hiuchiurhfiurhiuf", // Email content in plain text
             };
             // process.env.EMAIL_USER
             // Send the email
