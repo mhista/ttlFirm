@@ -13,7 +13,9 @@ const Accordion = () => {
     {
       title: "What types of cases does Turuchi Law Firm handle?",
       content:
-        "Turuchi Law Firm specializes in personal injury, medical malpractice, accident-related cases, and victim advocacy. Our attorneys are dedicated to protecting the rights of individuals and families affected by negligence or harm.",
+        `Beyond personal injury, our firm offers comprehensive legal
+                services in immigration law, workers' compensation, municipal
+                matters, and a broad spectrum of additional practice areas.`
     },
     {
       title: "How can I schedule a consultation with Turuchi Law Firm?",
