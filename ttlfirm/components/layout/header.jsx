@@ -14,21 +14,21 @@ const Header = ({}) => {
   }, []);
   const height = 500;
   return (
-    <div className={`relative w-full h-[640px] sm:h-[500px] md:h-[600px]`}>
+    <div className={`relative w-full h-[650px] sm:h-[500px] md:h-[600px]`}>
       {/* NAVBAR */}
       <Nav />
       {/* STICKY NAV */}
       <StickyNav />
       {/* background opacity */}
       <div
-        className={`absolute w-full z-20 bg-black opacity-40 h-[640px] sm:h-[500px] md:h-[600px] text-center top-0`}
+        className={`absolute w-full z-20 bg-black opacity-40 h-[650px] sm:h-[500px] md:h-[600px] text-center top-0`}
       ></div>
       {/* background image */}
       <img
         src="/assets/images/bgg.jpg"
-        className={`absolute w-full object-cover h-[640px] sm:h-[500px] md:h-[600px] z-10 top-0`}
+        className={`absolute w-full object-cover h-[650px] sm:h-[500px] md:h-[600px] z-10 top-0`}
       ></img>
-      <div className="w-full relative h-[640px] sm:h-[500px] md:h-[600px] flex flex-col sm:flex-row justify-center sm:items-center gap-7 pt-11 sm:pt-16 sm:pl-9 md:pl-0 lg:pl-9">
+      <div className="w-full relative h-[650px] sm:h-[500px] md:h-[600px] flex flex-col sm:flex-row justify-center sm:items-center gap-7 pt-11 sm:pt-16 sm:pl-9 md:pl-0 lg:pl-9">
         <div className=" flex items-start w-[50%] pl-8 md:h-[200px]">
           <Image
             // sm:w-[450px] sm:h-[500px] md:h-[600px] md:w-[260px]  md:h-[300px]  lg:w-[450px] lg:h-[500px]
