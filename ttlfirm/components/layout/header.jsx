@@ -56,7 +56,7 @@ const Header = ({}) => {
             We understand that every case is unique, so we're here to help you
             navigate through it with confidence and support.
           </p>
-          <Link href="#" className="btn" data-aos="zoom-in">
+          <Link href={`/contact`} className="btn" data-aos="zoom-in">
             Ask For Consultation
           </Link>
         </div>

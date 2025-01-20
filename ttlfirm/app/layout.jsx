@@ -2,6 +2,7 @@
 import "@styles/global.css";
 import Header from "@components/layout/header";
 import Footer from "@components/layout/footer";
+import ScrollToTop from "@components/common/scrollToTop";
 
 
 export const metadata = {
@@ -23,6 +24,7 @@ const Rootlayout = ({ children }) => {
 
           {children}
           <Footer />
+          <ScrollToTop/>
         </main>
       </body>
     </html>
