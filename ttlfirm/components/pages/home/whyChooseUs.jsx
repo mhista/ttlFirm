@@ -32,7 +32,7 @@ const WhyChooseUs = () => {
       <div className="flex flex-col sm:flex-row w-full items-center justify-center gap-7">
         <NumbersContainer title={"500+"} subtitle={"Legal Cases Handled"} aos={"zoom-in"} duration={"1000"}/>
         <NumbersContainer title={"8"} subtitle={"Years Industry Experience"} aos={"zoom-in"} duration={"1100"}/>
-        <NumbersContainer title={"100+"} subtitle={"Happy clients"} aos={"zoom-in"} duration={"1200"}/>
+        {/* <NumbersContainer title={"100+"} subtitle={"Happy clients"} aos={"zoom-in"} duration={"1200"}/> */}
       </div>
     </div>
   );
