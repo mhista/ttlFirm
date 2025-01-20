@@ -164,7 +164,12 @@ const StickyNav = ({ isSticky = false }) => {
                 </Link>
                 <div className="flex justify-between items-center gap-4 pr-4 text-lg">
                   {socialLinks.map((link, index) => (
-                    <Link key={index} href={link.href}>
+                    <Link key={index} href={link.href}
+                    onClick={()=>
+                  setToggleDropdown((prev) =>!prev)
+                
+                }
+                    >
                       {link.icon}
                     </Link>
                   ))}
