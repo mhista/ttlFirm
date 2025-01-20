@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const AboutUs = () => {
   return (
-    <div className="relative section1 w-full flex flex-col md:flex-row justify-around items-center md:gap-10 lg:gap-5 py-16 px-8 md:px-0 lg:pl-24">
+    <div className="relative section1 w-full flex flex-col md:flex-row justify-around items-center md:gap-10 lg:gap-5 py-16 px-8 md:px-0 lg:pl-24 mt-10 sm:mt-0">
       <div className="flex w-full flex-col md:flex-row sm:items-center sm:justify-center relative  md:pl-7 pb-7 md:gap-7">
         <Image
           className="relative z-30  md:h-[300px] object-cover md:w-[300px] lg:h-[400px] lg:w-[400px] rounded-lg"
