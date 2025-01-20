@@ -43,11 +43,12 @@ const Header = ({}) => {
         <div
           className={`text-white  flex flex-col items-start justify-center pl-8 w-full gap-5 z-40 md:pt-20 lg:pt-14`}
         >
+        {/* Your justice, Our commitment */}
           <h1
             className="font-lora text-3xl md:text-5xl lg:text-7xl w-5/6 "
             data-aos="fade-up"
           >
-            Turuchi <span className="text-amber-600">Law firm</span>
+            Your Justice <span className="text-amber-600">Our Commitment</span>
           </h1>
           <p className="text-base w-5/6 md:text-lg " data-aos="zoom-in-up">
             {/* Turuchilaw firm is a leading expert in legal profession. Our team of
