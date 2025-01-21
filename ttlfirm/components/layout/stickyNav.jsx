@@ -72,7 +72,7 @@ const StickyNav = ({ isSticky = false }) => {
         <Link href="/">
           <Image
             className={`text-white cursor-pointer ${
-              scrollState.isSticky ? "w-[58px] md:w-[70px]" : "md:w-28 pt-2"
+              scrollState.isSticky ? "w-[58px] md:w-[70px]" : "md:w-32 pt-2"
             }`}
             src="/assets/images/logo.png"
             width={65}
