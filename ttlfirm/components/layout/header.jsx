@@ -14,28 +14,28 @@ const Header = ({}) => {
   }, []);
   const height = 500;
   return (
-    <div className={`relative w-full h-[650px] sm:h-[500px] md:h-[750px]`}>
+    <div className={`relative w-full h-[650px] sm:h-[500px] md:h-[800px]`}>
       {/* NAVBAR */}
       <Nav />
       {/* STICKY NAV */}
       <StickyNav />
       {/* background opacity */}
       <div
-        className={`absolute w-full z-20 bg-black opacity-40 h-[650px] sm:h-[500px] md:h-[750px] text-center top-0`}
+        className={`absolute w-full z-20 bg-black opacity-40 h-[650px] sm:h-[500px] md:h-[800px] text-center top-0`}
       ></div>
       {/* background image */}
       <img
         src="/assets/images/bg2.jpg"
-        className={`absolute w-full object-cover h-[650px] sm:h-[500px] md:h-[750px] z-10 top-0`}
+        className={`absolute w-full object-cover h-[650px] sm:h-[500px] md:h-[800px] z-10 top-0`}
       ></img>
-      <div className="w-full relative h-[650px] sm:h-[500px] md:h-[750px] flex flex-col sm:flex-row-reverse justify-center sm:items-center gap-7 md:gap-5 pt-14 sm:pt-16 sm:pl-9 md:pl-0 lg:pl-9 md:px-5">
-        <div className=" flex items-end w-[50%] md:w-[full] pl-8 ">
+      <div className="w-full relative h-[650px] sm:h-[500px] md:h-[800px] flex flex-col sm:flex-row-reverse justify-center sm:items-center gap-7 md:gap-5 pt-14 sm:pt-16 sm:pl-9 md:pl-0 lg:pl-9 md:px-5">
+        <div className=" flex items-end w-[50%] md:w-[full] pr-20 ">
           <Image
-            // sm:w-[450px] sm:h-[500px] md:h-[750px] md:w-[260px]  md:h-[300px]  lg:w-[450px] lg:h-[500px]
+            // sm:w-[450px] sm:h-[500px] md:h-[800px] md:w-[260px]  md:h-[300px]  lg:w-[450px] lg:h-[500px]
             className="rounded  z-40 opacity-80  object-cover"
             src="/assets/images/lawyer.jpg"
-            width={300}
-            height={250}
+            width={500}
+            height={270}
             alt="law"
             data-aos="zoom-in"
           />
@@ -45,7 +45,7 @@ const Header = ({}) => {
         >
         {/* Your justice, Our commitment */}
         <h1 className=" font-lora  text-4xl md:text-3xl">
-              The Turuchi Law Firm
+              The Turuchi Law Firm, LLC
             </h1>
           <h1
             className="font-lora text-3xl md:text-5xl lg:text-7xl w-5/6 "
