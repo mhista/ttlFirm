@@ -62,7 +62,7 @@
 }
 
 .btn {
-  @apply bg-amber-600 text-[#1c314e] rounded-sm px-4 py-3 uppercase font-jost text-xs tracking-wider font-semibold opacity-85 cursor-pointer transition-all  hover:bg-transparent hover:border hover:outline-none hover:border-yellow-900 hover:text-white;
+  @apply bg-amber-600 text-[#1c314e] rounded-sm px-4 py-3 uppercase font-jost text-sm tracking-wider font-semibold opacity-85 cursor-pointer transition-all  hover:bg-transparent hover:border hover:outline-none hover:border-yellow-900 hover:text-white;
 }
 .btn2{
   @apply bg-white text-amber-600 rounded-sm px-4 py-3  font-lora text-xs tracking-wider font-semibold opacity-85 cursor-pointer transition-all  hover:bg-transparent hover:border hover:outline-none hover:border-white hover:text-white;

@@ -19,10 +19,10 @@ const Home = () => {
         <Countdown countToUse={8} subtitle={'Years of Industry Experience'} timer={100}/>
 
       </div>
-      <Section2>
+      {/* <Section2>
         <AboutUs />
       </Section2>
-      
+       */}
       <Section1>
         <PracticeArea/>
       </Section1>

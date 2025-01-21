@@ -54,7 +54,7 @@ const StickyNav = ({ isSticky = false }) => {
     { href: "/practice", label: "Practice Areas", isDropdown: false },
     { href: "/profile", label: "Attorney Profile", isDropdown: false },
     { href: "/about", label: "About", isDropdown: false },
-    { href: "/blog", label: "Blog", isDropdown: false },
+    { href: "#", label: "Blog", isDropdown: true },
     // { href: "#videos", label: "Videos", isDropdown: false },
   ];
   return (
@@ -67,17 +67,17 @@ const StickyNav = ({ isSticky = false }) => {
         }`}
     >
       {/* <div className="bg-black absolute w-full h-24 opacity-50 z-10 backdrop-blur-sm"></div> */}
-      <nav className=" w-full h-15 flex justify-between items-center  px-8 py-3.5 z-50">
+      <nav className=" w-full h-15 flex justify-between items-center  px-10 py-3.5 z-50">
         {/* LOGO */}
         <Link href="/">
           <Image
             className={`text-white cursor-pointer ${
-              scrollState.isSticky ? "w-[58px] md:w-[65px]" : "md:w-28 pt-2"
+              scrollState.isSticky ? "w-[58px] md:w-[70px]" : "md:w-28 pt-2"
             }`}
             src="/assets/images/logo.png"
             width={65}
             height={65}
-            alt="Turuchi"
+            alt="Turuchi law firm logo"
           ></Image>
         </Link>
         {/* MENU */}
