@@ -4,6 +4,7 @@ import { FaEnvelope, FaPhone } from "react-icons/fa6";
 import {socialLinks} from "@components/common/mediaButtons";
 
 const Nav = () => {
+  const email = "info@turuchilawfirm.com";
  
 
   
@@ -27,7 +28,7 @@ const Nav = () => {
             <span className="text-sm">732-210-6410</span>
           </Link>
           <Link
-            href={`mailto:info@turuchilawfirm.com`}
+            href={`mailto:${email}`}
             className=" flex justify-between hover:text-blue-200  items-center gap-2"
           >
             <FaEnvelope />

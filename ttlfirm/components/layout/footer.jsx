@@ -5,6 +5,7 @@ import { socialLinks } from "@components/common/mediaButtons";
 import Form from "@components/common/form";
 
 const Footer = () => {
+  const email = "info@turuchilawfirm.com";
   const footerLinks = [
     { href: "#personal_injury", label: "Personal Injury", isDropdown: false },
     { href: "#immig", label: "Immigration", isDropdown: false },
@@ -63,7 +64,7 @@ const Footer = () => {
                   <span className="text-sm">732-210-6410</span>
                 </Link>
                 <Link
-                  href={`mailto:info@turuchilawfirm.com`}
+                  href={`mailto:${email}`}
                   className=" flex hover:text-blue-200  items-center gap-2"
                 >
                   <FaEnvelope />
