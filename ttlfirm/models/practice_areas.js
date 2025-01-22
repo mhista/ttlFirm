@@ -2,7 +2,9 @@ export const demoProducts = [
     {
       id: "1",
       name: "Personal Injury",
-      image:'/assets/images/injury.jpg',
+      image:'/assets/images/inju.jpg',
+      subAreas:['Car Crash', 'Slip and Fall', 'Dog Bites'],
+
       detail: `At Turuchi Law Firm, we understand that an accident or injury can be one of the most devastating experiences of your life. The physical pain, emotional trauma, and financial strain can feel overwhelming, and the legal process of seeking compensation might seem complex and intimidating. That’s where we come in. We are dedicated to standing by your side, providing skilled legal representation, and fighting to secure the justice and compensation you deserve.
 
         Personal injury law encompasses a wide range of cases, including but not limited to car accidents, slip-and-fall incidents, defective products, and workplace accidents. `,
@@ -16,11 +18,12 @@ export const demoProducts = [
 
         At Turuchi Law Firm, we believe that injury victims deserve justice, and we are here to ensure your voice is heard. Let us handle the legal complexities while you focus on your recovery. Contact us today for a free consultation, and take the first step toward reclaiming your life.`,
     },
+    
     {
       id: "2",
       name: "Immigration",
       image:'/assets/images/immig.jpg',
-
+      subAreas:[],
       detail: `Immigration law is one of the most complex and dynamic areas of the legal system. At Turuchi Law Firm, we are passionate about helping individuals, families, and businesses navigate this intricate process and achieve their immigration goals. Whether you’re seeking a visa, green card, citizenship, or facing removal proceedings, our firm provides compassionate and effective legal representation tailored to your unique circumstances.
 
         We understand that immigration is more than just a legal matter—it’s about building a future, reuniting families, and creating opportunities.`,
@@ -43,7 +46,7 @@ export const demoProducts = [
       id: "3",
       name: "Workers Compensation",
       image:'/assets/images/work.jpg',
-
+      subAreas:[ 'Workplace Injury'],
       detail: `A workplace injury can disrupt your life in ways you never anticipated. From physical pain and mounting medical bills to lost wages and job insecurity, the aftermath of an injury can feel overwhelming. At Turuchi Law Firm, we are committed to helping injured workers navigate the workers’ compensation system and secure the benefits they need to recover and rebuild their lives.
 
         Workers’ compensation is designed to provide financial support to employees who suffer work-related injuries or illnesses.`,
@@ -66,8 +69,8 @@ export const demoProducts = [
     {
       id: "4",
       name: "Municipal Matters",
-      image:'/assets/images/muni.jpg',
-
+      image:'/assets/images/munic.jpg',
+      subAreas: [ 'Traffic Ticket Lawyer'],
       detail: `At Turuchi Law Firm, we provide comprehensive legal services for a wide range of municipal court matters, including traffic violations, speeding tickets, DUI/DWI, second and third DUI offenses, breath test refusals, underage DWI, and more.`,
       detail2: ` In New Jersey, thousands of traffic violations are issued every day, ranging from minor infractions to serious offenses like driving under the influence. While it may seem easiest to simply pay the fine and move on, doing so is equivalent to pleading guilty—and even a minor offense can lead to costly consequences, including increased insurance premiums and points on your license.`,
 

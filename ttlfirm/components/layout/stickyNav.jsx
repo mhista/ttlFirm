@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+
 import Image from "next/image";
 import Link from "next/link";
 import { FiMenu } from "react-icons/fi";
@@ -11,6 +13,9 @@ import { socialLinks } from "@components/common/mediaButtons";
 import _ from "lodash";
 
 const StickyNav = ({ isSticky = false }) => {
+  const router = usePathname();
+  const id = router.split("/").at(-1);
+  console.log(id)
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
   // handle scrolling
@@ -56,7 +61,7 @@ const StickyNav = ({ isSticky = false }) => {
     { href: "/practice", label: "Practice Areas", isDropdown: false },
     { href: "/profile", label: "Attorney Profile", isDropdown: false },
     { href: "/about", label: "About", isDropdown: false },
-    { href: "#", label: "Blog", isDropdown: true },
+    // { href: "#", label: "Blog", isDropdown: true },
     // { href: "#videos", label: "Videos", isDropdown: false },
   ];
   return (
@@ -88,7 +93,7 @@ const StickyNav = ({ isSticky = false }) => {
             ...(link.isDropdown ? (
               <span key={index} className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`} 
               onClick={() => {
-                setSelectedLink(link.label);
+                setSelectedLink(id);
               }}
               >
                 {link.label}
@@ -99,7 +104,7 @@ const StickyNav = ({ isSticky = false }) => {
                 key={index}
                 className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"}  hover:text-amber-600`}
                 onClick={() => {
-                setSelectedLink(link.label);
+                setSelectedLink(id);
               }}
               >
                 {link.label}
@@ -143,7 +148,7 @@ const StickyNav = ({ isSticky = false }) => {
                     key={index}
                     className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`} 
                     onClick={() => {
-                      setSelectedLink(link.label);
+                      setSelectedLink(id);
                       setToggleDropdown((prev) =>!prev)
                     }}
                   >
@@ -155,7 +160,7 @@ const StickyNav = ({ isSticky = false }) => {
                     key={index}
                     className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`} 
                     onClick={() => {
-                      setSelectedLink(link.label);
+                      setSelectedLink(id);
                       setToggleDropdown((prev) => !prev)
                     }}
                   >

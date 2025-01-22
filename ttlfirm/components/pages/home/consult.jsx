@@ -11,7 +11,7 @@ const Consultation = ()=>{
 
       </div>
       <p className="text-3xl w-1/2 text-center font-bold" >
-        Need help with any legal issues? feel free to
+        Need help with any legal issues? feel free to consult us
       </p>
       <Link href={`/contact`} className="btn2 w-40 text-center">
         Consult Us

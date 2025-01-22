@@ -3,7 +3,17 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
-const PracticeContainer = ({ image1, title, subtitle, aos, id }) => {
+const Area = ({ title }) => {
+  return (
+    <span className="flex gap-2 items-center cursor-auto">
+      <div className="h-[13px] w-[13px] rounded-full border-2 border-white flex justify-center items-center">
+        <div className="h-[5px] w-[5px] rounded-full bg-white"></div>
+      </div>
+      <p className="text-white ">{title}</p>
+    </span>
+  );
+};
+const PracticeContainer = ({ image1, title, subtitle, id, subAreas = [] }) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div
@@ -13,14 +23,29 @@ const PracticeContainer = ({ image1, title, subtitle, aos, id }) => {
      
     >
       <Link href={`/practice/${id}`}>
-        <div className={`flex flex-col gap-7`}>
+        <div className={`flex flex-col gap-7 `}>
+          <div className="relative flex justify-center items-center h-[190px] sm:w-[430px] sm:h-[250px] md:w-[300px] md:h-[190px]">
           <Image
             className="rounded-xl h-[190px] object-cover sm:w-[430px] sm:h-[250px] md:w-[300px] md:h-[190px]"
             src={image1}
             width={300}
             height={250}
             alt="business image"
-          />
+          /> { subAreas.length != 0 && <>
+          <div className="absolute h-[150px] w-[180px] bg-black top-5   opacity-45 rounded-md">
+           
+          </div>
+          <div className="text-white absolute rounded-md">
+            {
+             subAreas.length !=0 && subAreas.map((iteme, index)=>{
+              if (typeof iteme === "string") {
+                return (
+                  <Area key={index} title={iteme}/>
+                )}
+              })
+            }
+          </div></>}
+          </div>
 
           <h1 className="font-lora uppercase font-medium tracking-wider ">{title}</h1>
           <p className="w-[280px] sm:mx-0 sm:w-[300] overflow-hidden text-ellipsis text-pretty text-gray-700">

@@ -41,7 +41,7 @@ const HomeHero = ({height1 = "1200", height2="550", height3})=>{
             Your Justice <span className="text-amber-600">Our Commitment</span>
           </h1>
           <p className="text-base sm:text-sm w-5/6 sm:w-full lg:w-5/6 md:text-base lg:text-lg text-pretty" data-aos="zoom-in-up">
-          we are unwavering in our commitment to
+          We are unwavering in our commitment to
                 providing exceptional legal representation rooted in compassion,
                 diligence, and integrity. Our expertise lies in personal injury
                 law, where we relentlessly pursue justice and fair compensation

@@ -11,6 +11,9 @@ import Consultation from "@components/pages/home/consult";
 import { demoProducts } from "@models/practice_areas";
 import PageHeader from "@components/pages/header";
 
+
+
+
 const SinglePractice = () => {
   const router = usePathname();
   const id = router.split("/").at(-1);
@@ -22,7 +25,7 @@ const SinglePractice = () => {
 
   return (
     <div className="w-full flex flex-col">
-    <PageHeader text={demoProducts[id - 1].name} />
+    <PageHeader text={demoProducts[id - 1].name} subAreas={demoProducts[id - 1].subAreas} image={demoProducts[id - 1].image}/>
 
       <Section2>
         <div className="w-full flex flex-col md:flex-row-reverse justify-center items-center md:items-start md:justify-around md:pl-5">
