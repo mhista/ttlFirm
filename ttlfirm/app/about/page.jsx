@@ -4,10 +4,12 @@ import Section4 from "@components/common/section4";
 
 import Consultation from "@components/pages/home/consult";
 import Link from "next/link";
-
+import PageHeader from "@components/pages/header";
 const AboutUs = () => {
   return (
     <div className="z-[60] bg-white">
+    <PageHeader text={"About"} text2={"Us"}/>
+
     <div className="relative flex flex-col md:pl-8 mb-8 z-[60] bg-white">
       <div className="flex flex-col p-8 sm:p-16 md:flex-row-reverse justify-center md:items-start md:justify-around items-center mt-6  md:mt-8 sm:gap-7 md:px-0 ">
         <div className="relative w-full flex items-end justify-center  md:w-1/2">
@@ -36,7 +38,7 @@ const AboutUs = () => {
               </h3>
             </div>
             <h1 className=" font-lora  text-4xl">
-              Know about Turuchi Law Firm
+              About Turuchi Law Firm
             </h1>
 
             <div className="flex flex-col gap-3 text-lg">

@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiMenu } from "react-icons/fi";
 import { FaXmark } from "react-icons/fa6";
+import { FaEnvelope, FaPhone } from "react-icons/fa6";
+
 import { socialLinks } from "@components/common/mediaButtons";
 
 import _ from "lodash";
@@ -67,12 +69,12 @@ const StickyNav = ({ isSticky = false }) => {
         }`}
     >
       {/* <div className="bg-black absolute w-full h-24 opacity-50 z-10 backdrop-blur-sm"></div> */}
-      <nav className=" w-full h-15 flex justify-between items-center  px-10 py-3.5 z-50">
+      <nav className=" w-full h-15 flex justify-between items-center  px-5 lg:px-10 py-3.5 z-50">
         {/* LOGO */}
         <Link href="/">
           <Image
             className={`text-white cursor-pointer ${
-              scrollState.isSticky ? "w-[58px] md:w-[70px]" : "md:w-32 pt-2"
+              scrollState.isSticky ? "w-[58px] sm:w-[65px] md:w-[70px]" : "sm:w-[90px] md:w-32 pt-2"
             }`}
             src="/assets/images/logo.png"
             width={65}
@@ -105,9 +107,18 @@ const StickyNav = ({ isSticky = false }) => {
             )),
           }))}
         </div>
-        <Link href={`/contact`} className="btn hidden md:flex">
+       <div className="flex gap-4 flex-row-reverse">
+       <Link href={`/contact`} className="btn hidden md:flex">
           Contact us
         </Link>
+        <Link
+            href=""
+            className=" flex justify-between items-center gap-2 text-white md:text-sm text-xl  hover:text-blue-200"
+          >
+            <FaPhone />
+            <span className="">732-210-6410</span>
+          </Link>
+       </div>
         <div className="relative md:hidden">
           {!toggleDropdown ? (
             <FiMenu
@@ -154,7 +165,7 @@ const StickyNav = ({ isSticky = false }) => {
               }))}
               <hr className="w-full bg-gray-300"></hr>
               <div className="w-full text-white flex items-center justify-between">
-                <Link href={`/contact`} className="btn rounded-lg text-white"
+                <Link href={`/contact`} className="bg-amber-600 text-[#1c314e] rounded-sm px-4 py-3 text-center uppercase font-jost text-xs tracking-wider font-semibold opacity-85 cursor-pointer transition-all  hover:bg-transparent hover:border hover:outline-none hover:border-yellow-900 hover:text-white"
                 onClick={()=>
                   setToggleDropdown((prev) =>!prev)
                 

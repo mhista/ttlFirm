@@ -3,11 +3,14 @@ import Section2 from "@components/common/section2";
 import Section4 from "@components/common/section4";
 
 import Consultation from "@components/pages/home/consult";
+import PageHeader from "@components/pages/header";
 
 
 const PracticeAreas = () => {
   return (
     <div className="relative">
+    <PageHeader text={"Our Practice"} text2={"Areas"}/>
+
       <Section2>
         <PracticeArea />
       </Section2>

@@ -1,6 +1,5 @@
 
 import "@styles/global.css";
-import Header from "@components/layout/header";
 import Footer from "@components/layout/footer";
 import ScrollToTop from "@components/common/scrollToTop";
 
@@ -20,7 +19,6 @@ const Rootlayout = ({ children }) => {
       ></meta>
       <body>
         <main className="main font-jost">
-          <Header />
 
           {children}
           <Footer />
