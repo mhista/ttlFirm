@@ -24,7 +24,7 @@ const AboutUs = () => {
             </h1>
 
               <p className="text-pretty text-gray-500">
-                At Turuchi Law Firm, we are unwavering in our commitment to
+                At The Turuchi Law Firm, we are unwavering in our commitment to
                 providing exceptional legal representation rooted in compassion,
                 diligence, and integrity. Our expertise lies in personal injury
                 law, where we relentlessly pursue justice and fair compensation
@@ -40,7 +40,7 @@ const AboutUs = () => {
                 dedicated attorney will guide you with precision and care.
               </p>
               <p className="text-pretty text-gray-500">
-                At Turuchi Law Firm, we believe in the power of personalized
+                At The Turuchi Law Firm, we believe in the power of personalized
                 attention and transparent communication. We work tirelessly to
                 understand your unique circumstances, crafting tailored
                 strategies that align with your best interests. With a steadfast
