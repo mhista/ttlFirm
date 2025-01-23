@@ -88,7 +88,7 @@ const StickyNav = ({ isSticky = false }) => {
           ></Image>
         </Link>
         {/* MENU */}
-        <div className="hidden md:flex justify-between items-center text-white uppercase gap-4 md:gap-6 font-semibold md:font-normal lg:font-medium md:text-sm lg:text-base">
+        <div className={`hidden md:flex justify-between items-center text-white uppercase gap-4 md:gap-6 font-semibold md:font-normal lg:font-medium md:text-sm lg:text-base ${ scrollState.isSticky ? "" : "lg:mt-[-50px]"}`}>
           {menuLinks.map((link, index) => ({
             ...(link.isDropdown ? (
               <span key={index} className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`} 
@@ -112,7 +112,7 @@ const StickyNav = ({ isSticky = false }) => {
             )),
           }))}
         </div>
-       <div className="flex gap-4 flex-row-reverse">
+       <div className={`flex gap-4 flex-row-reverse ${ scrollState.isSticky ? "" : "lg:mt-[-50px]" }`}>
        <Link href={`/contact`} className="btn hidden md:flex">
           Contact us
         </Link>
@@ -121,7 +121,7 @@ const StickyNav = ({ isSticky = false }) => {
             className=" flex justify-between items-center gap-2 text-white md:text-sm text-xl  hover:text-blue-200"
           >
             <FaPhone />
-            <span className="">732-210-6410</span>
+            <span className="lg:text-lg">732-210-6410</span>
           </Link>
        </div>
         <div className="relative md:hidden">

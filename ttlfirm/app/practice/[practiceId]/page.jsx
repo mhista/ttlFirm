@@ -30,7 +30,7 @@ const SinglePractice = () => {
       <Section2>
         <div className="w-full flex flex-col md:flex-row-reverse justify-center items-center md:items-start md:justify-around md:pl-5">
           <div className="flex flex-col w-full md:w-[70%]  p-8 sm:p-16 justify-center md:items-start md:justify-around items-center mt-6  md:mt-8 sm:gap-7 md:px-0 ">
-            <div>
+            {/* <div>
               <Image
                 className="relative z-30  w-[300px]  h-[170px] sm:w-[450px] sm:h-[220px] md:w-[530px]  md:h-[250px]  lg:w-[800px] lg:h-[300px] object-cover hover:opacity-90"
                 src={demoProducts[id - 1].image}
@@ -38,8 +38,8 @@ const SinglePractice = () => {
                 height={250}
                 alt="business image"
               />
-            </div>
-            <div className="flex flex-col   gap-4  md:p-0 mt-10 sm:mt-0 ">
+            </div> */}
+            <div className="flex flex-col   gap-4  md:p-0 sm:mt-0 ">
               <div className="flex flex-col gap-5 sm:p-10 sm:pb-0 md:p-0">
                 {/* <div className="flex flex-col gap-8">
                 <hr className="bg-amber-600 h-[2px] w-14" />

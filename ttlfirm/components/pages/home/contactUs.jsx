@@ -8,9 +8,7 @@ const ContactUs = () => {
   return (
     <div className="w-full py-7">
      <div className="w-full hidden md:flex flex-col items-center justify-around gap-3 md:mt-7">
-     <h1 className="font-lora text-4xl font-medium">Leave us your info</h1>
-
-<h1 className="font-lora text-xl ">and we will get back to you</h1>
+     <h1 className="font-lora text-4xl font-medium">Leave us your info and we will get back to you</h1>
      </div>
       <div className="w-full flex flex-col md:flex-row items-center justify-between px-5 md:px-10 gap-6 md:gap-8">
         <div className="w-full flex flex-col  sm:items-start gap-8 sm:p-10 md:p-0 md:pb-12 ">
@@ -18,7 +16,7 @@ const ContactUs = () => {
             Free Consultation
           </h1>
           <p className="text-lg text-gray-800">
-          Law is a complex matter that can lead to significant problems if disregarded. Allow us to assist you!
+          Law is intricate, and neglecting it can  lead to serious consequences. Let us guide you through it.
           </p>
           <div className="flex flex-col  gap-4 text-black ">
             <Link

@@ -20,7 +20,7 @@ const Area = ({ title }) => {
 const PageHeader = ({text, text2, image, subAreas=[]}) => {
  
   return (
-    <div className={`relative w-full h-[350px] sm:h-[300px] md:h-[400px]`}>
+    <div className={`relative w-full h-[310px] sm:h-[300px] md:h-[340px]`}>
       {/* NAVBAR */}
       <Nav />
       {/* STICKY NAV */}
@@ -34,7 +34,7 @@ const PageHeader = ({text, text2, image, subAreas=[]}) => {
         src={`${image ?? "/assets/images/bgg.jpg"}`}
         className={`absolute w-full object-cover h-[350px] sm:h-[300px] md:h-[400px] z-10 top-0`}
       ></img>
-    <div className={`w-full relative h-[350px] sm:h-[300px] md:h-[400px] flex flex-col-reverse sm:flex-row-reverse items-center justify-center sm:items-center md:gap-8 pt-20 sm:pt-[100px]  sm:pl-9 md:pl-0 lg:pl-9 md:px-5`}>
+    <div className={`w-full relative h-[350px] sm:h-[300px] md:h-[400px] flex flex-col-reverse sm:flex-row-reverse items-center justify-center sm:items-center md:gap-8 pt-20 sm:pt-[10px]  sm:pl-9 md:pl-0 lg:pl-9 md:px-5`}>
         
         <div
           className={`text-white  flex flex-col gap-4 items-center  md:pl-8  w-full z-40 md:pt-20 lg:pt-14`}

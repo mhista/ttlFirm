@@ -40,9 +40,14 @@ const Accordion = () => {
   ];
 
   return (
-    <div className="flex flex-col sm:items-center w-full sm:px-10 md:px-0 mt-3 divide-y transition-all ">
+   <div className="flex flex-col  w-full p-8  sm:pt-0 mt-4 md:mt-0 transition-all">
+    <h1 className=" font-lora  text-3xl mb-5 tracking-widest">
+              FAQ
+            </h1>
+    <div className="flex flex-col sm:items-center w-full sm:px-10 md:px-0 transition-all ">
+    
       {accordionData.map((item, index) => (
-        <div key={index} className=" overflow-hidden mb-2 p-6">
+        <div key={index} className="w-full overflow-hidden  py-6">
           {/* Accordion Header */}
           <div
             className={` flex justify-between items-center px-4 py-2 cursor-pointer gap-2  ${
@@ -74,9 +79,10 @@ const Accordion = () => {
               {item.content}
             </div>
           )}
+          <hr className="w-full h-[0.5px] bg-gray-200 mt-4"/>
         </div>
       ))}
-    </div>
+    </div></div>
   );
 };
 

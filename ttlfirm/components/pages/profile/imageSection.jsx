@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { socialLinks2 } from "@components/common/mediaButttons2";
-const ImageSection = ()=>{
+const ImageSection = ({image})=>{
     return (
         <div className="z-[60] ">
         <Image
-          className="rounded relative  w-[300px]  h-[350px] sm:w-[450px] sm:h-[500px] md:w-[260px]  md:h-[300px]  lg:w-[700px] lg:h-[500px] object-cover z-[60]"
-          src="/assets/images/lawyer2.jpg"
+          className="rounded relative  w-[300px]  h-[450px] sm:w-[450px] sm:h-[630px] md:w-[260px]  md:h-[350px]  lg:w-[700px] lg:h-[700px] object-cover z-[60]"
+          src={image}
           width={300}
           height={250}
           alt="law"

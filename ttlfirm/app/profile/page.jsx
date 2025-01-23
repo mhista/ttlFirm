@@ -32,7 +32,7 @@ const Profile = () => {
     <div>
     <PageHeader text={"Meet Our"} text2={"Founder"}/>
       <div className="relative w-full flex flex-col md:flex-row justify-center md:items-start md:justify-around items-center pt-6 md:py-8 md:gap-7 md:px-7 z-[60] bg-white">
-        <ImageSection />
+        <ImageSection image={"/assets/images/main.jpg"} />
         <div className="md:w-full">
           {/* biography */}
           <div className=" sm:p-16 md:p-0 w-full">
@@ -131,7 +131,7 @@ const Profile = () => {
                 securing the best possible outcomes.
                 <br />
                 <br />
-                Let AttorneyTuruchi be your voice for justice. Contact her today
+                Let Attorney Turuchi be your voice for justice. Contact her today
                 to secure the representation you deserve.
               </p>
             </div>
@@ -181,7 +181,7 @@ const Profile = () => {
             </span>
             {/* honors and awards */}
             <div className="flex flex-col p-8 gap-4 ">
-              <h1 className="font-lora text-2xl font-medium">Honors</h1>
+              {/* <h1 className="font-lora text-2xl font-medium">Honors</h1> */}
               {awardAndRecognitions.map((items, index) => (
                 <span className="flex flex-col gap-4" key={index}>
                   <hr className="bg-amber-600 h-[2px] w-14" />
@@ -189,7 +189,7 @@ const Profile = () => {
                   <p className="text-pretty text-gray-500">
                     {items.recognition}
                   </p>
-                  <h1 className="text-lg opacity-80 font-bold">
+                  <h1 className="text-lg opacity-80 ">
                     {items.award}
                   </h1>
                 </span>
