@@ -17,14 +17,17 @@ const StickyNav = ({ isSticky = false }) => {
   const id = router.split("/").at(-1);
   console.log(id)
   const [toggleDropdown, setToggleDropdown] = useState(false);
-
+  const phoneNumber = "732-210-6410";
+  const handlePhoneCall = () => {
+    window.location.href = `tel:${phoneNumber}`;
+  };
   // handle scrolling
   const [scrollState, setScrollState] = useState({
     isSticky: false,
     isScrollingUp: false,
   });
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [selectedLink, setSelectedLink] = useState('Home');
+  const [selectedLink, setSelectedLink] = useState('');
 
   useEffect(() => {
     let ticking = false;
@@ -118,10 +121,11 @@ const StickyNav = ({ isSticky = false }) => {
         </Link>
         <Link
             href=""
+            onClick={handlePhoneCall}
             className=" flex justify-between items-center gap-2 text-white md:text-sm text-xl  hover:text-blue-200"
           >
             <FaPhone />
-            <span className="lg:text-lg">732-210-6410</span>
+            <span  className="lg:text-lg">732-210-6410</span>
           </Link>
        </div>
         <div className="relative md:hidden">

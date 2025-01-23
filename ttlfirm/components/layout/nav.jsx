@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { FaEnvelope, FaPhone } from "react-icons/fa6";
@@ -5,8 +6,10 @@ import {socialLinks} from "@components/common/mediaButtons";
 
 const Nav = () => {
   const email = "info@turuchilawfirm.com";
- 
-
+  const phoneNumber = "732-210-6410";
+  const handlePhoneCall = () => {
+    window.location.href = `tel:${phoneNumber}`;
+  };
   
 
   return (
@@ -22,10 +25,11 @@ const Nav = () => {
         <div className="flex justify-between items-center gap-7 text-white px-4">
           <Link
             href=""
+            onClick={handlePhoneCall}
             className=" flex justify-between items-center gap-2 hover:text-blue-200"
           >
             <FaPhone />
-            <span className="text-sm">732-210-6410</span>
+            <span className="text-sm" >732-210-6410</span>
           </Link>
           <Link
             href={`mailto:${email}`}

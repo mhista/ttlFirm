@@ -1,3 +1,4 @@
+"use client";
 import Form from "@components/common/form";
 import Link from "next/link";
 import { FaEnvelope, FaPhone, FaLocationDot } from "react-icons/fa6";
@@ -5,6 +6,10 @@ import { socialLinks } from "@components/common/mediaButtons";
 import { socialLinks2 } from "@components/common/mediaButttons2";
 
 const ContactUs = () => {
+  const phoneNumber = "732-210-6410";
+  const handlePhoneCall = () => {
+    window.location.href = `tel:${phoneNumber}`;
+  };
   return (
     <div className="w-full py-7">
      <div className="w-full hidden md:flex flex-col items-center justify-around gap-3 md:mt-7">
@@ -20,11 +25,12 @@ const ContactUs = () => {
           </p>
           <div className="flex flex-col  gap-4 text-black ">
             <Link
+            onClick={handlePhoneCall}
               href=""
               className=" flex  items-center gap-2 hover:text-blue-200"
             >
               <FaPhone />
-              <span className="text-lg">732-210-6410</span>
+              <span  className="text-lg">732-210-6410</span>
             </Link>
             <Link
               href=""

@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { FaEnvelope, FaPhone, FaLocationDot } from "react-icons/fa6";
@@ -5,6 +6,10 @@ import { socialLinks } from "@components/common/mediaButtons";
 import Form from "@components/common/form";
 
 const Footer = () => {
+  const phoneNumber = "732-210-6410";
+  const handlePhoneCall = () => {
+    window.location.href = `tel:${phoneNumber}`;
+  };
   const email = "info@turuchilawfirm.com";
   const footerLinks = [
     { href: "#personal_injury", label: "Personal Injury", isDropdown: false },
@@ -57,6 +62,7 @@ const Footer = () => {
               <div className="flex flex-col  gap-4 text-white ">
                 <Link
                   href=""
+                  onClick={handlePhoneCall}
                   className=" flex  items-center gap-2 hover:text-blue-200"
                 >
                   <FaPhone />
