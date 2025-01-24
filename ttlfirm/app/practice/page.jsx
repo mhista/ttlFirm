@@ -9,7 +9,7 @@ import PageHeader from "@components/pages/header";
 const PracticeAreas = () => {
   return (
     <div className="relative">
-    <PageHeader text={"Our Practice"} text2={"Areas"} subAreas={["Personal Injury", "Immigration", "Worker's Compensation", "Municipal Matters"]}/>
+    <PageHeader text={"Our Practice"} text2={"Areas"} subAreas={[]}/>
 
       <Section2>
         <PracticeArea />

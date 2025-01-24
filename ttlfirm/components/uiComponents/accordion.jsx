@@ -14,7 +14,7 @@ const Accordion = () => {
       title: "What types of cases does Turuchi Law Firm handle?",
       content:
         `Beyond personal injury, our firm offers comprehensive legal
-                services in immigration law, workers' compensation, municipal
+                services in immigration law, workers' compensation, municipal court
                 matters, and a broad spectrum of additional practice areas.`
     },
     {
@@ -42,9 +42,9 @@ const Accordion = () => {
   return (
    <div className="flex flex-col  w-full p-8  sm:pt-0 mt-4 md:mt-0 transition-all">
     <h1 className=" font-lora  text-3xl mb-5 tracking-widest">
-              FAQ
+              Frequently Asked Questions
             </h1>
-            <hr className="w-full h-[0.5px] bg-gray-200 mt-2"/>
+            <hr className="w-full h-[0.5px] bg-amber-600 mt-2"/>
     <div className="flex flex-col sm:items-center w-full sm:px-10 md:px-0 transition-all ">
     
       {accordionData.map((item, index) => (
