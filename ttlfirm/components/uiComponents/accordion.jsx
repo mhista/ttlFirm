@@ -44,6 +44,7 @@ const Accordion = () => {
     <h1 className=" font-lora  text-3xl mb-5 tracking-widest">
               FAQ
             </h1>
+            <hr className="w-full h-[0.5px] bg-gray-200 mt-2"/>
     <div className="flex flex-col sm:items-center w-full sm:px-10 md:px-0 transition-all ">
     
       {accordionData.map((item, index) => (

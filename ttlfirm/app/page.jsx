@@ -23,7 +23,7 @@ const Home = () => {
             <HomeHero height1={1200} height2={height2} height3={height3} />
           </Header>
 
-    <div className="absolute z-[70]  w-[85%] md:w-[50%] justify-center items-center right-[28px] sm:right-[48px] md:right-11 lg:left-10 top-[1250px] sm:top-[430px] md:top-[780px] md:pr-4 bg-zinc-100  flex flex-row shadow-2xl border-amber-600 border-opacity-90 border-t-[3px] gap:3 md:gap-5 rounded-sm">
+    <div className="absolute z-[70]  w-[85%] md:w-[50%] justify-center items-center right-[28px] sm:right-[48px] md:right-11 lg:left-10 top-[1240px] sm:top-[430px] md:top-[780px] md:pr-4 bg-zinc-100  flex flex-row shadow-2xl border-amber-600 border-opacity-90 border-t-[3px] gap:3 md:gap-5 rounded-sm">
         <Countdown countToUse={500} subtitle={'Legal Cases Handled'} sign={'+'} timer={5}/>
         <div className="w-[1px] bg-[#1f385b] h-[70px] md:h-[100px] opacity-75 mr-4 md:mr-0"></div>
         <Countdown countToUse={8} subtitle={'Years of Industry Experience'} timer={100}/>
