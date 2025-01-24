@@ -5,7 +5,7 @@ const ImageSection = ({image})=>{
     return (
         <div className="z-[60] ">
         <img
-          className="rounded relative  w-[300px]  h-[480px] sm:w-[450px] sm:h-[660px] md:w-[260px]  md:h-[380px]  lg:w-[700px] lg:h-[730px] object-cover z-[60]"
+          className="rounded relative  w-[300px]  h-[500px] sm:w-[450px] sm:h-[660px] md:w-[260px]  md:h-[380px]  lg:w-[700px] lg:h-[730px] object-cover z-[60]"
           src={image}
           width={300}
           height={250}
