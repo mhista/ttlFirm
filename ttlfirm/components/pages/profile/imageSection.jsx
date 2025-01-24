@@ -5,14 +5,14 @@ const ImageSection = ({image})=>{
     return (
         <div className="z-[60] ">
         <img
-          className="rounded relative  w-[300px]  h-[500px] sm:w-[450px] sm:h-[660px] md:w-[260px]  md:h-[380px]  lg:w-[700px] lg:h-[730px] object-cover z-[60]"
+          className="rounded relative  w-full h-[500px]  sm:h-[660px] md:w-[290px]  md:h-[380px]  lg:w-[700px] lg:h-[730px] object-cover z-[60] px-6 sm:px-0"
           src={image}
           width={300}
           height={250}
           alt="law"
         />
         {/* name and profession */}
-        <div className="flex flex-col gap-7 mt-5">
+        <div className="flex flex-col gap-7 mt-5 px-7 py-4 sm:p-0">
           <div className="flex flex-col gap-2"> 
             <h1 className="font-lora text-2xl font-medium">Turuchi S. Iheanachor, Esq.</h1>
             <h5 className="text-gray-500">Founder & Managing Attorney</h5>
