@@ -10,8 +10,9 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import Consultation from "@components/pages/home/consult";
 import { demoProducts } from "@models/practice_areas";
 import PageHeader from "@components/pages/header";
+import ImageSection from "@components/pages/profile/imageSection";
 
-
+import Accordion from "@components/uiComponents/accordion";
 
 
 const SinglePractice = () => {
@@ -19,8 +20,46 @@ const SinglePractice = () => {
   const id = router.split("/").at(-1);
   // demoProducts.js
   // demoProducts.js
+  const title = "";
+  const accordionData = [
+    {
+      title: "MORE MONEY (MAXIMIZING YOUR COMPENSATION)",
+      content:
+        "When I take on your case, insurance companies often assign a new adjuster with a higher settlement range because they know the exposure just went up.",
+    },
+    {
+      title: "CASH FLOW",
+      content:
+        "If possible, I’ll help you access additional funds from your insurance while you’re receiving treatment and waiting for your settlement.",
+    },
+    {
+      title: "HANDLING MEDICAL BILLS",
+      content:
+        "Once your treatment is complete, I’ll collect all your medical bills, records, and liens to make sure they’re handled properly.",
+    },
+    {
+      title: "WINNING YOUR SETTLEMENT",
+      content:
+        "I’ll build a strong case to get the insurance company to offer their highest settlement. I’ll also guide you on whether their offer is the right one for you.",
+    },
+    {
+      title: "KEEPING MORE IN YOUR POCKET",
+      content:
+        "If your bills are high, I’ll negotiate to reduce them so you can keep more of your settlement.",
+    },
+    {
+      title: "TAKING CARE OF PAYMENTS",
+      content:
+        "When your case is resolved, I’ll manage the payment of all bills and liens to take that stress off your plate.",
+    },
+    {
+      title: "GETTING YOU PAID",
+      content:
+        "The best part! I’ll send your share of the settlement directly to you as quickly as possible.",
+    },
+    
+  ];
   
-
   console.log(demoProducts[id - 1]);
 
   return (
@@ -76,8 +115,12 @@ const SinglePractice = () => {
                   </p>
                   <p className="text-pretty text-gray-500">
                     {demoProducts[id - 1].detail5}
-                  </p>
+                  </p>{demoProducts[id - 1].useFaq && (<Accordion title={title} accordionData = {accordionData} usePadding={false}/>)}
+                    <p className="text-pretty text-gray-500">
+                    With me on your side, you’ll get the care, support, and results you deserve while I handle the rest.
+                    </p>
                 </div>
+                
               </div>
             </div>
           </div>

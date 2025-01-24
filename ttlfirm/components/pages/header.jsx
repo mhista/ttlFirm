@@ -1,6 +1,4 @@
-
 import Nav from "@/components/layout/nav";
-
 import StickyNav from "@/components/layout/stickyNav";
 import Image from "next/image";
 import Link from "next/link";

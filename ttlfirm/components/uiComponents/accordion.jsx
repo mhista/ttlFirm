@@ -2,47 +2,19 @@
 import { useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 
-const Accordion = () => {
+const Accordion = ({usePadding, title, accordionData}) => {
   const [activeIndex, setActiveIndex] = useState(null);
 
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  const accordionData = [
-    {
-      title: "What types of cases does Turuchi Law Firm handle?",
-      content:
-        `Beyond personal injury, our firm offers comprehensive legal
-                services in immigration law, workers' compensation, municipal court
-                matters, and a broad spectrum of additional practice areas.`
-    },
-    {
-      title: "How can I schedule a consultation with Turuchi Law Firm?",
-      content:
-        "Scheduling a consultation with Turuchi Law Firm is easy. You can contact us through our website, call our office directly, or visit us in person. We strive to make the process as smooth and accessible as possible.",
-    },
-    {
-      title: "What makes Turuchi Law Firm stand out?",
-      content:
-        "At Turuchi Law Firm, we combine compassion with expertise. We are committed to personalized legal representation and have a proven track record of success in obtaining justice for our clients.",
-    },
-    {
-      title: "What are the costs of Turuchi Law Firm's legal services?",
-      content:
-        "Our legal fees vary depending on the complexity of the case. However, for personal injury cases, we often operate on a contingency fee basis, meaning you pay nothing unless we win your case.",
-    },
-    {
-      title: "Will I work directly with an attorney on my case?",
-      content:
-        "Yes, at Turuchi Law Firm, we believe in maintaining close communication with our clients. You will have direct access to an experienced attorney who will handle your case and provide you with updates every step of the way.",
-    },
-  ];
+  
 
   return (
-   <div className="flex flex-col  w-full p-8  sm:pt-0 mt-4 md:mt-0 transition-all">
+   <div className={`flex flex-col  w-full ${usePadding? "p-8" : ""}   sm:pt-0 mt-4 md:mt-0 transition-all`}>
     <h1 className=" font-lora  text-3xl mb-5 tracking-widest">
-              Frequently Asked Questions
+              {title}
             </h1>
             <hr className="w-full h-[0.5px] bg-amber-600 mt-2"/>
     <div className="flex flex-col sm:items-center w-full sm:px-10 md:px-0 transition-all ">

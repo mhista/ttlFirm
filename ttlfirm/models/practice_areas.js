@@ -3,6 +3,7 @@ export const demoProducts = [
       id: "1",
       name: "Personal Injury",
       image:'/assets/images/inju.jpg',
+      useFaq:true,
       subAreas:['Car Crash', 'Slip and Fall', 'Dog Bites'],
 
       detail: `At The Turuchi Law Firm, we understand that an accident or injury can be one of the most devastating experiences of your life. The physical pain, emotional trauma, and financial strain can feel overwhelming, and the legal process of seeking compensation might seem complex and intimidating. That’s where we come in. We are dedicated to standing by your side, providing skilled legal representation, and fighting to secure the justice and compensation you deserve.
@@ -23,6 +24,7 @@ export const demoProducts = [
       id: "2",
       name: "Immigration",
       image:'/assets/images/immig.jpg',
+      useFaq:false,
       subAreas:[],
       detail: `Immigration law is one of the most complex and dynamic areas of the legal system. At The Turuchi Law Firm, we are passionate about helping individuals, families, and businesses navigate this intricate process and achieve their immigration goals. Whether you’re seeking a visa, green card, citizenship, or facing removal proceedings, our firm provides compassionate and effective legal representation tailored to your unique circumstances.
 
@@ -46,7 +48,8 @@ export const demoProducts = [
       id: "3",
       name: "Workers' Compensation",
       image:'/assets/images/work.jpg',
-      subAreas:[ 'Workplace Injury'],
+      subAreas:[ 'Workplace Injury'],useFaq:false,
+
       detail: `A workplace injury can disrupt your life in ways you never anticipated. From physical pain and mounting medical bills to lost wages and job insecurity, the aftermath of an injury can feel overwhelming. At The Turuchi Law Firm, we are committed to helping injured workers navigate the workers’ compensation system and secure the benefits they need to recover and rebuild their lives.
 
         Workers’ compensation is designed to provide financial support to employees who suffer work-related injuries or illnesses.`,
@@ -70,8 +73,9 @@ export const demoProducts = [
       id: "4",
       name: "Municipal Court Matters",
       image:'/assets/images/munic.jpg',
-      subAreas: [ 'Traffic Ticket Lawyer'],
-      detail: `AtWe understand that every case is unique, and we're here to provide the guidance and support you need to navigate it with confidence. We understand that every case is unique, and we're here to provide the guidance and support you need to navigate it with confidence. At The Turuchi Law Firm, we provide comprehensive legal services for a wide range of municipal court matters, including traffic violations, speeding tickets, DUI/DWI, second and third DUI offenses, breath test refusals, underage DWI, and more.`,
+      subAreas: [ 'Traffic Ticket Lawyer'],useFaq:false,
+
+      detail: `At The Turuchi Law Firm, we provide comprehensive legal services for a wide range of municipal court matters, including traffic violations, speeding tickets, DUI/DWI, second and third DUI offenses, breath test refusals, underage DWI, and more.`,
       detail2: ` In New Jersey, thousands of traffic violations are issued every day, ranging from minor infractions to serious offenses like driving under the influence. While it may seem easiest to simply pay the fine and move on, doing so is equivalent to pleading guilty—and even a minor offense can lead to costly consequences, including increased insurance premiums and points on your license.`,
 
       detail3: ` Our experienced traffic violations attorney has successfully helped clients fight their tickets in municipal courts throughout New Jersey. We are familiar with NJ traffic laws and understand the potential long-term impact of a traffic ticket on your driving record and finances. 
