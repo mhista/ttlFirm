@@ -6,7 +6,7 @@ import {socialLinks} from "@components/common/mediaButtons";
 
 const Nav = () => {
   const email = "info@turuchilawfirm.com";
-  const phoneNumber = "732-210-6410";
+  const phoneNumber = "+1 732-210-6410";
   const handlePhoneCall = () => {
     window.location.href = `tel:${phoneNumber}`;
   };
@@ -29,7 +29,7 @@ const Nav = () => {
             className=" flex justify-between items-center gap-2 hover:text-blue-200"
           >
             <FaPhone />
-            <span className="text-sm" >732-210-6410</span>
+            <span className="text-sm" >+1 732-210-6410</span>
           </Link>
           <Link
             href={`mailto:${email}`}

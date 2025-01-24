@@ -22,7 +22,7 @@ const HomeHero = ({height1 = "1200", height2="550", height3})=>{
             data-aos="zoom-in"
           />
     
-          <Link href={'/profile'} className="z-40 font-lora   text-xl sm:text-base text-white md:text-2xl">
+          <Link href={'/profile'} className="z-40 font-lora border p-2   text-xl sm:text-base text-white md:text-2xl">
           Turuchi S. Iheanachor, Esq. <span className="text-xl">+</span>
             </Link>
             <div className="block sm:hidden z-40">
@@ -51,7 +51,7 @@ const HomeHero = ({height1 = "1200", height2="550", height3})=>{
                 law, where we relentlessly pursue justice and fair compensation
                 for individuals who have suffered harm due to the negligence of
                 others. Beyond personal injury, our firm offers comprehensive legal
-                services in immigration law, workers' compensation, municipal matters, and a broad spectrum of additional practice areas.
+                services in immigration law, workers' compensation, municipal court matters, and a broad spectrum of additional practice areas.
           </p>
           
           <Link href={`/contact`} className="hidden w-full sm:block lg:w-4/6   btn" data-aos="zoom-in">

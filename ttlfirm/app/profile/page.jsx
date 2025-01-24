@@ -6,10 +6,10 @@ import PageHeader from "@components/pages/header";
 const Area = ({ title }) => {
   return (
     <span className="flex gap-2 items-center opacity-85">
-      <div className="h-[13px] w-[13px] rounded-full border-2 border-amber-600 flex justify-center items-center">
-        <div className="h-[5px] w-[5px] rounded-full bg-amber-600"></div>
+      <div className="h-[13px] w-[13px] rounded-full border-2 border-gray-600 flex justify-center items-center">
+        <div className="h-[5px] w-[5px] rounded-full bg-gray-600"></div>
       </div>
-      <p className="text-amber-600 ">{title}</p>
+      <p className="text-gray-600 ">{title}</p>
     </span>
   );
 };
@@ -32,7 +32,7 @@ const Profile = () => {
     <div>
     <PageHeader text={"Meet Our"} text2={"Founder"}/>
       <div className="relative w-full flex flex-col md:flex-row justify-center md:items-start md:justify-around items-center pt-6 md:py-8 md:gap-7 md:px-7 z-[60] bg-white">
-        <ImageSection image={"/assets/images/main.jpg"} />
+        <ImageSection image={"/assets/images/main3.jpeg"} />
         <div className="md:w-full">
           {/* biography */}
           <div className=" sm:p-16 md:p-0 w-full">

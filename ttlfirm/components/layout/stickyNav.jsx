@@ -17,7 +17,7 @@ const StickyNav = ({ isSticky = false }) => {
   const id = router.split("/").at(-1);
   console.log(id)
   const [toggleDropdown, setToggleDropdown] = useState(false);
-  const phoneNumber = "732-210-6410";
+  const phoneNumber = "+1 732-210-6410";
   const handlePhoneCall = () => {
     window.location.href = `tel:${phoneNumber}`;
   };
@@ -125,7 +125,7 @@ const StickyNav = ({ isSticky = false }) => {
             className=" flex justify-between items-center gap-2 text-white md:text-sm text-xl  hover:text-blue-200"
           >
             <FaPhone />
-            <span  className="lg:text-lg">732-210-6410</span>
+            <span  className="lg:text-lg">+1 732-210-6410</span>
           </Link>
        </div>
         <div className="relative md:hidden">

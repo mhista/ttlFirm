@@ -4,8 +4,8 @@ import { socialLinks2 } from "@components/common/mediaButttons2";
 const ImageSection = ({image})=>{
     return (
         <div className="z-[60] ">
-        <Image
-          className="rounded relative  w-[300px]  h-[450px] sm:w-[450px] sm:h-[630px] md:w-[260px]  md:h-[350px]  lg:w-[700px] lg:h-[700px] object-cover z-[60]"
+        <img
+          className="rounded relative  w-[300px]  h-[480px] sm:w-[450px] sm:h-[660px] md:w-[260px]  md:h-[380px]  lg:w-[700px] lg:h-[730px] object-cover z-[60]"
           src={image}
           width={300}
           height={250}

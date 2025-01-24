@@ -12,7 +12,7 @@ const AboutUs = () => {
     <PageHeader text={"About"} text2={"Us"}/>
 
     <div className="relative w-full flex flex-col md:flex-row justify-center md:items-start md:justify-around items-center pt-6 md:py-8 md:gap-7 md:px-7 z-[60] bg-white">
-    <ImageSection image={"/assets/images/main2.jpg"}/>
+    <ImageSection image={"/assets/images/main.jpg"}/>
 
       <div className="md:w-full">
        
