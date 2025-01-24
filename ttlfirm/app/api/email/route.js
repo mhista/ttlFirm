@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { ConfidentialClientApplication } from '@azure/msal-node';
+// import { ConfidentialClientApplication } from '@azure/msal-node';
 export const POST= async(req, res)=> {
         const { name, email, message, phone } = req.body;
         console.log(req.body)

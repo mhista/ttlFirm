@@ -22,7 +22,7 @@ const HomeHero = ({height1 = "1200", height2="550", height3})=>{
             data-aos="zoom-in"
           />
     
-          <Link href={'/profile'} className="z-40 font-lora  text-2xl sm:text-base text-white md:text-2xl">
+          <Link href={'/profile'} className="z-40 font-lora   text-xl sm:text-base text-white md:text-2xl">
           Turuchi S. Iheanachor, Esq. <span className="text-xl">+</span>
             </Link>
             <div className="block sm:hidden z-40">

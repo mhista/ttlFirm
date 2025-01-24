@@ -47,4 +47,7 @@ const Nav = () => {
   );
 };
 
+// authority: `https://login.microsoftonline.com/${process.env.TENANT_ID}`,
+// 9236d2b0-3194-4dca-a947-299823dc150b secret
+
 export default Nav;
