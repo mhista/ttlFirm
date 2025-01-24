@@ -12,7 +12,7 @@ const ImageSection = ({image})=>{
           alt="law"
         />
         {/* name and profession */}
-        <div className="flex flex-col gap-7 mt-5 px-[26] py-4 sm:p-0">
+        <div className="flex flex-col gap-7 mt-5 px-[26px] py-4 sm:p-0">
           <div className="flex flex-col gap-2"> 
             <h1 className="font-lora text-2xl font-medium">Turuchi S. Iheanachor, Esq.</h1>
             <h5 className="text-gray-500">Founder & Managing Attorney</h5>
