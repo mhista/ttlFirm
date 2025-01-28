@@ -91,7 +91,7 @@ const StickyNav = ({ isSticky = false }) => {
           ></Image>
         </Link>
         {/* MENU */}
-        <div className={`hidden md:flex justify-between items-center text-white uppercase gap-4 md:gap-6 font-semibold md:font-normal lg:font-medium md:text-sm lg:text-base ${ scrollState.isSticky ? "" : "lg:mt-[-50px]"}`}>
+        <div className={`hidden md:flex justify-between items-center text-white uppercase gap-4 md:gap-2 lg:gap-6 font-semibold md:font-normal lg:font-medium md:text-sm lg:text-base ${ scrollState.isSticky ? "" : "lg:mt-[-50px]"}`}>
           {menuLinks.map((link, index) => ({
             ...(link.isDropdown ? (
               <span key={index} className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`} 
@@ -122,7 +122,7 @@ const StickyNav = ({ isSticky = false }) => {
         <Link
             href=""
             onClick={handlePhoneCall}
-            className="border p-3 rounded-sm flex justify-between items-center gap-2 text-white md:text-sm text-xl  hover:text-blue-200"
+            className="border p-3 rounded-sm flex justify-between items-center gap-2 text-white text-xl md:text-sm   hover:text-blue-200"
           >
             <FaPhone />
             <span  className="lg:text-lg ">+1 732-210-6410</span>
