@@ -62,9 +62,11 @@ const Profile = () => {
                 immigration cases to securing fair compensation for injured
                 workers or resolving municipal court disputes, Turuchi is a
                 relentless advocate and trusted guide, committed to delivering
-                exceptional representation at every stage of the legal process.
-                <br />
-                <br /> Turuchi has a unique advantage, having previously
+                exceptional representation at every stage of the legal process.</p>
+                <h1 className="font-lora text-xl font-medium">
+                Former Insurance Defense Attorney
+              </h1>
+              <p className="text-pretty text-gray-500"> Turuchi has a unique advantage, having previously
                 represented large insurance companies, agencies, and
                 municipalities as a defense attorrney in high-stakes cases
                 involving construction accidents, motor vehicle collisions, and
@@ -128,7 +130,7 @@ const Profile = () => {
                 securing the best possible outcomes.
                 <br />
                 <br />
-                Let Attorney Turuchi be your voice for justice. Contact her today
+                Let Attorney Turuchi be your voice for justice. Contact us today
                 to secure the representation you deserve.
               </p>
             </div>

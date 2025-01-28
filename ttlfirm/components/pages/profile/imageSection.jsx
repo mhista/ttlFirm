@@ -19,11 +19,11 @@ const ImageSection = ({image})=>{
           </div>
           <div className=" flex flex-col gap-3">
             <span className="flex gap-3 opacity-85">
-              <h6 className="font-bold">Email</h6>
+              <h6 className="font-bold">Email: </h6>
               <p>info@turuchilawfirm.com</p>
             </span>
             <span className="flex gap-3 opacity-85">
-              <h6 className="font-bold">Phone</h6>
+              <h6 className="font-bold">Phone: </h6>
               <p>+1 732-210-6410</p>
             </span>
           </div>
