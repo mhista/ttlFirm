@@ -10,7 +10,7 @@ const HomeHero = ({height1 = "1200", height2="550", height3})=>{
         AOS.init({ duration: 1000, once: true,});
       }, []);
     return (
-        <div className={`w-full relative h-[1260px] sm:h-[600px] md:h-[930px] flex flex-col-reverse sm:flex-row-reverse items-start justify-center sm:items-center gap-7 md:gap-8 lg:gap-4 pt-20 sm:pt-[120px] px-5 sm:pl-9 md:pl-0 lg:pl-9 md:px-5 lg:px-7`}>
+        <div className={`w-full relative h-[1290px] sm:h-[660px] md:h-[930px] flex flex-col-reverse sm:flex-row-reverse items-start justify-center sm:items-center gap-7 md:gap-8 lg:gap-4 pt-20 sm:pt-[120px] px-5 sm:pl-9 md:pl-0 lg:pl-9 md:px-5 lg:px-7`}>
         <div className=" flex flex-col items-center justify-center  w-full md:w-[full] md:pr-10 gap-5">
           <Image
             // sm:w-[450px] sm:h-[500px] md:h-[800px] md:w-[260px]  md:h-[300px]  lg:w-[450px] lg:h-[500px]
