@@ -3,7 +3,7 @@ import PracticeContainer from "@components/common/practiceContainer";
 
 const PracticeArea = () => {
   return (
-    <div className="relative section1 w-full flex flex-col justify-around items-center gap-5 md:gap-10 z-30 pt-28 pb-24 md:pt-32 lg:py-16">
+    <div className="relative section1 w-full flex flex-col justify-around items-center gap-5 md:gap-10 z-30 pt-[130px] pb-24 md:pt-32 lg:py-16">
         {/* <div className="flex flex-row items-center gap-3">
           <hr className="bg-amber-600 h-[2px] w-14" />
           <h3 className="text-amber-600 text-lg uppercase font-jost inline font-bold">
