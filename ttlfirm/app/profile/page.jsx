@@ -42,7 +42,7 @@ const Profile = () => {
               </h1>
               <p className="text-pretty text-gray-500">
                 Turuchi Iheanachor is the founder and managing attorney of our
-                law firm. She is a results driven attorney fueled by an
+                law firm. She is a results driven attorrney fueled by an
                 unwavering commitment to justice and advocacy. Specializing in
                 personal injury law, Turuchi combines her legal acumen,
                 tenacity, and compassion to fight for individuals who have
@@ -57,7 +57,7 @@ const Profile = () => {
                 formidable adversaries, including powerful corporations and
                 major insurance companies. Her practice extends far beyond
                 personal injury law, encompassing immigration law, workers'
-                compensation, municipal court matters, and a variety of other
+                compensation, municipal court matterrs, and a variety of other
                 legal services. From navigating the intricate nuances of
                 immigration cases to securing fair compensation for injured
                 workers or resolving municipal court disputes, Turuchi is a
@@ -66,7 +66,7 @@ const Profile = () => {
                 <br />
                 <br /> Turuchi has a unique advantage, having previously
                 represented large insurance companies, agencies, and
-                municipalities as a defense attorney in high-stakes cases
+                municipalities as a defense attorrney in high-stakes cases
                 involving construction accidents, motor vehicle collisions, and
                 catastrophic injuries. This invaluable experience allows her to
                 anticipate and counter the strategies of opposing counsel,
@@ -102,10 +102,10 @@ const Profile = () => {
                 Compassionate Representation That Delivers Results
               </h1>
               <p className="text-pretty text-gray-500">
-                Since completing law school, Attorney Turuchi has earned a
+                Since completing law school, Attorrney Turuchi has earned a
                 reputation as a skilled and relentless litigator, passionately
                 advocating for her clients across a broad spectrum of legal
-                matters. With a proven history of success, she has recovered
+                matterrs. With a proven history of success, she has recovered
                 millions of dollars in settlements and verdicts for individuals
                 injured by negligence, consistently delivering justice for her
                 clients. Turuchi approaches each case with unwavering
@@ -121,7 +121,7 @@ const Profile = () => {
                 <br />
                 Whether pursuing compensation for personal injury, navigating
                 the complexities of immigration law, or addressing workers’
-                compensation and municipal matters, Attoney Turuchi is the
+                compensation and municipal matterrs, Attorney Turuchi is the
                 advocate you need in your corner. Her unmatched dedication,
                 strategic expertise, and steadfast commitment to her clients’
                 rights make her an indispensable ally in achieving justice and
@@ -138,7 +138,7 @@ const Profile = () => {
               <Area title={"Personal Injury"} />
               <Area title={"Immigration Law"} />
               <Area title={"Workers' Compensation"} />
-              <Area title={"Municipal Matters"} />
+              <Area title={"Municipal Court Matters"} />
             </div>
             <span className="flex justify-center items-center md:justify-center">
               <hr className=" w-[90%] opacity-85 bg-amber-600 my-5" />
@@ -146,7 +146,7 @@ const Profile = () => {
             {/* education */}
             <div className="flex flex-col p-8 gap-4 ">
               <h1 className="font-lora text-2xl font-medium">
-                Education & Bar Admission
+                Education
               </h1>
               {educationAndBarAdmission.map((item, index) => {
                 if (typeof item === "string") {
@@ -181,12 +181,12 @@ const Profile = () => {
               {/* <h1 className="font-lora text-2xl font-medium">Honors</h1> */}
               {awardAndRecognitions.map((items, index) => (
                 <span className="flex flex-col gap-4" key={index}>
-                  <hr className="bg-amber-600 h-[2px] w-14" />
+                  {/* <hr className="bg-amber-600 h-[2px] w-14" /> */}
 
-                  <p className="text-pretty text-gray-500">
+                  <h1 className="font-lora text-2xl font-medium">
                     {items.recognition}
-                  </p>
-                  <h1 className="text-lg opacity-80 ">
+                  </h1>
+                  <h1 className="text-pretty text-gray-500">
                     {items.award}
                   </h1>
                 </span>

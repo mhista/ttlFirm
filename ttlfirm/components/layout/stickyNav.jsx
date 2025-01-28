@@ -122,10 +122,10 @@ const StickyNav = ({ isSticky = false }) => {
         <Link
             href=""
             onClick={handlePhoneCall}
-            className=" flex justify-between items-center gap-2 text-white md:text-sm text-xl  hover:text-blue-200"
+            className="border p-3 rounded-sm flex justify-between items-center gap-2 text-white md:text-sm text-xl  hover:text-blue-200"
           >
             <FaPhone />
-            <span  className="lg:text-lg">+1 732-210-6410</span>
+            <span  className="lg:text-lg ">+1 732-210-6410</span>
           </Link>
        </div>
         <div className="relative md:hidden">

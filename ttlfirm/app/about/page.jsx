@@ -10,7 +10,7 @@ const AboutUs = () => {
   const title = "Frequently Asked Questions";
   const accordionData = [
   {
-    title: "What types of cases does Turuchi Law Firm handle?",
+    title: "What type of cases does Turuchi Law Firm handle?",
     content:
       `Beyond personal injury, our firm offers comprehensive legal
               services in immigration law, workers' compensation, municipal court
@@ -19,7 +19,7 @@ const AboutUs = () => {
   {
     title: "How can I schedule a consultation with Turuchi Law Firm?",
     content:
-      "Scheduling a consultation with Turuchi Law Firm is easy. You can contact us through our website, call our office directly, or visit us in person. We strive to make the process as smooth and accessible as possible.",
+      "Scheduling a consultation with Turuchi Law Firm is easy. You can contact us through our website, call our office directly, or make an appointment to visit us in person. We strive to make the process as smooth and accessible as possible.",
   },
   {
     title: "What makes Turuchi Law Firm stand out?",
