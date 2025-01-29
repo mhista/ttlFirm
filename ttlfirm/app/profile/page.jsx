@@ -123,10 +123,10 @@ const Profile = () => {
                 <br />
                 Whether pursuing compensation for personal injury, navigating
                 the complexities of immigration law, or addressing workers’
-                compensation and municipal matterrs, Attorney Turuchi is the
+                compensation and municipal court matters, Attorney Turuchi is the
                 advocate you need in your corner. Her unmatched dedication,
                 strategic expertise, and steadfast commitment to her clients’
-                rights make her an indispensable ally in achieving justice and
+                rights make her an indispensable ally in achieving and
                 securing the best possible outcomes.
                 <br />
                 <br />

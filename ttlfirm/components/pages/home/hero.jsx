@@ -35,7 +35,7 @@ const HomeHero = ({height1 = "1200", height2="550", height3})=>{
           className={`text-white  flex flex-col items-start justify-center md:pl-8  w-full gap-5 z-40 md:pt-20 lg:mt-[-150px]`}
         >
         {/* Your justice, Our commitment */}
-        <h1 className=" font-lora  text-3xl sm:text-2xl md:text-2xl">
+        <h1 className=" font-lora  text-2xl sm:text-2xl md:text-2xl uppercase">
               The Turuchi Law Firm, LLC
             </h1>
           <h1
