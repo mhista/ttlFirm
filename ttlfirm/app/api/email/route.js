@@ -2,15 +2,12 @@ import { EmailClient, KnownEmailSendStatus } from "@azure/communication-email";
 
 // pages/api/send-email.js
 
-const connectionString = process.env.ACS_CONNECTION_STRING;
-const senderAddress = process.env.SENDER_EMAIL_ADDRESS;
+const connectionString = "endpoint=https://communicationservicewithturuchi.unitedstates.communication.azure.com/;accesskey=AV8uClV8AIDkdTStuTPxRVDSIutEekKMOs3kBYIDTprROywmUjIkJQQJ99BAACULyCpunCXBAAAAAZCSVNzl";
+const senderAddress = "DoNotReply@3630432b-a197-4c19-be62-0d6ae65c8e49.azurecomm.net";
 
 export const POST = async (req) => {
   const { name, email, message, phone } = await req.json();
-  console.log(email);
-  console.log(name);
-  console.log(message);
-  console.log(phone);
+  
 
   if (!name || !email || !message || !phone) {
     return new Response("Missing required fields", { status: 400 });
@@ -72,7 +69,7 @@ export const POST = async (req) => {
     //   }
     // }
 
-    const result = poller.getResult();
+    const result = await poller.getResult();
     if (result.status === KnownEmailSendStatus.Succeeded) {
       return new Response("Email sent successfully", { status: 200 });
     } else {
