@@ -38,7 +38,7 @@ const handleSubmit = async (e) => {
     setStatus("Sending...");
 
     try {
-      // console.log(formData)
+      console.log(formData)
         const response = await fetch("/api/email", {
             method: "POST",
             // headers: {

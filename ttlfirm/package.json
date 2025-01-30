@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@azure/communication-email": "^1.0.0",
     "aos": "^2.3.4",
     "lodash": "^4.17.21",
     "msal-node": "^0.0.1-security",
