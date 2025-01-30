@@ -2,11 +2,13 @@ import { EmailClient, KnownEmailSendStatus } from "@azure/communication-email";
 
 // pages/api/send-email.js
 
-const connectionString = "endpoint=https://communicationservicewithturuchi.unitedstates.communication.azure.com/;accesskey=AV8uClV8AIDkdTStuTPxRVDSIutEekKMOs3kBYIDTprROywmUjIkJQQJ99BAACULyCpunCXBAAAAAZCSVNzl";
-const senderAddress = "DoNotReply@3630432b-a197-4c19-be62-0d6ae65c8e49.azurecomm.net";
+const connectionString = process.env.ACS_CONNECTION_STRING;
+const senderAddress = process.env.SENDER_EMAIL_ADDRESS;
 
 export const POST = async (req) => {
   const { name, email, message, phone } = await req.json();
+  console.log("🔍 Connection String:", connectionString ? "Exists" : "Missing");
+console.log("🔍 Sender Email Address:", senderAddress ? senderAddress : "Missing");
   
 
   if (!name || !email || !message || !phone) {
@@ -50,26 +52,26 @@ export const POST = async (req) => {
     };
 
     const poller = await client.beginSend(email_message);
-    // if (!poller.getOperationState().isStarted) {
-    //   return new Response("Failed to send email", { status: 500 });
-    // }
+    if (!poller.getOperationState().isStarted) {
+      return new Response("Failed to send email", { status: 500 });
+    }
 
-    // const POLLER_WAIT_TIME = 10;
-    // let timeElapsed = 0;
+    const POLLER_WAIT_TIME = 10;
+    let timeElapsed = 0;
 
-    // while (!poller.isDone()) {
-    //   await poller.poll();
-    //   console.debug("Email send polling in progress");
-    //   await new Promise((resolve) =>
-    //     setTimeout(resolve, POLLER_WAIT_TIME * 1000)
-    //   );
-    //   timeElapsed += POLLER_WAIT_TIME;
-    //   if (timeElapsed > 180) {
-    //     return new Response("Failed to send email", { status: 500 });
-    //   }
-    // }
+    while (!poller.isDone()) {
+      await poller.poll();
+      console.debug("Email send polling in progress");
+      await new Promise((resolve) =>
+        setTimeout(resolve, POLLER_WAIT_TIME * 1000)
+      );
+      timeElapsed += POLLER_WAIT_TIME;
+      if (timeElapsed > 180) {
+        return new Response("Failed to send email", { status: 500 });
+      }
+    }
 
-    const result = await poller.getResult();
+    const result =  poller.getResult();
     if (result.status === KnownEmailSendStatus.Succeeded) {
       return new Response("Email sent successfully", { status: 200 });
     } else {
