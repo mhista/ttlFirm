@@ -56,20 +56,20 @@ console.log("🔍 Sender Email Address:", senderAddress ? senderAddress : "Missi
       return new Response("Failed to send email", { status: 500 });
     }
 
-    const POLLER_WAIT_TIME = 10;
-    let timeElapsed = 0;
+    // const POLLER_WAIT_TIME = 10;
+    // let timeElapsed = 0;
 
-    while (!poller.isDone()) {
-      await poller.poll();
-      console.debug("Email send polling in progress");
-      await new Promise((resolve) =>
-        setTimeout(resolve, POLLER_WAIT_TIME * 1000)
-      );
-      timeElapsed += POLLER_WAIT_TIME;
-      if (timeElapsed > 180) {
-        return new Response("Failed to send email", { status: 500 });
-      }
-    }
+    // while (!poller.isDone()) {
+    //   await poller.poll();
+    //   console.debug("Email send polling in progress");
+    //   await new Promise((resolve) =>
+    //     setTimeout(resolve, POLLER_WAIT_TIME * 1000)
+    //   );
+    //   timeElapsed += POLLER_WAIT_TIME;
+    //   if (timeElapsed > 180) {
+    //     return new Response("Failed to send email", { status: 500 });
+    //   }
+    // }
 
     const result =  poller.getResult();
     if (result.status === KnownEmailSendStatus.Succeeded) {
