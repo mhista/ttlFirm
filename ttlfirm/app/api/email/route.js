@@ -24,30 +24,7 @@ export const POST = async (req) => {
       content: {
         subject: "Test email from JS Sample",
         plainText: "This is plaintext body of test email.",
-        html: `<div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); border: 1px solid #ddd;">
-    
-    <h2 style="background: #0073e6; color: #ffffff; text-align: center; padding: 15px; margin: -20px -20px 20px -20px; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-        📩 New Client Message
-    </h2>
-    
-    <p style="font-size: 16px; color: #333;"><strong>Name:</strong> ${name}</p>
-    <p style="font-size: 16px; color: #333;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #0073e6;">${email}</a></p>
-    <p style="font-size: 16px; color: #333;"><strong>Phone:</strong> ${phone}</p>
-
-    <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; margin-top: 15px;">
-        <p style="font-size: 16px; font-style: italic; color: #555; margin: 0;">
-            ${message}
-        </p>
-    </div>
-
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="mailto:${email}" style="display: inline-block; background: #0073e6; color: #ffffff; text-decoration: none; font-weight: bold; padding: 10px 20px; border-radius: 5px;">
-            Reply Now
-        </a>
-    </div>
-
-    
-</div>
+        html: `<div> ${message}</div>
 `,
       },
     };
