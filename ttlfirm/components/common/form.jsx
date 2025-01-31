@@ -80,7 +80,7 @@ const Form = () => {
       return;
     }
     if (cooldown) {
-      setSnackbar({ open: true, message: "You can only send an email once every hour.", severity: "warning" });
+      setSnackbar({ open: true, message: "You can only send an email once every 10 minutes.", severity: "warning" });
       return;
     }
 
