@@ -12,10 +12,10 @@ const Footer = () => {
   };
   const email = "info@turuchilawfirm.com";
   const footerLinks = [
-    { href: "#personal_injury", label: "Personal Injury", isDropdown: false },
-    { href: "#immig", label: "Immigration", isDropdown: false },
-    { href: "#work", label: "Workers Compensation", isDropdown: true },
-    { href: "#municipal", label: "Municipal Matters", isDropdown: true },
+    { href: "/practice/1", label: "Personal Injury", isDropdown: false },
+    { href: "/practice/2", label: "Immigration", isDropdown: false },
+    { href: "/practice/3", label: "Workers Compensation", isDropdown: true },
+    { href: "/practice/4", label: "Municipal Matters", isDropdown: true },
    
   ];
   const menuLinks = [
