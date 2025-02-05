@@ -40,9 +40,9 @@ const Profile = () => {
               <h1 className="font-lora text-2xl font-medium">
                 Meet Our Founder
               </h1>
-              <p className="text-pretty text-gray-500">
+              <p className="text-pretty text-gray-500 text-justify">
                 Turuchi Iheanachor is the founder and managing attorney of our
-                law firm. She is a results driven attorrney fueled by an
+                law firm. She is a Results-driven attorrney fueled by an
                 unwavering commitment to justice and advocacy. Specializing in
                 personal injury law, Turuchi combines her legal acumen,
                 tenacity, and compassion to fight for individuals who have
@@ -66,7 +66,7 @@ const Profile = () => {
                 <h1 className="font-lora text-xl font-medium">
                 Former Insurance Defense Attorney
               </h1>
-              <p className="text-pretty text-gray-500"> Turuchi has a unique advantage, having previously
+              <p className="text-pretty text-gray-500 text-justify"> Turuchi has a unique advantage, having previously
                 represented large insurance companies, agencies, and
                 municipalities as a defense attorrney in high-stakes cases
                 involving construction accidents, motor vehicle collisions, and
@@ -79,7 +79,7 @@ const Profile = () => {
               <h1 className="font-lora text-xl font-medium">
                 A Global Perspective and Proven Expertise
               </h1>
-              <p className="text-pretty text-gray-500">
+              <p className="text-pretty text-gray-500 text-justify">
                 Turuchi earned her Juris Doctor from the University of Arizona
                 James E. Rogers College of Law and is licensed to practice in
                 New Jersey, with the ability to waive into other jurisdictions.
@@ -103,7 +103,7 @@ const Profile = () => {
               <h1 className="font-lora text-xl font-medium">
                 Compassionate Representation That Delivers Results
               </h1>
-              <p className="text-pretty text-gray-500">
+              <p className="text-pretty text-gray-500 text-justify">
                 Since completing law school, Attorrney Turuchi has earned a
                 reputation as a skilled and relentless litigator, passionately
                 advocating for her clients across a broad spectrum of legal
@@ -153,7 +153,7 @@ const Profile = () => {
               {educationAndBarAdmission.map((item, index) => {
                 if (typeof item === "string") {
                   return (
-                    <p className="text-pretty text-gray-500" key={index}>
+                    <p className="text-pretty text-gray-500 text-justify" key={index}>
                       {item}
                     </p>
                   );
@@ -188,7 +188,7 @@ const Profile = () => {
                   <h1 className="font-lora text-2xl font-medium">
                     {items.recognition}
                   </h1>
-                  <h1 className="text-pretty text-gray-500">
+                  <h1 className="text-pretty text-gray-500 text-justify">
                     {items.award}
                   </h1>
                 </span>
