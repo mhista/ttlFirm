@@ -156,7 +156,7 @@ const Footer = () => {
           </div>
           <div className="lg:pr-5">
             <p className="text-white  sm:text-base">
-              Built and managed by <a href="https://www.facebook.com/share/14UCpXLsP4/" className="text-blue-200 uppercase font-lora">Kymaa Digital Solutions</a>
+              Built and managed by <a href="https://www.facebook.com/share/14UCpXLsP4/" className="text-blue-200">Kymaa Digital Solutions</a>
             </p>
           </div>
 
