@@ -42,7 +42,7 @@ const Profile = () => {
               </h1>
               <p className="text-pretty text-gray-500 text-justify">
                 Turuchi Iheanachor is the founder and managing attorney of our
-                law firm. She is a results-driven attorrney fueled by an
+                law firm. She is a Results-driven attorrney fueled by an
                 unwavering commitment to justice and advocacy. Specializing in
                 personal injury law, Turuchi combines her legal acumen,
                 tenacity, and compassion to fight for individuals who have

@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css?family=Lora%3Aregular%2C500%2C600%2C700%2Citalic%2C500italic%2C600italic%2C700italic%7CJost%3A100%2C200%2C300%2Cregular%2C500%2C600%2C700%2C800%2C900%2C100italic%2C200italic%2C300italic%2Citalic%2C500italic%2C600italic%2C700italic%2C800italic%2C900italic&subset=cyrillic%2Ccyrillic-ext%2Clatin%2Clatin-ext%2Cvietnamese&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.main {
+  width: 100vw;
+  min-height: 100vh;
+  pointer-events: auto;
+  /* position: fixed; */
+  /* display: flex; */
+  /* justify-content: center; */
+  padding: 0px;
+  margin: 0px;
+}
+/* .section1:before {
+  content: "";
+  background-image: url("/assets/images/grid.svg");
+  z-index: 15;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left:0;
+  opacity: 0.4;
+  filter: invert(1);
+} */
+.section1:after {
+  content: "";
+  background-image: url("/assets/images/grid.svg");
+  z-index: 15;
+  position: absolute;
+  top: 0;
+  opacity: 0.4;
+  filter: invert(1);
+}
+
+.gradient:before {
+  height: fit-content;
+  z-index: 1;
+  width: 100%;
+  max-width: 640px;
+  background-image: radial-gradient(
+      at 27% 37%,
+      hsla(215, 98%, 61%, 1) 0px,
+      transparent 0%
+    ),
+    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 1) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, transparent 50%),
+    radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, transparent 50%),
+    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, transparent 50%),
+    radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, transparent 50%);
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  filter: blur(100px) saturate(150%);
+  top: 80px;
+  opacity: 0.15;
+}
+
+.btn {
+  @apply bg-amber-600 text-[#1c314e] rounded-sm px-4 py-3 text-center uppercase font-jost text-sm tracking-wider font-semibold opacity-85 cursor-pointer transition-all  hover:bg-transparent hover:border hover:outline-none hover:border-yellow-900 hover:text-white;
+}
+.btn2{
+  @apply bg-white text-amber-600 rounded-sm px-4 py-3  font-lora text-xs tracking-wider font-semibold opacity-85 cursor-pointer transition-all  hover:bg-transparent hover:border hover:outline-none hover:border-white hover:text-white;
+}
+
+.cursor_pointer{
+    @apply cursor-pointer;
+}
+
+.dropdown {
+  @apply absolute right-0 top-full mt-3 w-full p-5 rounded-lg bg-[#1c314e] opacity-95  flex flex-col justify-start items-start z-[100] ;
+}

@@ -29,7 +29,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative bottom-0 flex flex-col-reverse gap-5 w-full bg-[#1c314e] h-[810px] sm:h-[350px] md:h-[350px] lg:h-[380px] m-0 p-0">
+    <footer className="relative bottom-0 flex flex-col-reverse gap-5 w-full bg-[#1c314e] h-[840px] sm:h-[350px] md:h-[350px] lg:h-[380px] m-0 p-0">
       {/* <div className={`absolute w-full z-20 bg-black opacity-40 h-[500] text-center top-0`}></div> */}
       {/* <Image
         className={`text-white  absolute opacity-5 bottom-0 left- top-20`}
