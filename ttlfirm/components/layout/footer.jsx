@@ -14,8 +14,8 @@ const Footer = () => {
   const footerLinks = [
     { href: "/practice/1", label: "Personal Injury", isDropdown: false },
     { href: "/practice/2", label: "Immigration", isDropdown: false },
-    { href: "/practice/3", label: "Workers Compensation", isDropdown: true },
-    { href: "/practice/4", label: "Municipal Matters", isDropdown: true },
+    { href: "/practice/3", label: "Workers Compensation", isDropdown: false },
+    { href: "/practice/4", label: "Municipal Matters", isDropdown: false },
    
   ];
   const menuLinks = [
@@ -23,13 +23,13 @@ const Footer = () => {
 
     { href: "/profile", label: "Attorney Profile", isDropdown: false },
     { href: "/about", label: "About", isDropdown: false },
-    { href: "/blog", label: "Blog", isDropdown: false },
+    // { href: "/blog", label: "Blog", isDropdown: false },
     // { href: "#videos", label: "Videos", isDropdown: false },
   ];
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative bottom-0 flex flex-col-reverse gap-5 w-full bg-[#1c314e] h-[840px] sm:h-[350px] md:h-[350px] lg:h-[380px] m-0 p-0">
+    <footer className="relative bottom-0 flex flex-col-reverse gap-5 sm:gap-3 w-full bg-[#1c314e] h-[900px] sm:h-[400px] md:h-[350px] lg:h-[380px] m-0 p-0">
       {/* <div className={`absolute w-full z-20 bg-black opacity-40 h-[500] text-center top-0`}></div> */}
       {/* <Image
         className={`text-white  absolute opacity-5 bottom-0 left- top-20`}
@@ -39,7 +39,7 @@ const Footer = () => {
         alt="Turuchi"
       ></Image> */}
       {/* footer details */}
-      <div className="absolute w-full flex flex-col-reverse sm:flex-row justify-around md:items-center bottom-[100px] gap-5 sm:gap-4 pl-8 lg:pl-16">
+      <div className="absolute w-full flex flex-col-reverse sm:flex-row justify-around md:items-center bottom-[150px] sm:bottom-[120px] md:bottom-[100px] gap-5 sm:gap-4 pl-8 lg:pl-16">
         {/* form */}
         {/* <Form /> */}
         <div className="w-full flex flex-col gap-5 mb-5 sm:mb-0">
@@ -148,7 +148,7 @@ const Footer = () => {
         </div>
         
       </div>
-      <div className="flex flex-col-reverse md:flex-row w-full bg-[#213147] px-7 gap-3 mt-5  md:px-11 lg:px-16 pb-8 justify-between">
+      <div className="flex flex-col-reverse md:flex-row w-full bg-[#213147] px-7 gap-3 mt-5 sm:mt-0   md:px-11 lg:px-16 pb-8 justify-between">
           <div>
             <p className="text-white  sm:text-base">
               © {currentYear} Turuchi Law Firm. All rights reserved.
