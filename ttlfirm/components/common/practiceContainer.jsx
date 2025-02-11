@@ -32,7 +32,7 @@ const PracticeContainer = ({ image1, title, subtitle, id, subAreas = [] }) => {
             height={250}
             alt="business image"
           /> { subAreas.length != 0 && <>
-          <div className="absolute h-[150px] w-[180px] bg-black top-5   opacity-45 rounded-md">
+          <div className="absolute h-[150px] w-[180px] bg-black top-5 sm:top-10 md:top-5   opacity-45 rounded-md">
            
           </div>
           <div className="text-white absolute rounded-md">
