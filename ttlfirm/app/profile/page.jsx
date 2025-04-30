@@ -25,12 +25,14 @@ const Profile = () => {
       recognition: "Bar Admission",
       award:
         "Admitted to the State bar of New Jersey with the ability to waive into multiple states",
+      award2:
+        "Admitted to the United States District Court for the District of New Jersey",
     },
   ];
 
   return (
     <div>
-    <PageHeader text={"Meet Our"} text2={"Founder"}/>
+      <PageHeader text={"Meet Our"} text2={"Founder"} />
       <div className="relative w-full flex flex-col md:flex-row justify-center md:items-start md:justify-around items-center pt-6 md:py-8 md:gap-7 md:px-7 z-[60] bg-white">
         <ImageSection image={"/assets/images/main3.jpeg"} />
         <div className="md:w-full">
@@ -50,31 +52,34 @@ const Profile = () => {
                 deliver aggressive representation tailored to the unique needs
                 of every client, ensuring they receive the compensation and
                 justice they deserve. <br />
-                <br /> Turuchi's legal career is defined by her
-                dedication to empowering her community through advocacy and
-                justice. With a robust and diverse legal background, she takes
-                pride in championing the rights of individuals against
-                formidable adversaries, including powerful corporations and
-                major insurance companies. Her practice extends far beyond
-                personal injury law, encompassing immigration law, workers'
-                compensation, municipal court matterrs, and a variety of other
-                legal services. From navigating the intricate nuances of
-                immigration cases to securing fair compensation for injured
-                workers or resolving municipal court disputes, Turuchi is a
-                relentless advocate and trusted guide, committed to delivering
-                exceptional representation at every stage of the legal process.</p>
-                <h1 className="font-lora text-xl font-medium">
+                <br /> Turuchi's legal career is defined by her dedication to
+                empowering her community through advocacy and justice. With a
+                robust and diverse legal background, she takes pride in
+                championing the rights of individuals against formidable
+                adversaries, including powerful corporations and major insurance
+                companies. Her practice extends far beyond personal injury law,
+                encompassing immigration law, workers' compensation, municipal
+                court matterrs, and a variety of other legal services. From
+                navigating the intricate nuances of immigration cases to
+                securing fair compensation for injured workers or resolving
+                municipal court disputes, Turuchi is a relentless advocate and
+                trusted guide, committed to delivering exceptional
+                representation at every stage of the legal process.
+              </p>
+              <h1 className="font-lora text-xl font-medium">
                 Former Insurance Defense Attorney
               </h1>
-              <p className="text-pretty text-gray-500 text-justify"> Turuchi has a unique advantage, having previously
-                represented large insurance companies, agencies, and
-                municipalities as a defense attorney in high-stakes cases
-                involving construction accidents, motor vehicle collisions, and
-                catastrophic injuries. This invaluable experience allows her to
-                anticipate and counter the strategies of opposing counsel,
-                giving her clients a distinct edge. Committed to staying ahead
-                of legal developments, Turuchi employs a strategic approach that
-                ensures every case is handled with precision and care.
+              <p className="text-pretty text-gray-500 text-justify">
+                {" "}
+                Turuchi has a unique advantage, having previously represented
+                large insurance companies, agencies, and municipalities as a
+                defense attorney in high-stakes cases involving construction
+                accidents, motor vehicle collisions, and catastrophic injuries.
+                This invaluable experience allows her to anticipate and counter
+                the strategies of opposing counsel, giving her clients a
+                distinct edge. Committed to staying ahead of legal developments,
+                Turuchi employs a strategic approach that ensures every case is
+                handled with precision and care.
               </p>
               <h1 className="font-lora text-xl font-medium">
                 A Global Perspective and Proven Expertise
@@ -123,11 +128,11 @@ const Profile = () => {
                 <br />
                 Whether pursuing compensation for personal injury, navigating
                 the complexities of immigration law, or addressing workers’
-                compensation and municipal court matters, Attorney Turuchi is the
-                advocate you need in your corner. Her unmatched dedication,
+                compensation and municipal court matters, Attorney Turuchi is
+                the advocate you need in your corner. Her unmatched dedication,
                 strategic expertise, and steadfast commitment to her clients’
-                rights make her an indispensable ally in achieving and
-                securing the best possible outcomes.
+                rights make her an indispensable ally in achieving and securing
+                the best possible outcomes.
                 <br />
                 <br />
                 Let Attorney Turuchi be your voice for justice. Contact us today
@@ -147,13 +152,14 @@ const Profile = () => {
             </span>
             {/* education */}
             <div className="flex flex-col p-8 gap-4 ">
-              <h1 className="font-lora text-2xl font-medium">
-                Education
-              </h1>
+              <h1 className="font-lora text-2xl font-medium">Education</h1>
               {educationAndBarAdmission.map((item, index) => {
                 if (typeof item === "string") {
                   return (
-                    <p className="text-pretty text-gray-500 text-justify" key={index}>
+                    <p
+                      className="text-pretty text-gray-500 text-justify"
+                      key={index}
+                    >
                       {item}
                     </p>
                   );
@@ -190,6 +196,9 @@ const Profile = () => {
                   </h1>
                   <h1 className="text-pretty text-gray-500 text-justify">
                     {items.award}
+                  </h1>
+                  <h1 className="text-pretty text-gray-500 text-justify">
+                    {items.award2}
                   </h1>
                 </span>
               ))}
