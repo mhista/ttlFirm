@@ -148,7 +148,7 @@ export default async function SubServicePage({ params }) {
             </h1>
 
             {/* Counties */}
-            {subService.counties && subService.counties.length > 0 && (
+            {/* {subService.counties && subService.counties.length > 0 && (
               <div className="mt-4 flex gap-2 flex-wrap justify-center">
                 {subService.counties.map((county) => (
                   <span
@@ -159,7 +159,7 @@ export default async function SubServicePage({ params }) {
                   </span>
                 ))}
               </div>
-            )}
+            )} */}
           </div>
         </div>
 

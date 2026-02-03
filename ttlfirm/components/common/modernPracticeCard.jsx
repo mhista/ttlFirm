@@ -8,6 +8,7 @@ const ModernPracticeCard = ({ image1, title, subtitle, id, subAreas = [] }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
+    
     <div
       className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
       onMouseEnter={() => setIsHovered(true)}
