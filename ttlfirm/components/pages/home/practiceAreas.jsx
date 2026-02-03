@@ -1,28 +1,70 @@
-import PracticeContainer from "@components/common/practiceContainer";
-
+import ModernPracticeCard from "@components/common/modernPracticeCard";
+import Link from "@node_modules/next/link";
 
 const PracticeArea = () => {
   return (
-    <div className="relative section1 w-full flex flex-col justify-around items-center gap-5 md:gap-10 z-30 pt-[130px] pb-24 md:pt-32 lg:py-16">
-        {/* <div className="flex flex-row items-center gap-3">
+    <div className="relative w-full flex flex-col justify-around items-center gap-8 md:gap-12 z-30 pt-[130px] pb-24 md:pt-32 lg:py-20">
+      {/* Section Header */}
+      <div className="flex flex-col items-center gap-4 text-center px-4">
+        <div className="flex flex-row items-center gap-3">
           <hr className="bg-amber-600 h-[2px] w-14" />
           <h3 className="text-amber-600 text-lg uppercase font-jost inline font-bold">
-            What we do
+            What We Do
           </h3>
           <hr className="bg-amber-600 h-[2px] w-14" />
+        </div>
+        <h1 className="font-lora text-4xl md:text-5xl text-center font-bold">
+          Practice Areas
+        </h1>
+        <p className="text-gray-600 max-w-2xl text-lg">
+          Comprehensive legal services tailored to protect your rights and secure your future
+        </p>
+      </div>
 
-      </div> */}
-      <h1 className="font-lora text-4xl text-center sm:pl-0">Our Practice Areas</h1>
-   <div className="w-full flex flex-col md:flex-row  flex-wrap  lg:px-0 gap-12 items-center justify-center">
-   <PracticeContainer image1={'/assets/images/inju.jpg'}  title={'Personal Injury'} aos={"fade-right"} id={1} subAreas={['Car Accidents', 'Slip and Fall', 'Dog Bites', "and many more"]}
-    subtitle={'At The Turuchi Law Firm, we understand that an accident or injury can be one of the most devastating experiences of your life. The physical pain, emotional trauma,'}/>
-    <PracticeContainer image1={'/assets/images/immig.jpg'}  title={'Immigration'} aos={"zoom-in"} id={2} subAreas={[ "Immigration Law"]}
-    subtitle={'Immigration law is one of the most complex and dynamic areas of the legal system. At The Turuchi Law Firm, we are passionate about helping individuals, families, and '}/>
-    <PracticeContainer image1={'/assets/images/work.jpg'}  title={"Workers' Compensation"} aos={"fade-left"} id={3} subAreas={[ 'Workplace Injury']}
-    subtitle={'A workplace injury can disrupt your life in ways you never anticipated. From physical pain and mounting medical bills to lost wages and job insecurity, the aftermath'}/>
-     <PracticeContainer image1={'/assets/images/munic.jpg'}  title={'Municipal Court Matters'} aos={"zoom-in"} id={4} subAreas={[ 'Traffic Ticket Lawyer']}
-    subtitle={'At The Turuchi Law Firm, we provide comprehensive legal services for a wide range of municipal court matters, including traffic violations, speeding tickets,'}/>
-   </div>
+      {/* Practice Cards Grid */}
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-5 md:px-12 lg:px-16 max-w-[1400px]">
+        <ModernPracticeCard
+          image1={'/assets/images/inju.jpg'}
+          title={'Personal Injury'}
+          id={1}
+          subAreas={['Car Accidents', 'Slip and Fall', 'Dog Bites', 'Wrongful Death', 'Catastrophic Injuries']}
+          subtitle={'Our firm represents clients throughout New Jersey who have been injured due to negligence, helping them pursue fair compensation for medical expenses, lost income, and other damages. We handle each case with diligence and personal attention.'}
+        />
+        
+        <ModernPracticeCard
+          image1={'/assets/images/immig.jpg'}
+          title={'Immigration'}
+          id={2}
+          subAreas={['Family Immigration', 'Green Cards', 'Citizenship', 'Deportation Defense', 'Asylum']}
+          subtitle={'We assist individuals and families across New Jersey with immigration matters, including visas, adjustment of status, citizenship, and removal defense. Our approach is focused on clear guidance and effective legal representation at every stage.'}
+        />
+        
+        <ModernPracticeCard
+          image1={'/assets/images/work.jpg'}
+          title={"Workers' Compensation"}
+          id={3}
+          subAreas={['Workplace Injuries', 'Construction Accidents', 'Occupational Illness', 'Disability Claims']}
+          subtitle={'One of our goals is to protect your rights throughout the claims process. We stand for injured workers across New Jersey, ensuring they receive the benefits and medical care to which they are entitled under state workers’ compensation laws'}
+        />
+        
+        <ModernPracticeCard
+          image1={'/assets/images/munic.jpg'}
+          title={'Municipal Court & Traffic Matters'}
+          id={4}
+          subAreas={['Traffic Violations', 'DWI Defense', 'Disorderly Conduct', 'License Suspension']}
+          subtitle={'Let us advocate for you, protect your record, and save you from unnecessary penalties. We represent clients in New Jersey municipal courts for traffic violations and related matters, working to minimize penalties, protect driving records, and resolve cases efficiently.'}
+        />
+      </div>
+
+      {/* Bottom CTA */}
+      <div className="mt-8">
+        <Link
+          href="/contact"
+          className="btn text-center"
+        >
+          Schedule Free Consultation
+        </Link>
+      </div>
     </div>
   );
 };

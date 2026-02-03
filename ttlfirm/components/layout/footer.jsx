@@ -53,7 +53,7 @@ const Footer = () => {
           <p className="text-base sm:text-sm lg:text-base w-5/6  text-white">
             {/* Turuchilaw firm is a leading expert in legal profession. Our team of
             experts provides you with unparalleled legal advice and support. */}
-            We understand that every case is unique, and we're here to provide the guidance and support you need to navigate it with confidence.
+            We understand that every case is unique, and working with a trusted law firm in New Jersey provides the guidance and support you need to navigate it with confidence.
           </p>
         </div>
         {/* informations */}

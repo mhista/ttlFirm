@@ -29,33 +29,27 @@ export default defineConfig({
                       .child(
                         S.documentList()
                           .title('Published Posts')
-                          .filter('_type == "blog" && status == "published"')
+                          .filter('_type == "blog" && status == "published"'),
                       ),
                     S.listItem()
                       .title('Draft Posts')
                       .child(
                         S.documentList()
                           .title('Draft Posts')
-                          .filter('_type == "blog" && status == "draft"')
+                          .filter('_type == "blog" && status == "draft"'),
                       ),
                     S.listItem()
                       .title('All Posts')
-                      .child(
-                        S.documentTypeList('blog').title('All Blog Posts')
-                      ),
+                      .child(S.documentTypeList('blog').title('All Blog Posts')),
                     S.divider(),
                     S.listItem()
                       .title('Authors')
                       .child(S.documentTypeList('author').title('Authors')),
                     S.listItem()
                       .title('Categories')
-                      .child(
-                        S.documentTypeList('category').title('Categories')
-                      ),
-                    S.listItem()
-                      .title('Tags')
-                      .child(S.documentTypeList('tag').title('Tags'))
-                  ])
+                      .child(S.documentTypeList('category').title('Categories')),
+                    S.listItem().title('Tags').child(S.documentTypeList('tag').title('Tags')),
+                  ]),
               ),
 
             S.divider(),
@@ -69,16 +63,10 @@ export default defineConfig({
                   .items([
                     S.listItem()
                       .title('Practice Areas')
-                      .child(
-                        S.documentTypeList('practiceArea').title(
-                          'Practice Areas'
-                        )
-                      ),
+                      .child(S.documentTypeList('practiceArea').title('Practice Areas')),
                     S.listItem()
                       .title('Sub-Services')
-                      .child(
-                        S.documentTypeList('subService').title('Sub-Services')
-                      ),
+                      .child(S.documentTypeList('subService').title('Sub-Services')),
                     S.divider(),
                     S.listItem()
                       .title('By Practice Area')
@@ -89,26 +77,72 @@ export default defineConfig({
                             S.documentList()
                               .title('Sub-Services')
                               .filter(
-                                '_type == "subService" && practiceArea._ref == $practiceAreaId'
+                                '_type == "subService" && practiceArea._ref == $practiceAreaId',
                               )
-                              .params({practiceAreaId})
-                          )
-                      )
-                  ])
+                              .params({practiceAreaId}),
+                          ),
+                      ),
+                  ]),
+              ),
+
+            S.divider(),
+
+            // Testimonials
+            S.listItem()
+              .title('Testimonials')
+              .child(
+                S.list()
+                  .title('Testimonial Management')
+                  .items([
+                    S.listItem()
+                      .title('Featured Testimonials')
+                      .child(
+                        S.documentList()
+                          .title('Featured')
+                          .filter('_type == "testimonial" && featured == true'),
+                      ),
+                    S.listItem()
+                      .title('All Testimonials')
+                      .child(S.documentTypeList('testimonial').title('All Testimonials')),
+                    S.divider(),
+                    S.listItem()
+                      .title('By Case Type')
+                      .child(
+                        S.list()
+                          .title('Filter by Case Type')
+                          .items([
+                            S.listItem()
+                              .title('Personal Injury')
+                              .child(
+                                S.documentList()
+                                  .title('Personal Injury')
+                                  .filter(
+                                    '_type == "testimonial" && caseType == "personal-injury"',
+                                  ),
+                              ),
+                            S.listItem()
+                              .title('Immigration')
+                              .child(
+                                S.documentList()
+                                  .title('Immigration')
+                                  .filter('_type == "testimonial" && caseType == "immigration"'),
+                              ),
+                            // Add more case types as needed
+                          ]),
+                      ),
+                  ]),
               ),
 
             S.divider(),
 
             // Location Settings
-            S.listItem()
-              .title('NJ Counties')
-              .child(S.documentTypeList('county').title('Counties'))
-          ])
+            S.listItem().title('NJ Counties').child(S.documentTypeList('county').title('Counties')),
+          ]),
     }),
-    visionTool()
+    visionTool(),
   ],
 
   schema: {
-    types: schemaTypes
-  }
+    types: schemaTypes,
+  },
 })

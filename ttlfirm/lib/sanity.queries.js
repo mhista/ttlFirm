@@ -353,3 +353,40 @@ export const featuredBlogsQuery = `
     },
     publishedAt
   }`
+
+  export const testimonialsQuery = `
+  *[_type == "testimonial" && status == "active"] | order(order asc) {
+    _id,
+    name,
+    role,
+    image {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
+    testimonial,
+    rating,
+    caseType,
+    featured
+  }
+`
+
+export const featuredTestimonialsQuery = `
+  *[_type == "testimonial" && status == "active" && featured == true] | order(order asc) [0...6] {
+    _id,
+    name,
+    role,
+    image {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
+    testimonial,
+    rating,
+    caseType
+  }
+`
