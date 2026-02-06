@@ -4,7 +4,7 @@ import Section4 from "@components/common/section4";
 import Consultation from "@components/pages/home/consult";
 import PageHeader from "@components/pages/header";
 import Script from "next/script";
-
+export const revalidate = 60;
 export const metadata = {
   title: "Practice Areas | Personal Injury, Immigration & Workers' Comp Lawyer NJ",
   description: "Comprehensive legal services in NJ: Personal Injury, Immigration Law, Workers' Compensation, Municipal Court Defense. Serving Essex, Union, Hudson & all NJ counties.",

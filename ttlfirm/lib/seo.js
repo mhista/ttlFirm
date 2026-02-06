@@ -1,14 +1,29 @@
 import { urlFor } from "./sanity.client";
 
-export function generateLocalBusinessSchema(subService, county) {
+export function generateLocalBusinessSchema(item, county) {
+  // Handle both practice areas and sub-services
+  const isPracticeArea = !item.practiceArea; // Practice areas don't have practiceArea field
+  
+  // Safely get the URL
+  let url;
+  if (isPracticeArea) {
+    // For practice areas
+    url = `https://turuchilawfirm.com/practice/${item.slug?.current || item.id || ''}`;
+  } else {
+    // For sub-services
+    const practiceSlug = item.practiceArea?.slug?.current || item.practiceArea?.id || '';
+    const serviceSlug = item.slug?.current || '';
+    url = `https://turuchilawfirm.com/practice/${practiceSlug}/${serviceSlug}`;
+  }
+
   return {
     "@context": "https://schema.org",
     "@type": "LegalService",
-    name: `${subService.title} - ${county?.name || ""} - Turuchi Law Firm`,
-    description: subService.seo?.metaDescription || subService.excerpt,
-    url: `https://turuchilawfirm.com/practice/${subService.practiceArea.slug.current}/${subService.slug.current}`,
-    image: subService.image
-      ? urlFor(subService.image).width(1200).height(630).url()
+    name: `${item.title || item.name} - ${county?.name || "New Jersey"} - Turuchi Law Firm`,
+    description: item.seo?.metaDescription || item.excerpt || '',
+    url: url,
+    image: item.image
+      ? urlFor(item.image).width(1200).height(630).url()
       : undefined,
     telephone: "+1-732-210-6410",
     email: "info@turuchilawfirm.com",
@@ -61,7 +76,7 @@ export function generateArticleSchema(blog) {
       name: "Turuchi Law Firm",
       logo: {
         "@type": "ImageObject",
-        url: "https://turuchilawfirm.com/assets/images/logo.png", // Add your logo
+        url: "https://turuchilawfirm.com/assets/images/logo.png",
       },
     },
   };

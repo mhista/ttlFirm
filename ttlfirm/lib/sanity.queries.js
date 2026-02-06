@@ -34,7 +34,7 @@ export const blogsQuery = `
     publishedAt,
     featured
   }
-`
+`;
 
 export const blogBySlugQuery = `
   *[_type == "blog" && slug.current == $slug][0] {
@@ -100,7 +100,7 @@ export const blogBySlugQuery = `
       }
     }
   }
-`
+`;
 
 export const blogsByCategoryQuery = `
   *[_type == "blog" && status == "published" && $category in categories[]->slug.current] | order(publishedAt desc) {
@@ -121,7 +121,7 @@ export const blogsByCategoryQuery = `
     },
     publishedAt
   }
-`
+`;
 
 export const categoriesQuery = `
   *[_type == "category"] | order(title asc) {
@@ -132,7 +132,7 @@ export const categoriesQuery = `
     color,
     "postCount": count(*[_type == "blog" && references(^._id)])
   }
-`
+`;
 
 export const tagsQuery = `
   *[_type == "tag"] | order(title asc) {
@@ -141,30 +141,171 @@ export const tagsQuery = `
     slug,
     "postCount": count(*[_type == "blog" && references(^._id)])
   }
-`
+`;
 
 // Practice Area & Sub-Service Queries
 export const practiceAreasQuery = `
-  *[_type == "practiceArea"] | order(order asc) {
+  *[_type == "practiceArea" && status == "published"] | order(order asc) {
     _id,
     name,
     slug,
     id,
-    description,
+    excerpt,
     image {
       asset->{
         _id,
         url
-      }
+      },
+      alt
     },
     icon,
-    "subServices": *[_type == "subService" && references(^._id) && status == "published"] {
+    overview,
+    whyChooseUs,
+    process,
+    faqs,
+    counties[]->{
+      name,
+      slug,
+      majorCities
+    },
+    countyContent[] {
+      county->{
+        name,
+        slug
+      },
+      content,
+      localStats
+    },
+    relatedAreas[]->{
+      _id,
+      name,
+      slug,
+      id,
+      excerpt
+    },
+    seo {
+      metaTitle,
+      metaDescription,
+      keywords,
+      localKeywords[] {
+        county->{
+          name,
+          slug
+        },
+        keywords
+      },
+      ogImage {
+        asset->{
+          _id,
+          url
+        }
+      },
+      schema
+    },
+    "subServices": *[_type == "subService" && practiceArea._ref == ^._id && status == "published"] | order(order asc) {
       _id,
       title,
-      slug
+      slug,
+      excerpt,
+      image {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      counties[]->{
+        name,
+        slug
+      }
     }
   }
-`
+`;
+
+// Add this new query for single practice area with full details
+export const practiceAreaByIdQuery = `
+  *[_type == "practiceArea" && (id == $practiceId || slug.current == $practiceId)][0] {
+    _id,
+    name,
+    slug,
+    id,
+    excerpt,
+    image {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
+    overview,
+    whyChooseUs,
+    process,
+    faqs,
+    counties[]->{
+      name,
+      slug,
+      majorCities
+    },
+    countyContent[] {
+      county->{
+        name,
+        slug
+      },
+      content,
+      localStats
+    },
+    relatedAreas[]->{
+      _id,
+      name,
+      slug,
+      id,
+      excerpt,
+      image {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
+    },
+    seo {
+      metaTitle,
+      metaDescription,
+      keywords,
+      localKeywords[] {
+        county->{
+          name,
+          slug
+        },
+        keywords
+      },
+      ogImage {
+        asset->{
+          _id,
+          url
+        }
+      },
+      schema
+    },
+    "subServices": *[_type == "subService" && practiceArea._ref == ^._id && status == "published"] | order(order asc) {
+      _id,
+      title,
+      slug,
+      excerpt,
+      image {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      counties[]->{
+        name,
+        slug
+      }
+    }
+  }
+`;
 
 export const subServicesByPracticeQuery = `
   *[_type == "subService" && practiceArea._ref == $practiceAreaId && status == "published"] | order(order asc) {
@@ -180,7 +321,7 @@ export const subServicesByPracticeQuery = `
       alt
     }
   }
-`
+`;
 
 export const subServiceBySlugQuery = `
   *[_type == "subService" && slug.current == $slug][0] {
@@ -243,7 +384,7 @@ export const subServiceBySlugQuery = `
       schema
     }
   }
-`
+`;
 
 export const subServiceByCountyQuery = `
   *[_type == "subService" && status == "published" && $countyId in counties[]._ref] {
@@ -260,7 +401,7 @@ export const subServiceByCountyQuery = `
       slug
     }
   }
-`
+`;
 
 export const countiesQuery = `
   *[_type == "county"] | order(name asc) {
@@ -272,7 +413,7 @@ export const countiesQuery = `
     majorCities,
     "serviceCount": count(*[_type == "subService" && references(^._id)])
   }
-`
+`;
 
 // Author Query
 export const authorQuery = `
@@ -299,7 +440,7 @@ export const authorQuery = `
       publishedAt
     }
   }
-`
+`;
 
 // Search Query
 export const searchQuery = `
@@ -311,7 +452,7 @@ export const searchQuery = `
     excerpt,
     "type": _type
   }
-`
+`;
 
 // Sitemap Query
 export const sitemapQuery = `
@@ -327,7 +468,7 @@ export const sitemapQuery = `
       }
     }
   }
-`
+`;
 
 export const featuredBlogsQuery = `
   *[_type == "blog" && status == "published" && featured == true] | order(publishedAt desc) [0...3] {
@@ -352,9 +493,9 @@ export const featuredBlogsQuery = `
       color
     },
     publishedAt
-  }`
+  }`;
 
-  export const testimonialsQuery = `
+export const testimonialsQuery = `
   *[_type == "testimonial" && status == "active"] | order(order asc) {
     _id,
     name,
@@ -371,7 +512,7 @@ export const featuredBlogsQuery = `
     caseType,
     featured
   }
-`
+`;
 
 export const featuredTestimonialsQuery = `
   *[_type == "testimonial" && status == "active" && featured == true] | order(order asc) [0...6] {
@@ -389,4 +530,4 @@ export const featuredTestimonialsQuery = `
     rating,
     caseType
   }
-`
+`;

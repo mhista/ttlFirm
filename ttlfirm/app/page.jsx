@@ -15,6 +15,7 @@ import HomeHero from "@components/pages/home/hero";
 import BlogSection from "@components/pages/home/blogSection";
 import Script from "next/script";
 
+export const revalidate = 60;
 // SEO Metadata
 export const metadata = {
   title: "Reliable Law firm in New Jersey | The Turuchi Law Firm",

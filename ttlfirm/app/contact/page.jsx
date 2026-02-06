@@ -2,7 +2,7 @@ import Section2 from "@components/common/section2";
 import ContactUs from "@components/pages/home/contactUs";
 import PageHeader from "@components/pages/header";
 import Script from "next/script";
-
+export const revalidate = 60;
 export const metadata = {
   title: "Contact Us | Free Consultation | Turuchi Law Firm NJ",
   description: "Get a free legal consultation. Call 732-210-6410 or visit us at 111 Town Square Pl, Jersey City, NJ. Available for Personal Injury, Immigration & Workers' Comp cases.",

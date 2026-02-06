@@ -1,16 +1,26 @@
+// ===========================================
+// app/practice/[practiceId]/page.jsx - COMPLETE REDESIGN
+// ===========================================
 import { client } from "@/lib/sanity.client";
-import { practiceAreasQuery, subServicesByPracticeQuery } from "@/lib/sanity.queries";
+import { practiceAreaByIdQuery, practiceAreasQuery } from "@/lib/sanity.queries";
 import { urlFor } from "@/lib/sanity.client";
+import { PortableText } from "@portabletext/react";
+import PortableTextComponents from "@/components/blog/PortableTextComponents";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import Section2 from "@/components/common/section2";
 import Section4 from "@/components/common/section4";
 import Consultation from "@/components/pages/home/consult";
-import PageHeader from "@/components/pages/header";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import Accordion from "@/components/uiComponents/accordion";
+import { FaArrowRightLong } from "react-icons/fa6";
+import SEOHead from "@/components/SEOHead";
+import { generateLocalBusinessSchema } from "@/lib/seo";
 import Script from "next/script";
 
-export const revalidate = 60;
+export const revalidate = 60; // Always fetch fresh data
 
+// Generate static paths
 export async function generateStaticParams() {
   const practiceAreas = await client.fetch(practiceAreasQuery);
   return practiceAreas.map((area) => ({
@@ -18,242 +28,345 @@ export async function generateStaticParams() {
   }));
 }
 
+// Generate metadata
 export async function generateMetadata({ params }) {
   const { practiceId } = await params;
-  const practiceAreas = await client.fetch(practiceAreasQuery);
-  const area = practiceAreas.find(
-    (a) => a.id?.toString() === practiceId || a.slug.current === practiceId
-  );
+  const practiceArea = await client.fetch(practiceAreaByIdQuery, {
+    practiceId: parseInt(practiceId) || practiceId,
+  });
 
-  if (!area) {
+  if (!practiceArea) {
     return { title: "Practice Area Not Found" };
   }
 
   return {
-    title: `${area.name} Attorney New Jersey | Turuchi Law Firm`,
-    description: area.description || `Expert ${area.name} legal services serving all New Jersey counties including Essex, Union, Hudson, Middlesex, Bergen, Passaic, and Mercer County.`,
-    keywords: [
-      `${area.name} lawyer NJ`,
-      `${area.name} attorney New Jersey`,
-      "Essex County lawyer",
-      "Union County attorney",
-      "Hudson County legal services"
-    ],
+    title:
+      practiceArea.seo?.metaTitle ||
+      `${practiceArea.name} Attorney NJ | Turuchi Law Firm`,
+    description:
+      practiceArea.seo?.metaDescription ||
+      practiceArea.excerpt ||
+      `Expert ${practiceArea.name} legal services in New Jersey`,
+    keywords: practiceArea.seo?.keywords?.join(", "),
     openGraph: {
-      title: `${area.name} | Turuchi Law Firm`,
-      description: area.description,
+      title: practiceArea.seo?.metaTitle || practiceArea.name,
+      description: practiceArea.seo?.metaDescription || practiceArea.excerpt,
       url: `https://turuchilawfirm.com/practice/${practiceId}`,
+      images: practiceArea.seo?.ogImage
+        ? [urlFor(practiceArea.seo.ogImage).width(1200).height(630).url()]
+        : practiceArea.image
+        ? [urlFor(practiceArea.image).width(1200).height(630).url()]
+        : [],
     },
   };
 }
 
-async function getPracticeArea(practiceId) {
-  const practiceAreas = await client.fetch(practiceAreasQuery);
-  return practiceAreas.find(
-    (a) => a.id?.toString() === practiceId || a.slug.current === practiceId
-  );
-}
-
-async function getSubServices(practiceAreaRef) {
-  const subServices = await client.fetch(subServicesByPracticeQuery, {
-    practiceAreaId: practiceAreaRef,
-  });
-  return subServices;
-}
-
 export default async function PracticeAreaPage({ params }) {
   const { practiceId } = await params;
-  const practiceArea = await getPracticeArea(practiceId);
+  const practiceArea = await client.fetch(practiceAreaByIdQuery, {
+    practiceId: parseInt(practiceId) || practiceId,
+  });
 
   if (!practiceArea) {
     notFound();
   }
 
-  const subServices = await getSubServices(practiceArea._id);
-
-  // Schema for SEO
-  const practiceSchema = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": practiceArea.name,
-    "provider": {
-      "@type": "LegalService",
-      "name": "Turuchi Law Firm, LLC"
-    },
-    "areaServed": {
-      "@type": "State",
-      "name": "New Jersey"
-    }
+  // Generate schema for SEO - FIXED VERSION
+  const schemaData = {
+    name: practiceArea.name,
+    title: practiceArea.name, // Added for consistency
+    slug: practiceArea.slug,
+    id: practiceArea.id,
+    excerpt: practiceArea.excerpt,
+    image: practiceArea.image,
+    seo: practiceArea.seo,
+    // Don't include practiceArea field since this IS a practice area
   };
+  
+  const schema = generateLocalBusinessSchema(
+    schemaData,
+    practiceArea.counties?.[0]
+  );
+
+  // Convert FAQs to accordion format
+  const accordionData =
+    practiceArea.faqs?.map((faq) => ({
+      title: faq.question,
+      content: (
+        <PortableText value={faq.answer} components={PortableTextComponents} />
+      ),
+    })) || [];
 
   return (
     <>
+      {/* SEO Schema */}
       <Script
-        id="practice-schema"
+        id="practice-area-schema"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(practiceSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
 
-      <div className="relative">
-        <PageHeader text={practiceArea.name} subAreas={[]} />
+      <div className="w-full flex flex-col">
+        {/* Header with Image */}
+        <div className="relative w-full h-[400px] bg-gradient-to-r from-gray-900 to-gray-800">
+          {practiceArea.image && (
+            <Image
+              src={urlFor(practiceArea.image).width(1920).height(600).url()}
+              alt={practiceArea.image.alt || practiceArea.name}
+              fill
+              className="object-cover opacity-40"
+            />
+          )}
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-white z-10 px-4">
+            {/* Breadcrumbs */}
+            <nav className="flex gap-2 text-sm mb-4">
+              <Link href="/" className="hover:text-amber-600">
+                Home
+              </Link>
+              <span>/</span>
+              <Link href="/practice" className="hover:text-amber-600">
+                Practice Areas
+              </Link>
+              <span>/</span>
+              <span>{practiceArea.name}</span>
+            </nav>
 
-        <Section2>
-          <div className="w-full flex flex-col items-center gap-12 py-12 px-5 md:px-12 lg:px-16">
-            {/* Practice Area Description - REDESIGNED FOR LONG CONTENT */}
-            <div className="max-w-5xl w-full">
-              <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-                <h2 className="font-lora text-3xl md:text-4xl font-bold mb-6 text-gray-900 text-center">
-                  {practiceArea.name}
-                </h2>
-                
-                {/* Long Description - Now with Better Typography */}
-                <div className="prose prose-lg max-w-none">
-                  <p className="text-gray-700 leading-relaxed text-justify">
-                    {practiceArea.description || 
-                      `Expert ${practiceArea.name} legal services serving all New Jersey counties. 
-                      Our experienced attorneys provide comprehensive representation for clients 
-                      throughout Essex County, Union County, Hudson County, Middlesex County, 
-                      Bergen County, Passaic County, and Mercer County. With a proven track 
-                      record of success and personalized attention to every case, we are 
-                      committed to protecting your rights and achieving the best possible outcome 
-                      for your legal matter.`
-                    }
-                  </p>
-                </div>
+            <h1 className="font-lora text-4xl md:text-5xl font-bold text-center mb-4">
+              {practiceArea.name}
+            </h1>
 
-                {/* Quick Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-gray-200">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-amber-600 mb-1">
-                      {subServices.length}+
-                    </div>
-                    <div className="text-sm text-gray-600">Services</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-amber-600 mb-1">7</div>
-                    <div className="text-sm text-gray-600">NJ Counties</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-amber-600 mb-1">500+</div>
-                    <div className="text-sm text-gray-600">Cases Handled</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-amber-600 mb-1">8</div>
-                    <div className="text-sm text-gray-600">Years Experience</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Sub-Services Grid */}
-            {subServices && subServices.length > 0 ? (
-              <div className="w-full max-w-7xl">
-                <div className="text-center mb-10">
-                  <h3 className="font-lora text-3xl md:text-4xl font-bold mb-3">
-                    Our {practiceArea.name} Services
-                  </h3>
-                  <p className="text-gray-600 text-lg">
-                    Comprehensive legal representation across all areas of {practiceArea.name.toLowerCase()}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {subServices.map((service) => (
-                    <Link
-                      key={service._id}
-                      href={`/practice/${practiceId}/${service.slug.current}`}
-                      className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
-                    >
-                      {service.image && (
-                        <div className="relative w-full h-48 overflow-hidden">
-                          <img
-                            src={urlFor(service.image).width(600).height(400).url()}
-                            alt={service.image.alt || service.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        </div>
-                      )}
-
-                      <div className="p-6">
-                        <h4 className="font-lora text-xl font-semibold mb-3 group-hover:text-amber-600 transition">
-                          {service.title}
-                        </h4>
-                        
-                        {service.excerpt && (
-                          <p className="text-gray-600 text-sm line-clamp-3 mb-4 leading-relaxed">
-                            {service.excerpt}
-                          </p>
-                        )}
-
-                        {service.counties && service.counties.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {service.counties.slice(0, 3).map((county) => (
-                              <span
-                                key={county.slug.current}
-                                className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-full font-medium"
-                              >
-                                {county.name}
-                              </span>
-                            ))}
-                            {service.counties.length > 3 && (
-                              <span className="text-xs text-gray-500">
-                                +{service.counties.length - 3} more
-                              </span>
-                            )}
-                          </div>
-                        )}
-
-                        <div className="flex items-center text-amber-600 font-semibold text-sm gap-2 group-hover:gap-3 transition-all">
-                          Learn More
-                          <span>→</span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-12 bg-gray-50 rounded-2xl">
-                <p className="text-gray-600 text-lg mb-6">
-                  Contact us to learn more about our {practiceArea.name} services.
-                </p>
-                <Link href="/contact" className="btn">
-                  Get in Touch
-                </Link>
-              </div>
+            {practiceArea.excerpt && (
+              <p className="text-xl text-gray-200 text-center max-w-3xl">
+                {practiceArea.excerpt}
+              </p>
             )}
 
-            {/* Why Choose Us Section */}
-            <div className="w-full max-w-6xl bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 md:p-12 shadow-lg">
-              <h3 className="font-lora text-3xl font-bold mb-8 text-center">
-                Why Choose Turuchi Law Firm for {practiceArea.name}?
-              </h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white rounded-lg p-6 shadow-md">
-                  <h4 className="font-semibold text-lg mb-3 text-amber-600">Experienced Representation</h4>
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    Years of experience handling {practiceArea.name} cases throughout New Jersey with a proven track record of successful outcomes.
-                  </p>
+            {/* Counties */}
+            {practiceArea.counties && practiceArea.counties.length > 0 && (
+              <div className="mt-6 flex gap-2 flex-wrap justify-center">
+                {practiceArea.counties.map((county) => (
+                  <span
+                    key={county.slug.current}
+                    className="bg-amber-600 text-white px-3 py-1 text-sm rounded"
+                  >
+                    {county.name}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Content */}
+        <Section2>
+          <div className="relative w-full flex flex-col md:flex-row-reverse justify-center items-start md:justify-around md:pl-5 py-12">
+            {/* Main Content */}
+            <div className="flex flex-col w-full md:w-[70%] p-8 sm:p-16 md:px-12 gap-8">
+              {/* Overview */}
+              {practiceArea.overview && (
+                <div className="prose prose-lg max-w-none">
+                  <PortableText
+                    value={practiceArea.overview}
+                    components={PortableTextComponents}
+                  />
                 </div>
-                <div className="bg-white rounded-lg p-6 shadow-md">
-                  <h4 className="font-semibold text-lg mb-3 text-amber-600">Personalized Service</h4>
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    Every case receives individual attention and a customized legal strategy tailored to your unique circumstances and goals.
-                  </p>
+              )}
+
+              {/* Why Choose Us */}
+              {practiceArea.whyChooseUs && (
+                <div className="bg-gray-50 p-8 rounded-lg">
+                  <h2 className="font-lora text-3xl font-bold mb-6">
+                    Why Choose Turuchi Law Firm for {practiceArea.name}
+                  </h2>
+                  <div className="prose prose-lg max-w-none">
+                    <PortableText
+                      value={practiceArea.whyChooseUs}
+                      components={PortableTextComponents}
+                    />
+                  </div>
                 </div>
-                <div className="bg-white rounded-lg p-6 shadow-md">
-                  <h4 className="font-semibold text-lg mb-3 text-amber-600">Aggressive Advocacy</h4>
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    We fight tirelessly to protect your rights and secure the best possible outcome, whether through negotiation or litigation.
-                  </p>
+              )}
+
+              {/* Process Steps */}
+              {practiceArea.process && practiceArea.process.length > 0 && (
+                <div>
+                  <h2 className="font-lora text-3xl font-bold mb-6">
+                    Our Process
+                  </h2>
+                  <div className="space-y-6">
+                    {practiceArea.process.map((step, index) => (
+                      <div
+                        key={index}
+                        className="flex gap-4 p-6 bg-white rounded-lg shadow-md"
+                      >
+                        <div className="flex-shrink-0 w-12 h-12 bg-amber-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <h3 className="font-lora text-xl font-semibold mb-2">
+                            {step.title}
+                          </h3>
+                          <p className="text-gray-700">{step.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="bg-white rounded-lg p-6 shadow-md">
-                  <h4 className="font-semibold text-lg mb-3 text-amber-600">Free Consultation</h4>
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    Discuss your case with an experienced attorney at no cost. Call 732-210-6410 to schedule your free consultation today.
-                  </p>
-                </div>
+              )}
+
+              {/* County-Specific Content */}
+              {practiceArea.countyContent &&
+                practiceArea.countyContent.length > 0 && (
+                  <div className="mt-8">
+                    <h2 className="font-lora text-3xl font-bold mb-6">
+                      County-Specific Information
+                    </h2>
+                    <div className="space-y-6">
+                      {practiceArea.countyContent.map((item, index) => (
+                        <div
+                          key={index}
+                          className="border-l-4 border-amber-600 pl-6"
+                        >
+                          <h3 className="font-lora text-2xl font-semibold mb-4">
+                            {item.county.name}
+                          </h3>
+                          {item.localStats && (
+                            <div className="bg-blue-50 p-4 rounded mb-4">
+                              <p className="text-sm font-semibold text-blue-900">
+                                Local Statistics:
+                              </p>
+                              <p className="text-gray-700">{item.localStats}</p>
+                            </div>
+                          )}
+                          <div className="prose max-w-none">
+                            <PortableText
+                              value={item.content}
+                              components={PortableTextComponents}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              {/* FAQs */}
+              {accordionData.length > 0 && (
+                <Accordion
+                  title="Frequently Asked Questions"
+                  accordionData={accordionData}
+                  usePadding={false}
+                />
+              )}
+
+              {/* Sub-Services Section */}
+              {practiceArea.subServices &&
+                practiceArea.subServices.length > 0 && (
+                  <div className="mt-12">
+                    <h2 className="font-lora text-3xl font-bold mb-6">
+                      Our {practiceArea.name} Services
+                    </h2>
+                    <p className="text-gray-600 mb-8">
+                      We offer comprehensive legal services across all areas of{" "}
+                      {practiceArea.name.toLowerCase()}
+                    </p>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {practiceArea.subServices.map((service) => (
+                        <Link
+                          key={service._id}
+                          href={`/practice/${practiceId}/${service.slug.current}`}
+                          className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
+                        >
+                          {service.image && (
+                            <div className="relative w-full h-48 overflow-hidden">
+                              <Image
+                                src={urlFor(service.image)
+                                  .width(600)
+                                  .height(400)
+                                  .url()}
+                                alt={service.image.alt || service.title}
+                                fill
+                                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            </div>
+                          )}
+
+                          <div className="p-6">
+                            <h3 className="font-lora text-xl font-semibold mb-3 group-hover:text-amber-600 transition">
+                              {service.title}
+                            </h3>
+
+                            {service.excerpt && (
+                              <p className="text-gray-600 text-sm line-clamp-3 mb-4 leading-relaxed">
+                                {service.excerpt}
+                              </p>
+                            )}
+
+                            {service.counties && service.counties.length > 0 && (
+                              <div className="flex flex-wrap gap-2 mb-4">
+                                {service.counties.slice(0, 3).map((county) => (
+                                  <span
+                                    key={county.slug.current}
+                                    className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-full font-medium"
+                                  >
+                                    {county.name}
+                                  </span>
+                                ))}
+                                {service.counties.length > 3 && (
+                                  <span className="text-xs text-gray-500">
+                                    +{service.counties.length - 3} more
+                                  </span>
+                                )}
+                              </div>
+                            )}
+
+                            <div className="flex items-center text-amber-600 font-semibold text-sm gap-2 group-hover:gap-3 transition-all">
+                              Learn More
+                              <span>→</span>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              {/* Related Practice Areas */}
+              {practiceArea.relatedAreas &&
+                practiceArea.relatedAreas.length > 0 && (
+                  <div className="mt-12">
+                    <h2 className="font-lora text-3xl font-bold mb-6">
+                      Related Practice Areas
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {practiceArea.relatedAreas.map((area) => (
+                        <Link
+                          key={area._id}
+                          href={`/practice/${area.id || area.slug.current}`}
+                          className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition group"
+                        >
+                          <h3 className="font-lora text-xl font-semibold mb-2 group-hover:text-amber-600 transition">
+                            {area.name}
+                          </h3>
+                          <p className="text-gray-600 line-clamp-2">
+                            {area.excerpt}
+                          </p>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+            </div>
+
+            {/* Sidebar */}
+            <div className="w-full md:w-[30%] p-8">
+              <div className="w-full flex flex-col gap-5 md:sticky md:top-24">
+                <h2 className="font-lora text-2xl font-medium">
+                  Practice Areas
+                </h2>
+                {/* This will be populated with all practice areas */}
+                <PracticeAreaSidebar currentId={practiceId} />
               </div>
             </div>
           </div>
@@ -263,6 +376,33 @@ export default async function PracticeAreaPage({ params }) {
           <Consultation />
         </Section4>
       </div>
+    </>
+  );
+}
+
+// Sidebar Component
+async function PracticeAreaSidebar({ currentId }) {
+  const practiceAreas = await client.fetch(practiceAreasQuery);
+
+  return (
+    <>
+      {practiceAreas.map((area) => (
+        <div className="w-full flex flex-col gap-4" key={area._id}>
+          <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
+          <Link
+            href={`/practice/${area.id || area.slug.current}`}
+            className={`hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-base ${
+              (area.id?.toString() === currentId ||
+                area.slug.current === currentId)
+                ? "text-amber-600 ml-2"
+                : ""
+            }`}
+          >
+            <FaArrowRightLong className="text-xs" />
+            <span>{area.name}</span>
+          </Link>
+        </div>
+      ))}
     </>
   );
 }
