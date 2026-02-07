@@ -4,7 +4,19 @@ import AOS from "aos";
 import Link from "next/link";
 import { FaCheckCircle, FaBalanceScale, FaHandshake, FaComments, FaMapMarkerAlt, FaUserTie } from "react-icons/fa";
 
-const FeatureCard = ({ icon: Icon, title, description, delay }) => {
+// Icon mapping
+const iconMap = {
+  FaBalanceScale,
+  FaComments,
+  FaMapMarkerAlt,
+  FaHandshake,
+  FaCheckCircle,
+  FaUserTie
+};
+
+const FeatureCard = ({ icon: iconName, title, description, delay }) => {
+  const Icon = iconMap[iconName] || FaCheckCircle;
+  
   return (
     <div
       className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 border border-white/20"
@@ -49,43 +61,56 @@ const StatCard = ({ number, label, delay }) => {
   );
 };
 
-const WhyChooseUs = () => {
+const WhyChooseUs = ({ content, stats }) => {
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
   }, []);
 
-  const features = [
+  // Default features if not provided by CMS
+  const defaultFeatures = [
     {
-      icon: FaBalanceScale,
+      icon: "FaBalanceScale",
       title: "Personalized Legal Strategy",
-      description: "Every case is handled with a customized legal strategy shaped by the client's unique circumstances, objectives, and concerns. We take time to understand the facts, assess available legal options, and develop an approach designed to protect our clients' interests.",
+      description: "Every case is handled with a customized legal strategy shaped by the client's unique circumstances, objectives, and concerns."
     },
     {
-      icon: FaComments,
+      icon: "FaComments",
       title: "Clear, Honest Communication",
-      description: "We believe effective representation begins with clear and honest communication. Clients receive straightforward explanations of their legal options, realistic expectations, and timely updates throughout their case.",
+      description: "We believe effective representation begins with clear and honest communication."
     },
     {
-      icon: FaMapMarkerAlt,
+      icon: "FaMapMarkerAlt",
       title: "Experience with New Jersey Courts",
-      description: "Our firm has practical experience representing clients in state, municipal, and federal courts throughout New Jersey. This local knowledge allows us to navigate court procedures efficiently while advocating effectively.",
+      description: "Our firm has practical experience representing clients in state, municipal, and federal courts throughout New Jersey."
     },
     {
-      icon: FaHandshake,
+      icon: "FaHandshake",
       title: "Compassionate Representation",
-      description: "We recognize that legal issues often involve stress and uncertainty. We approach every matter with empathy, professionalism, and respect, ensuring our clients feel supported while we work diligently to protect their rights.",
+      description: "We approach every matter with empathy, professionalism, and respect."
     },
     {
-      icon: FaCheckCircle,
+      icon: "FaCheckCircle",
       title: "Free Initial Consultation",
-      description: "We offer a free initial consultation so prospective clients can speak directly with a knowledgeable New Jersey attorney about their legal concerns. This provides an opportunity to understand available options before committing.",
+      description: "We offer a free initial consultation so prospective clients can speak directly with a knowledgeable New Jersey attorney."
     },
     {
-      icon: FaUserTie,
+      icon: "FaUserTie",
       title: "Meet Attorney Turuchi Iheanachor",
-      description: "With prior experience as an insurance defense attorney, Turuchi brings a strategic advantage to every case, anticipating opposing tactics and advocating aggressively for her clients' rights.",
-    },
+      description: "With prior experience as an insurance defense attorney, Turuchi brings a strategic advantage to every case."
+    }
   ];
+
+  // Use CMS content or defaults
+  const sectionLabel = content?.sectionLabel || "Why Trust Us";
+  const heading = content?.heading || "Why Clients Choose Our Legal Team";
+  const description = content?.description || "We believe in the power of personalized attention and transparent communication. Individuals and families seeking a reliable New Jersey attorney choose our firm because we combine legal knowledge with genuine care and local experience.";
+  const features = content?.features && content.features.length > 0 ? content.features : defaultFeatures;
+  const ctaText = content?.ctaText || "Learn More About Attorney Turuchi Iheanachor";
+  const ctaLink = content?.ctaLink || "/profile";
+
+  // Stats
+  const casesHandled = stats?.casesHandled || 500;
+  const yearsExperience = stats?.yearsExperience || 8;
 
   return (
     <div className="relative w-full py-16 md:py-24 px-5 md:px-12 overflow-hidden">
@@ -99,27 +124,22 @@ const WhyChooseUs = () => {
           <div className="flex flex-row items-center justify-center gap-3 mb-4">
             <hr className="bg-amber-600 h-[2px] w-14" />
             <h3 className="text-amber-400 uppercase font-bold tracking-wider">
-              Why Trust Us
+              {sectionLabel}
             </h3>
             <hr className="bg-amber-600 h-[2px] w-14" />
           </div>
           <h2 className="font-lora text-4xl md:text-5xl font-bold text-white mb-6">
-            Why Clients Choose Our Legal Team
+            {heading}
           </h2>
           <p className="text-gray-200 text-lg max-w-4xl mx-auto leading-relaxed">
-            We believe in the power of personalized attention and transparent communication. 
-            Individuals and families seeking a reliable New Jersey attorney choose our firm 
-            because we combine legal knowledge with genuine care and local experience. With a 
-            steadfast focus on achieving favorable outcomes, we stand as your trusted legal 
-            partner in New Jersey, committed to protecting your rights and securing a brighter 
-            future for you and your loved ones.
+            {description}
           </p>
         </div>
 
         {/* Stats Section */}
         <div className="grid grid-cols-2 md:grid-cols-2 gap-6 mb-16 max-w-2xl mx-auto">
-          <StatCard number="500+" label="Legal Cases Handled" delay="100" />
-          <StatCard number="8" label="Years Industry Experience" delay="200" />
+          <StatCard number={`${casesHandled}+`} label="Legal Cases Handled" delay="100" />
+          <StatCard number={yearsExperience} label="Years Industry Experience" delay="200" />
         </div>
 
         {/* Features Grid */}
@@ -138,10 +158,10 @@ const WhyChooseUs = () => {
         {/* CTA Section */}
         <div className="text-center" data-aos="fade-up" data-aos-delay="600">
           <Link
-            href="/profile"
+            href={ctaLink}
             className="inline-block bg-amber-600 hover:bg-amber-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
-            Learn More About Attorney Turuchi Iheanachor
+            {ctaText}
           </Link>
         </div>
       </div>

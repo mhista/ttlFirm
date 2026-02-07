@@ -2,10 +2,22 @@
 import Link from "next/link";
 import { FaPhone, FaEnvelope, FaCalendarCheck } from "react-icons/fa6";
 
-const Consultation = () => {
+const Consultation = ({ content, contact }) => {
+  // Use CMS content or defaults
+  const sectionLabel = content?.sectionLabel || "Free Case Evaluation";
+  const heading = content?.heading || "Confide in a Trusted Law Firm in New Jersey";
+  const description = content?.description || "We will review your situation and answer your questions. Then we'll provide legal options tailored to your needs with no obligation.";
+  const ctaPrimaryText = content?.ctaPrimaryText || "Schedule Free Consultation";
+  const ctaSecondaryText = content?.ctaSecondaryText || "Call Now";
+  
+  // Contact info from site settings or defaults
+  const phone = contact?.phone || "+1-732-210-6410";
+  const email = contact?.email || "info@turuchilawfirm.com";
+  const displayPhone = phone.replace(/\D/g, '').slice(-10).replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+
   return (
     <div className="relative w-full overflow-hidden py-16 md:py-24 px-5 md:px-12 bg-gradient-to-br from-[#1c314e] via-[#1e3a5f] to-[#1c314e]">
-      {/* Animated Background Elements - UPDATED COLORS */}
+      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
@@ -18,30 +30,29 @@ const Consultation = () => {
           <div className="flex flex-row items-center justify-center gap-3 mb-4">
             <hr className="bg-amber-500 h-[2px] w-14" />
             <h3 className="text-amber-500 text-sm uppercase font-bold tracking-wider">
-              Free Case Evaluation
+              {sectionLabel}
             </h3>
             <hr className="bg-amber-500 h-[2px] w-14" />
           </div>
           
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 font-lora leading-tight">
-            Confide in a Trusted Law Firm in New Jersey
+            {heading}
           </h2>
           
           <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            We will review your situation and answer your questions. Then we'll provide 
-            legal options tailored to your needs with no obligation.
+            {description}
           </p>
         </div>
 
-        {/* Action Cards - UPDATED COLORS */}
+        {/* Action Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 hover:border-amber-500/30 transition-all duration-300 text-center group">
             <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
               <FaPhone className="text-white text-2xl" />
             </div>
             <h4 className="text-white font-semibold text-lg mb-2">Call Us</h4>
-            <a href="tel:+17322106410" className="text-amber-400 hover:text-amber-300 transition font-medium">
-              (732) 210-6410
+            <a href={`tel:${phone}`} className="text-amber-400 hover:text-amber-300 transition font-medium">
+              {displayPhone}
             </a>
           </div>
 
@@ -50,8 +61,8 @@ const Consultation = () => {
               <FaEnvelope className="text-white text-2xl" />
             </div>
             <h4 className="text-white font-semibold text-lg mb-2">Email Us</h4>
-            <a href="mailto:info@turuchilawfirm.com" className="text-amber-400 hover:text-amber-300 transition text-sm font-medium">
-              info@turuchilawfirm.com
+            <a href={`mailto:${email}`} className="text-amber-400 hover:text-amber-300 transition text-sm font-medium break-all">
+              {email}
             </a>
           </div>
 
@@ -64,24 +75,24 @@ const Consultation = () => {
           </div>
         </div>
 
-        {/* CTA Buttons - UPDATED COLORS */}
+        {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center" data-aos="fade-up">
           <Link
             href="/contact"
             className="group relative px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold rounded-lg overflow-hidden hover:from-amber-600 hover:to-amber-700 transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-1"
           >
-            <span className="relative z-10">Schedule Free Consultation</span>
+            <span className="relative z-10">{ctaPrimaryText}</span>
           </Link>
 
           <a
-            href="tel:+17322106410"
+            href={`tel:${phone}`}
             className="px-8 py-4 bg-white/5 backdrop-blur-sm text-white font-semibold rounded-lg border-2 border-white/20 hover:bg-white/10 hover:border-amber-500/50 transition-all duration-300"
           >
-            Call Now: (732) 210-6410
+            {ctaSecondaryText}: {displayPhone}
           </a>
         </div>
 
-        {/* Trust Indicators - UPDATED COLORS */}
+        {/* Trust Indicators */}
         <div className="mt-12 pt-8 border-t border-white/10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>

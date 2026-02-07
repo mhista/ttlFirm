@@ -1,5 +1,10 @@
 import { client } from "@/lib/sanity.client";
-import { testimonialsQuery } from "@/lib/sanity.queries";
+import { 
+  testimonialsQuery, 
+  homePageQuery, 
+  siteSettingsQuery 
+} from "@/lib/sanity.queries";
+import { urlFor } from "@/lib/sanity.client";
 import Countdown from "@components/common/countdown";
 import Section1 from "@components/common/section1";
 import Section2 from "@components/common/section2";
@@ -16,113 +21,141 @@ import BlogSection from "@components/pages/home/blogSection";
 import Script from "next/script";
 
 export const revalidate = 60;
-// SEO Metadata
-export const metadata = {
-  title: "Reliable Law firm in New Jersey | The Turuchi Law Firm",
-  description: "Experienced law firm in New Jersey offering immigration, personal injury, workers’ compensation, and municipal court representation. Get a free consultation.",
-  keywords: [
-    "New Jersey lawyer",
-    "personal injury attorney NJ",
-    "immigration lawyer New Jersey",
-    "workers compensation attorney",
-    "Essex County lawyer",
-    "Union County attorney",
-    "Hudson County legal services",
-    "car accident lawyer NJ",
-    "slip and fall attorney",
-    "work injury lawyer"
-  ],
-  openGraph: {
-    title: "Reliable Law firm in New Jersey | The Turuchi Law Firm",
-    description: "Experienced law firm in New Jersey offering immigration, personal injury, workers’ compensation, and municipal court representation. Get a free consultation.",
-    url: "https://turuchilawfirm.com",
-    siteName: "Turuchi Law Firm",
-    images: [
-      {
-        url: "/assets/images/lawyer.jpg", // Update with actual OG image
-        width: 1200,
-        height: 630,
-        alt: "Turuchi Law Firm - New Jersey Attorney"
-      }
-    ],
-    locale: "en_US",
-    type: "website"
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Reliable Law firm in New Jersey | The Turuchi Law Firm",
-    description: "Experienced law firm in New Jersey offering immigration, personal injury, workers’ compensation, and municipal court representation. Get a free consultation.",
-    images: ["/assets/images/lawyer.jpg"]
-  },
-  alternates: {
-    canonical: "https://turuchilawfirm.com"
-  }
-};
 
-// Organization Schema for SEO
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "LegalService",
-  "name": "Turuchi Law Firm, LLC",
-  "image": "https://turuchilawfirm.com/assets/images/logo.png",
-  "url": "https://turuchilawfirm.com",
-  "telephone": "+17322106410",
-  "email": "info@turuchilawfirm.com",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "111 Town Square Pl",
-    "addressLocality": "Jersey City",
-    "addressRegion": "NJ",
-    "postalCode": "07310",
-    "addressCountry": "US"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "40.7178",
-    "longitude": "-74.0431"
-  },
-  "areaServed": [
-    {
-      "@type": "State",
-      "name": "New Jersey"
-    }
-  ],
-  "priceRange": "$$",
-  "founder": {
-    "@type": "Person",
-    "name": "Turuchi S. Iheanachor",
-    "jobTitle": "Founder & Managing Attorney"
-  },
-  "openingHoursSpecification": [
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "09:00",
-      "closes": "17:00"
-    }
-  ],
-  "sameAs": [
-    "https://www.facebook.com/turuchilawfirm",
-    "https://www.linkedin.com/company/turuchi-law-firm"
-  ]
-};
-
-async function getTestimonials() {
+// Fetch all page data
+async function getPageData() {
   try {
-    const testimonials = await client.fetch(testimonialsQuery);
-    return testimonials;
+    const [homePage, siteSettings, testimonials] = await Promise.all([
+      client.fetch(homePageQuery),
+      client.fetch(siteSettingsQuery),
+      client.fetch(testimonialsQuery)
+    ]);
+    
+    return { 
+      homePage: homePage || {}, 
+      siteSettings: siteSettings || {},
+      testimonials: testimonials || []
+    };
   } catch (error) {
-    console.error("Error fetching testimonials:", error);
-    return [];
+    console.error("Error fetching page data:", error);
+    return { 
+      homePage: {}, 
+      siteSettings: {},
+      testimonials: []
+    };
   }
 }
 
+// Generate dynamic metadata from CMS
+export async function generateMetadata() {
+  const { homePage, siteSettings } = await getPageData();
+  
+  const seo = homePage?.seo || {};
+  const defaultOGImage = siteSettings?.defaultOGImage 
+    ? urlFor(siteSettings.defaultOGImage).width(1200).height(630).url()
+    : "/assets/images/lawyer.jpg";
+
+  return {
+    title: seo.metaTitle || "Reliable Law firm in New Jersey | The Turuchi Law Firm",
+    description: seo.metaDescription || "Experienced law firm in New Jersey offering immigration, personal injury, workers' compensation, and municipal court representation. Get a free consultation.",
+    keywords: seo.keywords || [
+      "New Jersey lawyer",
+      "personal injury attorney NJ",
+      "immigration lawyer New Jersey",
+      "workers compensation attorney"
+    ],
+    openGraph: {
+      title: seo.metaTitle || "Reliable Law firm in New Jersey | The Turuchi Law Firm",
+      description: seo.metaDescription,
+      url: "https://turuchilawfirm.com",
+      siteName: siteSettings?.title || "Turuchi Law Firm",
+      images: [
+        {
+          url: seo.ogImage ? urlFor(seo.ogImage).width(1200).height(630).url() : defaultOGImage,
+          width: 1200,
+          height: 630,
+          alt: "Turuchi Law Firm - New Jersey Attorney"
+        }
+      ],
+      locale: "en_US",
+      type: "website"
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.metaTitle,
+      description: seo.metaDescription,
+      images: [seo.ogImage ? urlFor(seo.ogImage).url() : defaultOGImage]
+    },
+    alternates: {
+      canonical: "https://turuchilawfirm.com"
+    }
+  };
+}
+
+// Generate Organization Schema from CMS
+function generateOrganizationSchema(siteSettings) {
+  const contact = siteSettings?.contact || {};
+  const address = contact?.address || {};
+  const social = siteSettings?.social || {};
+  
+  return {
+    "@context": "https://schema.org",
+    "@type": "LegalService",
+    "name": siteSettings?.title || "Turuchi Law Firm, LLC",
+    "image": siteSettings?.logo ? urlFor(siteSettings.logo).url() : "https://turuchilawfirm.com/assets/images/logo.png",
+    "url": "https://turuchilawfirm.com",
+    "telephone": contact?.phone || "+17322106410",
+    "email": contact?.email || "info@turuchilawfirm.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": address?.street || "111 Town Square Pl",
+      "addressLocality": address?.city || "Jersey City",
+      "addressRegion": address?.state || "NJ",
+      "postalCode": address?.zipCode || "07310",
+      "addressCountry": address?.country || "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "40.7178",
+      "longitude": "-74.0431"
+    },
+    "areaServed": [
+      {
+        "@type": "State",
+        "name": "New Jersey"
+      }
+    ],
+    "priceRange": "$$",
+    "founder": {
+      "@type": "Person",
+      "name": "Turuchi S. Iheanachor",
+      "jobTitle": "Founder & Managing Attorney"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "09:00",
+        "closes": "17:00"
+      }
+    ],
+    "sameAs": [
+      social?.facebook,
+      social?.linkedin,
+      social?.instagram
+    ].filter(Boolean)
+  };
+}
 
 const Home = async () => {
-  const testimonials = await getTestimonials();
-  const height1 = "1200";
-  const height2 = "600";
-  const height3 = "800";
+  const { homePage, siteSettings, testimonials } = await getPageData();
+  
+  // Get stats from CMS or use defaults
+  const stats = siteSettings?.stats || {};
+  const casesHandled = stats?.casesHandled || 500;
+  const yearsExperience = stats?.yearsExperience || 8;
+  
+  const organizationSchema = generateOrganizationSchema(siteSettings);
   
   return (
     <>
@@ -136,38 +169,65 @@ const Home = async () => {
       />
 
       <div className="relative h-[full]">
-        <Header height1={"1200"} height2={height2} height3={height3}>
-          <HomeHero height1={1200} height2={height2} height3={height3} />
+        <Header height1={"1200"} height2={"600"} height3={"800"}>
+          <HomeHero 
+            content={homePage?.hero} 
+            height1={1200} 
+            height2={600} 
+            height3={800} 
+          />
         </Header>
 
-        <div className="absolute z-[70] w-[85%] lg:w-[50%] justify-center items-center right-[28px] sm:right-[48px] lg:left-10 top-[1270px] sm:top-[650px] md:top-[780px] lg:top-[820px] md:pr-4 bg-zinc-100 flex flex-row shadow-2xl border-amber-600 border-opacity-90 border-t-[3px] gap:3 md:gap-5 rounded-sm">
-          <Countdown countToUse={500} subtitle={'Legal Cases Handled'} sign={'+'} timer={10}/>
-          <div className="w-[1px] bg-[#1f385b] h-[70px] md:h-[100px] opacity-75 mr-4 md:mr-0"></div>
-          <Countdown countToUse={8} subtitle={'Years of Industry Experience'} timer={100}/>
-        </div>
+        {/* Stats Section - Dynamic from CMS */}
+        {homePage?.statsSection?.enabled !== false && (
+          <div className="absolute z-[70] w-[85%] lg:w-[50%] justify-center items-center right-[28px] sm:right-[48px] lg:left-10 top-[1270px] sm:top-[650px] md:top-[780px] lg:top-[820px] md:pr-4 bg-zinc-100 flex flex-row shadow-2xl border-amber-600 border-opacity-90 border-t-[3px] gap:3 md:gap-5 rounded-sm">
+            <Countdown 
+              countToUse={casesHandled} 
+              subtitle={homePage?.statsSection?.stat1Label || 'Legal Cases Handled'} 
+              sign={'+'} 
+              timer={10}
+            />
+            <div className="w-[1px] bg-[#1f385b] h-[70px] md:h-[100px] opacity-75 mr-4 md:mr-0"></div>
+            <Countdown 
+              countToUse={yearsExperience} 
+              subtitle={homePage?.statsSection?.stat2Label || 'Years of Industry Experience'} 
+              timer={100}
+            />
+          </div>
+        )}
 
         <Section1>
-          <PracticeArea/>
+          <PracticeArea content={homePage?.practiceAreasSection} />
         </Section1>
 
         <Section3>
-          <WhyChooseUs/>
+          <WhyChooseUs content={homePage?.whyChooseUsSection} stats={stats} />
         </Section3>
 
         <Section4>
-          <Consultation/>
+          <Consultation content={homePage?.consultationSection} contact={siteSettings?.contact} />
         </Section4>
 
-        <Section1>
-          <TestimonialCarousel testimonials={testimonials} />
-        </Section1>
+        {/* Testimonials Section */}
+        {homePage?.testimonialsSection?.enabled !== false && (
+          <Section1>
+            <TestimonialCarousel 
+              testimonials={testimonials}
+              content={homePage?.testimonialsSection}
+              stats={stats}
+            />
+          </Section1>
+        )}
+
+        {/* Blog Section */}
+        {homePage?.blogSection?.enabled !== false && (
+          <Section2>
+            <BlogSection content={homePage?.blogSection} />
+          </Section2>
+        )}
 
         <Section2>
-          <BlogSection />
-        </Section2>
-
-        <Section2>
-          <ContactUs/>
+          <ContactUs contact={siteSettings?.contact} social={siteSettings?.social} />
         </Section2>
       </div>
     </>

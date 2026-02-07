@@ -17,6 +17,56 @@ export default defineConfig({
         S.list()
           .title('Content')
           .items([
+            // SITE SETTINGS (Singleton)
+            S.listItem()
+              .title('⚙️ Site Settings')
+              .child(
+                S.document()
+                  .schemaType('siteSettings')
+                  .documentId('siteSettings')
+              ),
+            
+            S.divider(),
+
+            // PAGES
+            S.listItem()
+              .title('📄 Pages')
+              .child(
+                S.list()
+                  .title('Pages')
+                  .items([
+                    S.listItem()
+                      .title('🏠 Homepage')
+                      .child(
+                        S.document()
+                          .schemaType('homePage')
+                          .documentId('homePage')
+                      ),
+                    S.listItem()
+                      .title('ℹ️ About Us')
+                      .child(
+                        S.document()
+                          .schemaType('aboutPage')
+                          .documentId('aboutPage')
+                      ),
+                    S.listItem()
+                      .title('👤 Attorney Profile')
+                      .child(
+                        S.document()
+                          .schemaType('attorneyProfile')
+                          .documentId('attorneyProfile')
+                      ),
+                    S.listItem()
+                      .title('📞 Contact')
+                      .child(
+                        S.document()
+                          .schemaType('contactPage')
+                          .documentId('contactPage')
+                      ),
+                  ])
+              ),
+
+            S.divider(),
             // Blog Section
             S.listItem()
               .title('Blog')
