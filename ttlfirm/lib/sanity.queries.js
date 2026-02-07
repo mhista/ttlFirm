@@ -1,3 +1,11 @@
+// ===========================================
+// lib/sanity.queries.js - COMPLETE FILE
+// Replace your existing sanity.queries.js with this
+// ===========================================
+
+// ============================================
+// BLOG QUERIES
+// ============================================
 export const blogsQuery = `
   *[_type == "blog" && status == "published"] | order(publishedAt desc) {
     _id,
@@ -102,6 +110,27 @@ export const blogBySlugQuery = `
   }
 `;
 
+export const blogsByCategoryQuery = `
+  *[_type == "blog" && status == "published" && $category in categories[]->slug.current] | order(publishedAt desc) {
+    _id,
+    title,
+    slug,
+    excerpt,
+    mainImage {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
+    author->{
+      name,
+      slug
+    },
+    publishedAt
+  }
+`;
+
 export const featuredBlogsQuery = `
   *[_type == "blog" && status == "published" && featured == true] | order(publishedAt desc) [0...3] {
     _id,
@@ -148,8 +177,64 @@ export const tagsQuery = `
   }
 `;
 
+export const authorQuery = `
+  *[_type == "author" && slug.current == $slug][0] {
+    _id,
+    name,
+    slug,
+    image {
+      asset->{
+        _id,
+        url
+      }
+    },
+    title,
+    bio,
+    email,
+    phone,
+    social,
+    "posts": *[_type == "blog" && author._ref == ^._id && status == "published"] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      excerpt,
+      publishedAt
+    }
+  }
+`;
+
+export const searchQuery = `
+  *[_type in ["blog", "subService"] && [title, excerpt, body] match $searchTerm] {
+    _type,
+    _id,
+    title,
+    slug,
+    excerpt,
+    "type": _type
+  }
+`;
+
 // ============================================
-// EXISTING PRACTICE AREA QUERIES (Keep these)
+// SITEMAP QUERY
+// ============================================
+export const sitemapQuery = `
+  {
+    "blogs": *[_type == "blog" && status == "published"] {
+      slug,
+      publishedAt
+    },
+    "subServices": *[_type == "subService" && status == "published"] {
+      slug,
+      practiceArea->{
+        slug,
+        id
+      }
+    }
+  }
+`;
+
+// ============================================
+// PRACTICE AREA QUERIES
 // ============================================
 export const practiceAreasQuery = `
   *[_type == "practiceArea" && status == "published"] | order(order asc) {
@@ -313,6 +398,22 @@ export const practiceAreaByIdQuery = `
   }
 `;
 
+export const subServicesByPracticeQuery = `
+  *[_type == "subService" && practiceArea._ref == $practiceAreaId && status == "published"] | order(order asc) {
+    _id,
+    title,
+    slug,
+    excerpt,
+    image {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    }
+  }
+`;
+
 export const subServiceBySlugQuery = `
   *[_type == "subService" && slug.current == $slug][0] {
     _id,
@@ -376,8 +477,37 @@ export const subServiceBySlugQuery = `
   }
 `;
 
+export const subServiceByCountyQuery = `
+  *[_type == "subService" && status == "published" && $countyId in counties[]._ref] {
+    _id,
+    title,
+    slug,
+    excerpt,
+    practiceArea->{
+      name,
+      slug
+    },
+    counties[]->{
+      name,
+      slug
+    }
+  }
+`;
+
+export const countiesQuery = `
+  *[_type == "county"] | order(name asc) {
+    _id,
+    name,
+    slug,
+    description,
+    zipCodes,
+    majorCities,
+    "serviceCount": count(*[_type == "subService" && references(^._id)])
+  }
+`;
+
 // ============================================
-// TESTIMONIALS QUERIES (Keep these)
+// TESTIMONIALS QUERIES
 // ============================================
 export const testimonialsQuery = `
   *[_type == "testimonial" && status == "active"] | order(order asc) {
@@ -417,7 +547,7 @@ export const featuredTestimonialsQuery = `
 `;
 
 // ============================================
-// NEW: SITE SETTINGS QUERY
+// SITE SETTINGS QUERY
 // ============================================
 export const siteSettingsQuery = `
   *[_type == "siteSettings"][0] {
@@ -475,7 +605,7 @@ export const siteSettingsQuery = `
 `;
 
 // ============================================
-// NEW: HOMEPAGE QUERY
+// HOMEPAGE QUERY
 // ============================================
 export const homePageQuery = `
   *[_type == "homePage"][0] {
@@ -560,7 +690,7 @@ export const homePageQuery = `
 `;
 
 // ============================================
-// NEW: ABOUT PAGE QUERY
+// ABOUT PAGE QUERY
 // ============================================
 export const aboutPageQuery = `
   *[_type == "aboutPage"][0] {
@@ -623,7 +753,7 @@ export const aboutPageQuery = `
 `;
 
 // ============================================
-// NEW: CONTACT PAGE QUERY
+// CONTACT PAGE QUERY
 // ============================================
 export const contactPageQuery = `
   *[_type == "contactPage"][0] {
@@ -664,7 +794,7 @@ export const contactPageQuery = `
 `;
 
 // ============================================
-// NEW: ATTORNEY PROFILE QUERY
+// ATTORNEY PROFILE QUERY
 // ============================================
 export const attorneyProfileQuery = `
   *[_type == "attorneyProfile"][0] {
