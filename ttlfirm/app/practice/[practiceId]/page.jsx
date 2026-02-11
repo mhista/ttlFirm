@@ -1,8 +1,9 @@
 // ===========================================
-// app/practice/[practiceId]/page.jsx - COMPLETE REDESIGN
+// app/practice/[practiceId]/page.jsx - FINAL VERSION
+// Uses TailoredCTA component (WhyChooseUs design)
 // ===========================================
 import { client } from "@/lib/sanity.client";
-import { practiceAreaByIdQuery, practiceAreasQuery } from "@/lib/sanity.queries";
+import { practiceAreaBySlugQuery, practiceAreasQuery } from "@/lib/sanity.queries";
 import { urlFor } from "@/lib/sanity.client";
 import { PortableText } from "@portabletext/react";
 import PortableTextComponents from "@/components/blog/PortableTextComponents";
@@ -10,29 +11,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Section2 from "@/components/common/section2";
-import Section4 from "@/components/common/section4";
-import Consultation from "@/components/pages/home/consult";
 import Accordion from "@/components/uiComponents/accordion";
 import { FaArrowRightLong } from "react-icons/fa6";
-import SEOHead from "@/components/SEOHead";
 import { generateLocalBusinessSchema } from "@/lib/seo";
 import Script from "next/script";
+import TailoredCTA from "@/components/common/TailoredCTA"; // NEW
 
-export const revalidate = 60; // Always fetch fresh data
+export const revalidate = 60;
 
-// Generate static paths
+// Generate static paths using SLUGS
 export async function generateStaticParams() {
   const practiceAreas = await client.fetch(practiceAreasQuery);
   return practiceAreas.map((area) => ({
-    practiceId: area.id?.toString() || area.slug.current,
+    practiceId: area.slug.current,
   }));
 }
 
 // Generate metadata
 export async function generateMetadata({ params }) {
   const { practiceId } = await params;
-  const practiceArea = await client.fetch(practiceAreaByIdQuery, {
-    practiceId: parseInt(practiceId) || practiceId,
+  const practiceArea = await client.fetch(practiceAreaBySlugQuery, {
+    slug: practiceId,
   });
 
   if (!practiceArea) {
@@ -63,24 +62,22 @@ export async function generateMetadata({ params }) {
 
 export default async function PracticeAreaPage({ params }) {
   const { practiceId } = await params;
-  const practiceArea = await client.fetch(practiceAreaByIdQuery, {
-    practiceId: parseInt(practiceId) || practiceId,
+  const practiceArea = await client.fetch(practiceAreaBySlugQuery, {
+    slug: practiceId,
   });
 
   if (!practiceArea) {
     notFound();
   }
 
-  // Generate schema for SEO - FIXED VERSION
+  // Generate schema for SEO
   const schemaData = {
     name: practiceArea.name,
-    title: practiceArea.name, // Added for consistency
+    title: practiceArea.name,
     slug: practiceArea.slug,
-    id: practiceArea.id,
     excerpt: practiceArea.excerpt,
     image: practiceArea.image,
     seo: practiceArea.seo,
-    // Don't include practiceArea field since this IS a practice area
   };
   
   const schema = generateLocalBusinessSchema(
@@ -172,21 +169,6 @@ export default async function PracticeAreaPage({ params }) {
                 </div>
               )}
 
-              {/* Why Choose Us */}
-              {practiceArea.whyChooseUs && (
-                <div className="bg-gray-50 p-8 rounded-lg">
-                  <h2 className="font-lora text-3xl font-bold mb-6">
-                    Why Choose Turuchi Law Firm for {practiceArea.name}
-                  </h2>
-                  <div className="prose prose-lg max-w-none">
-                    <PortableText
-                      value={practiceArea.whyChooseUs}
-                      components={PortableTextComponents}
-                    />
-                  </div>
-                </div>
-              )}
-
               {/* Process Steps */}
               {practiceArea.process && practiceArea.process.length > 0 && (
                 <div>
@@ -259,79 +241,6 @@ export default async function PracticeAreaPage({ params }) {
                 />
               )}
 
-              {/* Sub-Services Section */}
-              {practiceArea.subServices &&
-                practiceArea.subServices.length > 0 && (
-                  <div className="mt-12">
-                    <h2 className="font-lora text-3xl font-bold mb-6">
-                      Our {practiceArea.name} Services
-                    </h2>
-                    <p className="text-gray-600 mb-8">
-                      We offer comprehensive legal services across all areas of{" "}
-                      {practiceArea.name.toLowerCase()}
-                    </p>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {practiceArea.subServices.map((service) => (
-                        <Link
-                          key={service._id}
-                          href={`/practice/${practiceId}/${service.slug.current}`}
-                          className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
-                        >
-                          {service.image && (
-                            <div className="relative w-full h-48 overflow-hidden">
-                              <Image
-                                src={urlFor(service.image)
-                                  .width(600)
-                                  .height(400)
-                                  .url()}
-                                alt={service.image.alt || service.title}
-                                fill
-                                className="object-cover group-hover:scale-110 transition-transform duration-500"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            </div>
-                          )}
-
-                          <div className="p-6">
-                            <h3 className="font-lora text-xl font-semibold mb-3 group-hover:text-amber-600 transition">
-                              {service.title}
-                            </h3>
-
-                            {service.excerpt && (
-                              <p className="text-gray-600 text-sm line-clamp-3 mb-4 leading-relaxed">
-                                {service.excerpt}
-                              </p>
-                            )}
-
-                            {service.counties && service.counties.length > 0 && (
-                              <div className="flex flex-wrap gap-2 mb-4">
-                                {service.counties.slice(0, 3).map((county) => (
-                                  <span
-                                    key={county.slug.current}
-                                    className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-full font-medium"
-                                  >
-                                    {county.name}
-                                  </span>
-                                ))}
-                                {service.counties.length > 3 && (
-                                  <span className="text-xs text-gray-500">
-                                    +{service.counties.length - 3} more
-                                  </span>
-                                )}
-                              </div>
-                            )}
-
-                            <div className="flex items-center text-amber-600 font-semibold text-sm gap-2 group-hover:gap-3 transition-all">
-                              Learn More
-                              <span>→</span>
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
               {/* Related Practice Areas */}
               {practiceArea.relatedAreas &&
                 practiceArea.relatedAreas.length > 0 && (
@@ -343,7 +252,7 @@ export default async function PracticeAreaPage({ params }) {
                       {practiceArea.relatedAreas.map((area) => (
                         <Link
                           key={area._id}
-                          href={`/practice/${area.id || area.slug.current}`}
+                          href={`/practice/${area.slug.current}`}
                           className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition group"
                         >
                           <h3 className="font-lora text-xl font-semibold mb-2 group-hover:text-amber-600 transition">
@@ -365,23 +274,21 @@ export default async function PracticeAreaPage({ params }) {
                 <h2 className="font-lora text-2xl font-medium">
                   Practice Areas
                 </h2>
-                {/* This will be populated with all practice areas */}
-                <PracticeAreaSidebar currentId={practiceId} />
+                <PracticeAreaSidebar currentSlug={practiceId} />
               </div>
             </div>
           </div>
         </Section2>
 
-        <Section4>
-          <Consultation />
-        </Section4>
+        {/* Tailored CTA Section - NEW COMPONENT */}
+        <TailoredCTA ctaData={practiceArea.ctaSection} />
       </div>
     </>
   );
 }
 
 // Sidebar Component
-async function PracticeAreaSidebar({ currentId }) {
+async function PracticeAreaSidebar({ currentSlug }) {
   const practiceAreas = await client.fetch(practiceAreasQuery);
 
   return (
@@ -390,10 +297,9 @@ async function PracticeAreaSidebar({ currentId }) {
         <div className="w-full flex flex-col gap-4" key={area._id}>
           <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
           <Link
-            href={`/practice/${area.id || area.slug.current}`}
+            href={`/practice/${area.slug.current}`}
             className={`hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-base ${
-              (area.id?.toString() === currentId ||
-                area.slug.current === currentId)
+              area.slug.current === currentSlug
                 ? "text-amber-600 ml-2"
                 : ""
             }`}

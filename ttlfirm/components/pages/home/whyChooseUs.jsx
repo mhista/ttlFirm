@@ -137,9 +137,9 @@ const WhyChooseUs = ({ content, stats }) => {
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-6 mb-16 max-w-2xl mx-auto">
-          <StatCard number={`${casesHandled}+`} label="Legal Cases Handled" delay="100" />
-          <StatCard number={yearsExperience} label="Years Industry Experience" delay="200" />
+         <div className="grid grid-cols-2 gap-4 md:gap-6 mb-16 max-w-2xl mx-auto">
+          <StatCard number="500+" label="Legal Cases Handled" delay="100" />
+          <StatCard number="8" label="Years Industry Experience" delay="200" />
         </div>
 
         {/* Features Grid */}

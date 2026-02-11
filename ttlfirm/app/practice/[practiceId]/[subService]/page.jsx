@@ -1,3 +1,7 @@
+// ===========================================
+// app/practice/[practiceId]/[subService]/page.jsx - FINAL VERSION
+// Uses TailoredCTA component (WhyChooseUs design)
+// ===========================================
 import { client } from "@/lib/sanity.client";
 import {
   subServiceBySlugQuery,
@@ -9,12 +13,11 @@ import PortableTextComponents from "@/components/blog/PortableTextComponents";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Section4 from "@/components/common/section4";
-import Consultation from "@/components/pages/home/consult";
 import Accordion from "@/components/uiComponents/accordion";
 import { FaArrowRightLong } from "react-icons/fa6";
 import SEOHead from "@/components/SEOHead";
 import { generateLocalBusinessSchema } from "@/lib/seo";
+import TailoredCTA from "@/components/common/TailoredCTA"; // NEW
 
 export const revalidate = 60;
 
@@ -27,7 +30,7 @@ export async function generateStaticParams() {
     if (area.subServices) {
       for (const service of area.subServices) {
         paths.push({
-          practiceId: area.id?.toString() || area.slug.current,
+          practiceId: area.slug.current,
           subService: service.slug.current,
         });
       }
@@ -38,9 +41,8 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata
-
 export async function generateMetadata({ params }) {
-  const { subService: subServiceSlug } = await params; // ← FIX: Await params
+  const { subService: subServiceSlug } = await params;
   const subService = await client.fetch(subServiceBySlugQuery, {
     slug: subServiceSlug,
   });
@@ -131,10 +133,7 @@ export default async function SubServicePage({ params }) {
               </Link>
               <span>/</span>
               <Link
-                href={`/practice/${
-                  subService.practiceArea?.id ||
-                  subService.practiceArea?.slug.current
-                }`}
+                href={`/practice/${subService.practiceArea?.slug.current}`}
                 className="hover:text-amber-600"
               >
                 {subService.practiceArea?.name}
@@ -146,25 +145,11 @@ export default async function SubServicePage({ params }) {
             <h1 className="font-lora text-4xl md:text-5xl font-bold text-center px-4">
               {subService.title}
             </h1>
-
-            {/* Counties */}
-            {/* {subService.counties && subService.counties.length > 0 && (
-              <div className="mt-4 flex gap-2 flex-wrap justify-center">
-                {subService.counties.map((county) => (
-                  <span
-                    key={county.slug.current}
-                    className="bg-amber-600 text-white px-3 py-1 text-sm rounded"
-                  >
-                    {county.name}
-                  </span>
-                ))}
-              </div>
-            )} */}
           </div>
         </div>
 
         {/* Content */}
-        <div className="relative w-full flex flex-col md:flex-row-reverse justify-center items-start md:justify-around md:pl-5 py-12">
+        <div className="relative w-full bg-zinc-100 flex flex-col md:flex-row-reverse justify-center items-start md:justify-around md:pl-5 py-12">
           {/* Main Content */}
           <div className="flex flex-col w-full md:w-[70%] p-8 sm:p-16 md:px-12 gap-8">
             {/* Overview */}
@@ -174,21 +159,6 @@ export default async function SubServicePage({ params }) {
                   value={subService.overview}
                   components={PortableTextComponents}
                 />
-              </div>
-            )}
-
-            {/* Why Choose Us */}
-            {subService.whyChooseUs && (
-              <div className="bg-gray-50 p-8 rounded-lg">
-                <h2 className="font-lora text-3xl font-bold mb-6">
-                  Why Choose Turuchi Law Firm
-                </h2>
-                <div className="prose prose-lg max-w-none">
-                  <PortableText
-                    value={subService.whyChooseUs}
-                    components={PortableTextComponents}
-                  />
-                </div>
               </div>
             )}
 
@@ -275,7 +245,7 @@ export default async function SubServicePage({ params }) {
                     {subService.relatedServices.map((service) => (
                       <Link
                         key={service._id}
-                        href={`/practice/${subService.practiceArea?.id}/${service.slug.current}`}
+                        href={`/practice/${subService.practiceArea?.slug.current}/${service.slug.current}`}
                         className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition group"
                       >
                         <h3 className="font-lora text-xl font-semibold mb-2 group-hover:text-amber-600 transition">
@@ -299,7 +269,7 @@ export default async function SubServicePage({ params }) {
                 <div className="w-full flex flex-col gap-4" key={area._id}>
                   <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
                   <Link
-                    href={`/practice/${area.id || area.slug.current}`}
+                    href={`/practice/${area.slug.current}`}
                     className="hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-base"
                   >
                     <FaArrowRightLong className="text-xs" />
@@ -311,9 +281,8 @@ export default async function SubServicePage({ params }) {
           </div>
         </div>
 
-        <Section4>
-          <Consultation />
-        </Section4>
+        {/* Tailored CTA Section - NEW COMPONENT */}
+        <TailoredCTA ctaData={subService.ctaSection} />
       </div>
     </>
   );

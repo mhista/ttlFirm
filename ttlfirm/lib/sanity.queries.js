@@ -236,12 +236,86 @@ export const sitemapQuery = `
 // ============================================
 // PRACTICE AREA QUERIES
 // ============================================
+export const practiceAreaBySlugQuery = `
+  *[_type == "practiceArea" && slug.current == $slug][0] {
+    _id,
+    name,
+    slug,
+    excerpt,
+    image {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
+    overview,
+    process,
+    faqs,
+    counties[]->{
+      name,
+      slug,
+      majorCities
+    },
+    countyContent[] {
+      county->{
+        name,
+        slug
+      },
+      content,
+      localStats
+    },
+    relatedAreas[]->{
+      _id,
+      name,
+      slug,
+      excerpt,
+      image {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
+    },
+    ctaSection {
+      enabled,
+      sectionLabel,
+      heading,
+      description,
+      buttons[] {
+        text,
+        link
+      }
+    },
+    seo {
+      metaTitle,
+      metaDescription,
+      keywords,
+      localKeywords[] {
+        county->{
+          name,
+          slug
+        },
+        keywords
+      },
+      ogImage {
+        asset->{
+          _id,
+          url
+        }
+      },
+      schema
+    }
+  }
+`;
+
+// Practice Areas Query - UPDATED
 export const practiceAreasQuery = `
   *[_type == "practiceArea" && status == "published"] | order(order asc) {
     _id,
     name,
     slug,
-    id,
     excerpt,
     image {
       asset->{
@@ -252,7 +326,6 @@ export const practiceAreasQuery = `
     },
     icon,
     overview,
-    whyChooseUs,
     process,
     faqs,
     counties[]->{
@@ -260,39 +333,20 @@ export const practiceAreasQuery = `
       slug,
       majorCities
     },
-    countyContent[] {
-      county->{
-        name,
-        slug
-      },
-      content,
-      localStats
-    },
-    relatedAreas[]->{
-      _id,
-      name,
-      slug,
-      id,
-      excerpt
+    ctaSection {
+      enabled,
+      sectionLabel,
+      heading,
+      description,
+      buttons[] {
+        text,
+        link
+      }
     },
     seo {
       metaTitle,
       metaDescription,
-      keywords,
-      localKeywords[] {
-        county->{
-          name,
-          slug
-        },
-        keywords
-      },
-      ogImage {
-        asset->{
-          _id,
-          url
-        }
-      },
-      schema
+      keywords
     },
     "subServices": *[_type == "subService" && practiceArea._ref == ^._id && status == "published"] | order(order asc) {
       _id,
@@ -305,115 +359,12 @@ export const practiceAreasQuery = `
           url
         },
         alt
-      },
-      counties[]->{
-        name,
-        slug
       }
     }
   }
 `;
 
-export const practiceAreaByIdQuery = `
-  *[_type == "practiceArea" && (id == $practiceId || slug.current == $practiceId)][0] {
-    _id,
-    name,
-    slug,
-    id,
-    excerpt,
-    image {
-      asset->{
-        _id,
-        url
-      },
-      alt
-    },
-    overview,
-    whyChooseUs,
-    process,
-    faqs,
-    counties[]->{
-      name,
-      slug,
-      majorCities
-    },
-    countyContent[] {
-      county->{
-        name,
-        slug
-      },
-      content,
-      localStats
-    },
-    relatedAreas[]->{
-      _id,
-      name,
-      slug,
-      id,
-      excerpt,
-      image {
-        asset->{
-          _id,
-          url
-        },
-        alt
-      }
-    },
-    seo {
-      metaTitle,
-      metaDescription,
-      keywords,
-      localKeywords[] {
-        county->{
-          name,
-          slug
-        },
-        keywords
-      },
-      ogImage {
-        asset->{
-          _id,
-          url
-        }
-      },
-      schema
-    },
-    "subServices": *[_type == "subService" && practiceArea._ref == ^._id && status == "published"] | order(order asc) {
-      _id,
-      title,
-      slug,
-      excerpt,
-      image {
-        asset->{
-          _id,
-          url
-        },
-        alt
-      },
-      counties[]->{
-        name,
-        slug
-      }
-    }
-  }
-`;
-
-export const subServicesByPracticeQuery = `
-  *[_type == "subService" && practiceArea._ref == $practiceAreaId && status == "published"] | order(order asc) {
-    _id,
-    title,
-    slug,
-    excerpt,
-    image {
-      asset->{
-        _id,
-        url
-      },
-      alt
-    }
-  }
-`;
-
+// Sub-Service by Slug Query - UPDATED
 export const subServiceBySlugQuery = `
   *[_type == "subService" && slug.current == $slug][0] {
     _id,
@@ -421,8 +372,7 @@ export const subServiceBySlugQuery = `
     slug,
     practiceArea->{
       name,
-      slug,
-      id
+      slug
     },
     counties[]->{
       name,
@@ -438,7 +388,6 @@ export const subServiceBySlugQuery = `
     },
     excerpt,
     overview,
-    whyChooseUs,
     process,
     faqs,
     countyContent[] {
@@ -455,6 +404,16 @@ export const subServiceBySlugQuery = `
       slug,
       excerpt
     },
+    ctaSection {
+      enabled,
+      sectionLabel,
+      heading,
+      description,
+      buttons[] {
+        text,
+        link
+      }
+    },
     seo {
       metaTitle,
       metaDescription,
@@ -476,6 +435,23 @@ export const subServiceBySlugQuery = `
     }
   }
 `;
+export const subServicesByPracticeQuery = `
+  *[_type == "subService" && practiceArea._ref == $practiceAreaId && status == "published"] | order(order asc) {
+    _id,
+    title,
+    slug,
+    excerpt,
+    image {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    }
+  }
+`;
+
+
 
 export const subServiceByCountyQuery = `
   *[_type == "subService" && status == "published" && $countyId in counties[]._ref] {

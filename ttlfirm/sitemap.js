@@ -2,59 +2,86 @@ import { client } from "@/lib/sanity.client";
 import { sitemapQuery } from "@/lib/sanity.queries";
 
 export default async function sitemap() {
-  const baseUrl = "https://turuchilawfirm.com"; // Replace with your domain
+  const baseUrl = "https://turuchilawfirm.com";
 
-  const data = await client.fetch(sitemapQuery);
+  try {
+    const data = await client.fetch(sitemapQuery);
 
-  // Blog posts
-  const blogs = data.blogs.map((blog) => ({
-    url: `${baseUrl}/blog/${blog.slug.current}`,
-    lastModified: new Date(blog.publishedAt),
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
+    // Blog posts
+    const blogs = data.blogs?.map((blog) => ({
+      url: `${baseUrl}/blog/${blog.slug.current}`,
+      lastModified: new Date(blog.publishedAt),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    })) || [];
 
-  // Sub-services
-  const subServices = data.subServices.map((service) => ({
-    url: `${baseUrl}/practice/${service.practiceArea.slug.current}/${service.slug.current}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.8,
-  }));
-
-  // Static pages
-  const staticPages = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/about`,
+    // Sub-services - UPDATED to use slugs
+    const subServices = data.subServices?.map((service) => ({
+      url: `${baseUrl}/practice/${service.practiceArea.slug.current}/${service.slug.current}`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/practice`,
+    })) || [];
+
+    // Practice areas - UPDATED to use slugs
+    const practiceAreas = data.practiceAreas?.map((area) => ({
+      url: `${baseUrl}/practice/${area.slug.current}`,
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.7,
-    },
-  ];
+      priority: 0.85,
+    })) || [];
 
-  return [...staticPages, ...blogs, ...subServices];
+    // Static pages
+    const staticPages = [
+      {
+        url: baseUrl,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 1,
+      },
+      {
+        url: `${baseUrl}/about`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.9,
+      },
+      {
+        url: `${baseUrl}/profile`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.9,
+      },
+      {
+        url: `${baseUrl}/practice`,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.9,
+      },
+      {
+        url: `${baseUrl}/blog`,
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.8,
+      },
+      {
+        url: `${baseUrl}/contact`,
+        lastModified: new Date(),
+        changeFrequency: "yearly",
+        priority: 0.7,
+      },
+    ];
+
+    return [...staticPages, ...practiceAreas, ...blogs, ...subServices];
+  } catch (error) {
+    console.error("Error generating sitemap:", error);
+    // Return at least static pages if dynamic content fails
+    return [
+      {
+        url: baseUrl,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 1,
+      },
+    ];
+  }
 }

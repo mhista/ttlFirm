@@ -1,7 +1,3 @@
-
-// ===========================================
-// sanity/schemas/subService.js
-// ===========================================
 export default {
   name: 'subService',
   title: 'Sub-Services',
@@ -21,7 +17,8 @@ export default {
         source: 'title',
         maxLength: 96
       },
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
+      description: 'URL-friendly version (e.g., car-accidents, slip-and-fall)'
     },
     {
       name: 'practiceArea',
@@ -59,16 +56,16 @@ export default {
       rows: 3,
       validation: Rule => Rule.max(200)
     },
+    
+    // OVERVIEW (Includes everything)
     {
       name: 'overview',
       title: 'Overview Section',
-      type: 'blockContent'
+      type: 'blockContent',
+      description: 'Main content about this service. Include why clients should choose you, your approach, etc.'
     },
-    {
-      name: 'whyChooseUs',
-      title: 'Why Choose Us',
-      type: 'blockContent'
-    },
+    
+    // PROCESS
     {
       name: 'process',
       title: 'Our Process',
@@ -83,6 +80,8 @@ export default {
         }
       ]
     },
+    
+    // FAQs
     {
       name: 'faqs',
       title: 'FAQs',
@@ -97,12 +96,89 @@ export default {
         }
       ]
     },
+
+    // NEW: TAILORED CTA SECTION
+    {
+      name: 'ctaSection',
+      title: 'Call-to-Action Section',
+      type: 'object',
+      description: 'Tailored CTA section (dark blue design like WhyChooseUs)',
+      options: {
+        collapsible: true,
+        collapsed: false
+      },
+      fields: [
+        {
+          name: 'enabled',
+          title: 'Show CTA Section',
+          type: 'boolean',
+          initialValue: true
+        },
+        {
+          name: 'sectionLabel',
+          title: 'Section Label (Optional)',
+          type: 'string',
+          description: 'Small label above heading (e.g., "Get Started", "Contact Us")',
+          placeholder: 'Get Legal Help'
+        },
+        {
+          name: 'heading',
+          title: 'Heading',
+          type: 'string',
+          validation: Rule => Rule.required(),
+          initialValue: 'Need Legal Assistance?'
+        },
+        {
+          name: 'description',
+          title: 'Description',
+          type: 'text',
+          rows: 5,
+          description: 'Detailed description specific to this service. Can be longer text.',
+          placeholder: 'If you need help with...'
+        },
+        {
+          name: 'buttons',
+          title: 'CTA Buttons',
+          type: 'array',
+          description: 'Add 1-3 buttons (first button is primary amber, rest are secondary white)',
+          validation: Rule => Rule.max(3),
+          of: [
+            {
+              type: 'object',
+              fields: [
+                {
+                  name: 'text',
+                  title: 'Button Text',
+                  type: 'string',
+                  validation: Rule => Rule.required()
+                },
+                {
+                  name: 'link',
+                  title: 'Button Link',
+                  type: 'string',
+                  validation: Rule => Rule.required(),
+                  initialValue: '/contact'
+                }
+              ],
+              preview: {
+                select: {
+                  title: 'text',
+                  subtitle: 'link'
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    
     {
       name: 'relatedServices',
       title: 'Related Services',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'subService'}]}]
     },
+    
     // County-Specific Content
     {
       name: 'countyContent',
@@ -132,6 +208,7 @@ export default {
         }
       ]
     },
+    
     // SEO Fields
     {
       name: 'seo',
@@ -222,12 +299,13 @@ export default {
       title: 'title',
       practiceArea: 'practiceArea.name',
       media: 'image',
-      status: 'status'
+      status: 'status',
+      slug: 'slug.current'
     },
-    prepare({title, practiceArea, media, status}) {
+    prepare({title, practiceArea, media, status, slug}) {
       return {
         title,
-        subtitle: `${practiceArea} - ${status}`,
+        subtitle: `${practiceArea} - /${slug} - ${status}`,
         media
       }
     }

@@ -17,14 +17,15 @@ export default {
         source: 'name',
         maxLength: 96
       },
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
+      description: 'URL-friendly version (e.g., personal-injury, immigration)'
     },
     {
       name: 'id',
-      title: 'Numeric ID',
+      title: 'Numeric ID (Legacy)',
       type: 'number',
-      description: 'Legacy ID for backwards compatibility (1, 2, 3, 4)',
-      validation: Rule => Rule.required()
+      description: 'DEPRECATED: Legacy ID for backwards compatibility. Use slug instead.',
+      readOnly: true
     },
     {
       name: 'excerpt',
@@ -57,19 +58,15 @@ export default {
       description: 'Icon identifier for frontend'
     },
     
-    // NEW: Rich Content Fields (like sub-services)
+    // OVERVIEW SECTION (Includes everything - no separate whyChooseUs)
     {
       name: 'overview',
       title: 'Overview Section',
       type: 'blockContent',
-      description: 'Main content describing this practice area'
+      description: 'Main content describing this practice area. Include why clients should choose you, your approach, experience, etc.'
     },
-    {
-      name: 'whyChooseUs',
-      title: 'Why Choose Us',
-      type: 'blockContent',
-      description: 'Why clients should choose us for this practice area'
-    },
+    
+    // PROCESS
     {
       name: 'process',
       title: 'Our Process',
@@ -84,6 +81,8 @@ export default {
         }
       ]
     },
+    
+    // FAQs
     {
       name: 'faqs',
       title: 'FAQs',
@@ -94,6 +93,81 @@ export default {
           fields: [
             {name: 'question', title: 'Question', type: 'string'},
             {name: 'answer', title: 'Answer', type: 'blockContent'}
+          ]
+        }
+      ]
+    },
+
+    // NEW: TAILORED CTA SECTION (Matches WhyChooseUs design)
+    {
+      name: 'ctaSection',
+      title: 'Call-to-Action Section',
+      type: 'object',
+      description: 'Tailored CTA section (dark blue design like WhyChooseUs)',
+      options: {
+        collapsible: true,
+        collapsed: false
+      },
+      fields: [
+        {
+          name: 'enabled',
+          title: 'Show CTA Section',
+          type: 'boolean',
+          initialValue: true
+        },
+        {
+          name: 'sectionLabel',
+          title: 'Section Label (Optional)',
+          type: 'string',
+          description: 'Small label above heading (e.g., "Get Started", "Contact Us")',
+          placeholder: 'Get Legal Help'
+        },
+        {
+          name: 'heading',
+          title: 'Heading',
+          type: 'string',
+          validation: Rule => Rule.required(),
+          initialValue: 'Need Legal Assistance?'
+        },
+        {
+          name: 'description',
+          title: 'Description',
+          type: 'text',
+          rows: 5,
+          description: 'Detailed description specific to this practice area. Can be longer text.',
+          placeholder: 'If you need help with...'
+        },
+        {
+          name: 'buttons',
+          title: 'CTA Buttons',
+          type: 'array',
+          description: 'Add 1-3 buttons (first button is primary amber, rest are secondary white)',
+          validation: Rule => Rule.max(3),
+          of: [
+            {
+              type: 'object',
+              fields: [
+                {
+                  name: 'text',
+                  title: 'Button Text',
+                  type: 'string',
+                  validation: Rule => Rule.required()
+                },
+                {
+                  name: 'link',
+                  title: 'Button Link',
+                  type: 'string',
+                  validation: Rule => Rule.required(),
+                  initialValue: '/contact'
+                }
+              ],
+              preview: {
+                select: {
+                  title: 'text',
+                  subtitle: 'link'
+                }
+              }
+            }
           ]
         }
       ]
@@ -146,7 +220,7 @@ export default {
       of: [{type: 'reference', to: [{type: 'practiceArea'}]}]
     },
 
-    // SEO Fields (Enhanced)
+    // SEO Fields
     {
       name: 'seo',
       title: 'SEO Settings',
@@ -238,12 +312,13 @@ export default {
       title: 'name',
       media: 'image',
       order: 'order',
-      status: 'status'
+      status: 'status',
+      slug: 'slug.current'
     },
-    prepare({title, media, order, status}) {
+    prepare({title, media, order, status, slug}) {
       return {
         title,
-        subtitle: `Order: ${order} - ${status}`,
+        subtitle: `/${slug} - Order: ${order} - ${status}`,
         media
       }
     }

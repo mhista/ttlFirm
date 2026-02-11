@@ -41,8 +41,8 @@ export async function generateMetadata({ params }) {
       images: blog.seo?.ogImage
         ? [urlFor(blog.seo.ogImage).width(1200).height(630).url()]
         : blog.mainImage
-        ? [urlFor(blog.mainImage).width(1200).height(630).url()]
-        : [],
+          ? [urlFor(blog.mainImage).width(1200).height(630).url()]
+          : [],
     },
   };
 }
@@ -191,30 +191,39 @@ export default async function BlogPost({ params }) {
               </div>
             )}
 
-            {/* Author Bio */}
+            {/* Author Bio - FIXED IMAGE ASPECT RATIO */}
             {blog.author && blog.author.bio && (
-              <div className="mt-12 p-6 bg-gray-50 rounded-lg">
-                <h3 className="font-lora text-xl font-semibold mb-4">
+              <div className="mt-12 p-6 md:p-8 bg-gray-50 rounded-lg">
+                <h3 className="font-lora text-xl font-semibold mb-6">
                   About the Author
                 </h3>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-6">
                   {blog.author.image && (
-                    <Image
-                      src={urlFor(blog.author.image).width(80).height(80).url()}
-                      alt={blog.author.name}
-                      width={80}
-                      height={80}
-                      className="rounded-full"
-                    />
+                    <div className="flex-shrink-0">
+                      <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32">
+                        <Image
+                          src={urlFor(blog.author.image)
+                            .width(150)
+                            .height(150)
+                            .url()}
+                          alt={blog.author.name}
+                          fill
+                          className="rounded-full object-cover"
+                          sizes="(max-width: 640px) 96px, (max-width: 768px) 112px, 128px"
+                        />
+                      </div>
+                    </div>
                   )}
                   <div className="flex-1">
-                    <h4 className="font-semibold text-lg">{blog.author.name}</h4>
+                    <h4 className="font-semibold text-lg md:text-xl mb-1">
+                      {blog.author.name}
+                    </h4>
                     {blog.author.title && (
-                      <p className="text-sm text-gray-600 mb-2">
+                      <p className="text-sm text-gray-600 mb-3">
                         {blog.author.title}
                       </p>
                     )}
-                    <div className="prose prose-sm">
+                    <div className="prose prose-sm max-w-none">
                       <PortableText
                         value={blog.author.bio}
                         components={PortableTextComponents}
