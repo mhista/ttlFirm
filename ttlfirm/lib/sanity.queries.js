@@ -1,13 +1,9 @@
 // ===========================================
 // lib/sanity.queries.js - COMPLETE FILE
-// Replace your existing sanity.queries.js with this
 // ===========================================
 
-// ============================================
-// BLOG QUERIES
-// ============================================
 export const blogsQuery = `
-  *[_type == "blog" && status == "published"] | order(publishedAt desc) {
+  *[_type == "blog" && status != "draft"] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -111,7 +107,7 @@ export const blogBySlugQuery = `
 `;
 
 export const blogsByCategoryQuery = `
-  *[_type == "blog" && status == "published" && $category in categories[]->slug.current] | order(publishedAt desc) {
+  *[_type == "blog" && status != "draft" && $category in categories[]->slug.current] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -126,32 +122,6 @@ export const blogsByCategoryQuery = `
     author->{
       name,
       slug
-    },
-    publishedAt
-  }
-`;
-
-export const featuredBlogsQuery = `
-  *[_type == "blog" && status == "published" && featured == true] | order(publishedAt desc) [0...3] {
-    _id,
-    title,
-    slug,
-    excerpt,
-    mainImage {
-      asset->{
-        _id,
-        url
-      },
-      alt
-    },
-    author->{
-      name,
-      slug
-    },
-    categories[]->{
-      title,
-      slug,
-      color
     },
     publishedAt
   }
@@ -177,64 +147,96 @@ export const tagsQuery = `
   }
 `;
 
-export const authorQuery = `
-  *[_type == "author" && slug.current == $slug][0] {
+// ============================================
+// PRACTICE AREAS — list (cards, sidebar, static params)
+// ============================================
+export const practiceAreasQuery = `
+  *[_type == "practiceArea" && status != "draft"] | order(order asc) {
     _id,
     name,
     slug,
+    excerpt,
     image {
       asset->{
         _id,
         url
+      },
+      alt
+    },
+    icon,
+    overview,
+    process,
+    faqs,
+    counties[]->{
+      name,
+      slug,
+      majorCities
+    },
+    countyContent[] {
+      county->{
+        name,
+        slug
+      },
+      content,
+      localStats
+    },
+    relatedAreas[]->{
+      _id,
+      name,
+      slug,
+      excerpt
+    },
+    ctaSection {
+      enabled,
+      sectionLabel,
+      heading,
+      description,
+      buttons[] {
+        text,
+        link
       }
     },
-    title,
-    bio,
-    email,
-    phone,
-    social,
-    "posts": *[_type == "blog" && author._ref == ^._id && status == "published"] | order(publishedAt desc) {
+    seo {
+      metaTitle,
+      metaDescription,
+      keywords,
+      localKeywords[] {
+        county->{
+          name,
+          slug
+        },
+        keywords
+      },
+      ogImage {
+        asset->{
+          _id,
+          url
+        }
+      },
+      schema
+    },
+    "subServices": *[_type == "subService" && practiceArea._ref == ^._id && status != "draft"] | order(order asc) {
       _id,
       title,
       slug,
       excerpt,
-      publishedAt
-    }
-  }
-`;
-
-export const searchQuery = `
-  *[_type in ["blog", "subService"] && [title, excerpt, body] match $searchTerm] {
-    _type,
-    _id,
-    title,
-    slug,
-    excerpt,
-    "type": _type
-  }
-`;
-
-// ============================================
-// SITEMAP QUERY
-// ============================================
-export const sitemapQuery = `
-  {
-    "blogs": *[_type == "blog" && status == "published"] {
-      slug,
-      publishedAt
-    },
-    "subServices": *[_type == "subService" && status == "published"] {
-      slug,
-      practiceArea->{
-        slug,
-        id
+      image {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      counties[]->{
+        name,
+        slug
       }
     }
   }
 `;
 
 // ============================================
-// PRACTICE AREA QUERIES
+// PRACTICE AREA — single page by SLUG
 // ============================================
 export const practiceAreaBySlugQuery = `
   *[_type == "practiceArea" && slug.current == $slug][0] {
@@ -306,49 +308,8 @@ export const practiceAreaBySlugQuery = `
         }
       },
       schema
-    }
-  }
-`;
-
-// Practice Areas Query - UPDATED
-export const practiceAreasQuery = `
-  *[_type == "practiceArea" && status == "published"] | order(order asc) {
-    _id,
-    name,
-    slug,
-    excerpt,
-    image {
-      asset->{
-        _id,
-        url
-      },
-      alt
     },
-    icon,
-    overview,
-    process,
-    faqs,
-    counties[]->{
-      name,
-      slug,
-      majorCities
-    },
-    ctaSection {
-      enabled,
-      sectionLabel,
-      heading,
-      description,
-      buttons[] {
-        text,
-        link
-      }
-    },
-    seo {
-      metaTitle,
-      metaDescription,
-      keywords
-    },
-    "subServices": *[_type == "subService" && practiceArea._ref == ^._id && status == "published"] | order(order asc) {
+    "subServices": *[_type == "subService" && practiceArea._ref == ^._id && status != "draft"] | order(order asc) {
       _id,
       title,
       slug,
@@ -364,7 +325,84 @@ export const practiceAreasQuery = `
   }
 `;
 
-// Sub-Service by Slug Query - UPDATED
+export const practiceAreaByIdQuery = `
+  *[_type == "practiceArea" && (id == $practiceId || slug.current == $practiceId)][0] {
+    _id,
+    name,
+    slug,
+    id,
+    excerpt,
+    image {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
+    overview,
+    process,
+    faqs,
+    counties[]->{
+      name,
+      slug,
+      majorCities
+    },
+    countyContent[] {
+      county->{
+        name,
+        slug
+      },
+      content,
+      localStats
+    },
+    relatedAreas[]->{
+      _id,
+      name,
+      slug,
+      id,
+      excerpt
+    },
+    ctaSection {
+      enabled,
+      sectionLabel,
+      heading,
+      description,
+      buttons[] {
+        text,
+        link
+      }
+    },
+    seo {
+      metaTitle,
+      metaDescription,
+      keywords,
+      ogImage {
+        asset->{
+          _id,
+          url
+        }
+      },
+      schema
+    },
+    "subServices": *[_type == "subService" && practiceArea._ref == ^._id && status != "draft"] | order(order asc) {
+      _id,
+      title,
+      slug,
+      excerpt,
+      image {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
+    }
+  }
+`;
+
+// ============================================
+// SUB-SERVICE — single page by slug
+// ============================================
 export const subServiceBySlugQuery = `
   *[_type == "subService" && slug.current == $slug][0] {
     _id,
@@ -435,8 +473,9 @@ export const subServiceBySlugQuery = `
     }
   }
 `;
+
 export const subServicesByPracticeQuery = `
-  *[_type == "subService" && practiceArea._ref == $practiceAreaId && status == "published"] | order(order asc) {
+  *[_type == "subService" && practiceArea._ref == $practiceAreaId && status != "draft"] | order(order asc) {
     _id,
     title,
     slug,
@@ -451,10 +490,8 @@ export const subServicesByPracticeQuery = `
   }
 `;
 
-
-
 export const subServiceByCountyQuery = `
-  *[_type == "subService" && status == "published" && $countyId in counties[]._ref] {
+  *[_type == "subService" && status != "draft" && $countyId in counties[]._ref] {
     _id,
     title,
     slug,
@@ -482,9 +519,87 @@ export const countiesQuery = `
   }
 `;
 
-// ============================================
-// TESTIMONIALS QUERIES
-// ============================================
+export const authorQuery = `
+  *[_type == "author" && slug.current == $slug][0] {
+    _id,
+    name,
+    slug,
+    image {
+      asset->{
+        _id,
+        url
+      }
+    },
+    title,
+    bio,
+    email,
+    phone,
+    social,
+    "posts": *[_type == "blog" && author._ref == ^._id && status != "draft"] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      excerpt,
+      publishedAt
+    }
+  }
+`;
+
+export const searchQuery = `
+  *[_type in ["blog", "subService"] && [title, excerpt, body] match $searchTerm] {
+    _type,
+    _id,
+    title,
+    slug,
+    excerpt,
+    "type": _type
+  }
+`;
+
+export const sitemapQuery = `
+  {
+    "blogs": *[_type == "blog" && status != "draft"] {
+      slug,
+      publishedAt
+    },
+    "practiceAreas": *[_type == "practiceArea" && status != "draft"] {
+      slug
+    },
+    "subServices": *[_type == "subService" && status != "draft"] {
+      slug,
+      practiceArea->{
+        slug
+      }
+    }
+  }
+`;
+
+export const featuredBlogsQuery = `
+  *[_type == "blog" && status != "draft" && featured == true] | order(publishedAt desc) [0...3] {
+    _id,
+    title,
+    slug,
+    excerpt,
+    mainImage {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
+    author->{
+      name,
+      slug
+    },
+    categories[]->{
+      title,
+      slug,
+      color
+    },
+    publishedAt
+  }
+`;
+
 export const testimonialsQuery = `
   *[_type == "testimonial" && status == "active"] | order(order asc) {
     _id,

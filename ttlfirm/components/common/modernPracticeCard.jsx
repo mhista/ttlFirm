@@ -4,11 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRightLong, FaChevronRight } from "react-icons/fa6";
 
-const ModernPracticeCard = ({ image1, title, subtitle, id, subAreas = [] }) => {
+const ModernPracticeCard = ({ image1, title, subtitle, slug, subAreas = [] }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    
     <div
       className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
       onMouseEnter={() => setIsHovered(true)}
@@ -23,25 +22,18 @@ const ModernPracticeCard = ({ image1, title, subtitle, id, subAreas = [] }) => {
           height={320}
           alt={title}
         />
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-        
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+
         {/* Title on Image */}
         <div className="absolute bottom-0 left-0 right-0 p-6">
-          <h2 className="font-lora text-white text-2xl md:text-3xl font-bold mb-2">
+          <h2 className="font-lora text-white text-2xl md:text-3xl font-bold mb-2 uppercase">
             {title}
           </h2>
-          {subAreas.length > 0 && (
-            <p className="text-amber-400 text-sm font-medium">
-              {subAreas.length} Services Available
-            </p>
-          )}
         </div>
       </div>
 
       {/* Content Section */}
       <div className="p-6">
-        {/* Description */}
         <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
           {subtitle}
         </p>
@@ -69,9 +61,9 @@ const ModernPracticeCard = ({ image1, title, subtitle, id, subAreas = [] }) => {
           </div>
         )}
 
-        {/* CTA Button */}
+        {/* ✅ FIXED: correct JSX template literal syntax */}
         <Link
-          href={`/practice/${id}`}
+          href={`/practice/${slug}`}
           className="group/btn inline-flex items-center gap-2 text-amber-600 font-semibold text-sm hover:text-amber-700 transition-all"
         >
           <span>Explore Services</span>
@@ -83,8 +75,7 @@ const ModernPracticeCard = ({ image1, title, subtitle, id, subAreas = [] }) => {
         </Link>
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute top-4 right-4 w-16 h-16 bg-amber-600/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+      <div className="absolute top-4 right-4 w-16 h-16 bg-amber-600/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
     </div>
   );
 };
