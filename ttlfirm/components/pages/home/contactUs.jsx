@@ -7,7 +7,7 @@ import { socialLinks2 } from "@components/common/mediaButttons2";
 // ✅ Multiple phones and addresses — edit these arrays to add more
 const phones = [
   { number: "+17322106410", display: "732-210-6410" },
-  // { number: "+15550000000", display: "555-000-0000" }, // Uncomment to add second number
+  { number: "+8482286402", display: "848-228-6402" }, // Uncomment to add second number
 ];
 
 const addresses = [
@@ -15,10 +15,10 @@ const addresses = [
     text: "111 Town Square Pl, Jersey City, NJ 07310",
     mapsUrl: "https://maps.google.com/?q=111+Town+Square+Pl+Jersey+City+NJ+07310",
   },
-  // {
-  //   text: "123 Main St, Newark, NJ 07101",
-  //   mapsUrl: "https://maps.google.com/?q=123+Main+St+Newark+NJ+07101",
-  // },
+  {
+    text: "30 Knightsbridge Road, Suite 525, Piscataway, New Jersey 08854",
+   mapsUrl: "https://maps.google.com/?q=30+Knightsbridge+Road+Suite+525+Piscataway+NJ+08854",
+  },
 ];
 
 const email = "info@turuchilawfirm.com";

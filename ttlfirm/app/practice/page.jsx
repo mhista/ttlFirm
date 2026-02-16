@@ -7,7 +7,7 @@ import Script from "next/script";
 import { client } from "@/lib/sanity.client";
 import { practiceAreasQuery } from "@/lib/sanity.queries";
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 export const metadata = {
   title: "Practice Areas | Personal Injury, Immigration & Workers' Comp Lawyer NJ",
@@ -55,52 +55,27 @@ const practiceAreasSchema = {
   }
 };
 
-// export const revalidate = 0; // disable cache for debugging
-
+// ✅ NOW ASYNC — fetches data server-side and passes as prop
 const PracticeAreasPage = async () => {
-
-  // ── DEBUG: try the simplest possible query first ──────────────────────────
-  const raw = await client
-    .fetch(`*[_type == "practiceArea"][0...10]{ _id, name, status, slug }`)
-    .catch((e) => { console.error("SANITY FETCH ERROR:", e); return null; });
-
-  console.log("──── SANITY DEBUG ────────────────────────────");
-  console.log("raw result:", JSON.stringify(raw, null, 2));
-  console.log("─────────────────────────────────────────────");
-  // ── END DEBUG ─────────────────────────────────────────────────────────────
-
-  // full query only if raw worked
-  const practiceAreas = Array.isArray(raw)
-    ? await client
-        .fetch(`*[_type == "practiceArea" && status == "published"] | order(order asc) {
-          _id, name, slug, excerpt, image { asset->{ _id, url }, alt },
-          "subServices": *[_type == "subService" && practiceArea._ref == ^._id && status == "published"]{ _id, title, slug }
-        }`)
-        .catch(() => [])
-    : [];
+  // Fetch here so we can pass data as a plain prop to the client-safe component
+  let practiceAreas = [];
+  try {
+    practiceAreas = await client.fetch(practiceAreasQuery) ?? [];
+  } catch (error) {
+    console.error("Error fetching practice areas:", error);
+  }
 
   return (
     <>
-      {/* Visible debug panel — remove after fixing */}
-      <div style={{ background: '#1c1c1c', color: '#0f0', fontFamily: 'monospace', padding: '16px', fontSize: '13px', whiteSpace: 'pre-wrap', zIndex: 9999, position: 'relative' }}>
-        <strong>DEBUG — Sanity raw (no status filter):</strong>{"\n"}
-        {raw === null
-          ? "❌ FETCH THREW AN ERROR — check terminal for SANITY FETCH ERROR"
-          : raw.length === 0
-          ? "⚠️  Query returned 0 documents. Check: _type name, dataset, projectId."
-          : raw.map(a => `✅ _id:${a._id}  name:"${a.name}"  status:"${a.status}"  slug:"${a.slug?.current}"`).join("\n")
-        }
-        {"\n\n"}
-        <strong>practiceAreas (published only):</strong>{"\n"}
-        {practiceAreas.length === 0
-          ? "⚠️  0 published practice areas — check status field value in Sanity"
-          : practiceAreas.map(a => `✅ "${a.name}" → /practice/${a.slug?.current}`).join("\n")
-        }
-      </div>
-
+      <Script
+        id="practice-areas-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(practiceAreasSchema) }}
+      />
       <div className="relative">
         <PageHeader text={"Our Practice"} text2={"Areas"} subAreas={[]} />
         <Section2>
+          {/* Pass fetched data as prop — no async needed inside PracticeArea */}
           <PracticeArea practiceAreas={practiceAreas} />
         </Section2>
         <Section4>

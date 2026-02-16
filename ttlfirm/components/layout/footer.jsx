@@ -35,6 +35,8 @@ const Footer = () => {
     // { text: "123 Main St, Newark, NJ 07101", mapsUrl: "https://maps.google.com/?q=..." },
   ];
 
+  
+
   const email = "info@turuchilawfirm.com";
 
   return (
