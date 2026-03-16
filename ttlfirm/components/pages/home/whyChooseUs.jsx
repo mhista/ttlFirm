@@ -49,11 +49,11 @@ const StatCard = ({ number, label, delay }) => {
       data-aos="zoom-in"
       data-aos-delay={delay}
     >
-      <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300">
-        <div className="text-5xl md:text-6xl font-bold text-amber-400 mb-2">
+      <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20 hover:bg-white/20 transition-all duration-300">
+        <div className="text-4xl md:text-5xl font-bold text-amber-400 mb-1">
           {number}
         </div>
-        <div className="text-gray-200 text-sm uppercase tracking-wider">
+        <div className="text-gray-200 text-xs uppercase tracking-widest leading-snug">
           {label}
         </div>
       </div>

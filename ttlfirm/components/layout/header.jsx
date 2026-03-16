@@ -8,7 +8,7 @@ import "aos/dist/aos.css";
 const Header = ({children, height1, height2, height3}) => {
  
   return (
-    <div className={`relative w-full h-[1290px] sm:h-[660px] md:h-[800px] lg:h-[930px]`}>
+    <div className={`relative w-full h-[1070px] sm:h-[660px] md:h-[800px] lg:h-[930px]`}>
       {/* NAVBAR */}
       <Nav />
       {/* STICKY NAV */}
@@ -20,6 +20,7 @@ const Header = ({children, height1, height2, height3}) => {
       {/* background image */}
       <img
         src="/assets/images/bg2.jpg"
+        height={1000}
         className={`absolute w-full object-cover h-[1290px] sm:h-[660px] md:h-[800px] lg:h-[930px] z-10 top-0`}
       ></img>
       {children}

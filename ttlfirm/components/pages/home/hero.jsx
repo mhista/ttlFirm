@@ -38,7 +38,7 @@ const HomeHero = ({ content, height1 = "1200", height2 = "550", height3 }) => {
 
   return (
     <div
-      className={`w-full relative h-[1290px] sm:h-[660px] md:h-[800px] lg:h-[930px] flex flex-col-reverse sm:flex-row-reverse items-start justify-center sm:items-center gap-7 md:gap-8 lg:gap-4 pt-20 sm:pt-[120px] md:pt-[100px] lg:pt-[120px] px-5 sm:pl-9 md:pl-0 lg:pl-9 md:px-5 lg:px-7`}
+      className={`w-full relative h-[1000px] sm:h-[660px] md:h-[800px] lg:h-[930px] flex flex-col-reverse sm:flex-row-reverse items-start justify-center sm:items-center gap-7 md:gap-8 lg:gap-4 pt-20 sm:pt-[120px] md:pt-[100px] lg:pt-[120px] px-5 sm:pl-9 md:pl-0 lg:pl-9 md:px-5 lg:px-7`}
     >
       <div className="flex flex-col items-center justify-center w-full md:w-[full] md:pr-10 gap-5">
         <Image
