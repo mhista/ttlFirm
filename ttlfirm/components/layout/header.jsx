@@ -8,7 +8,7 @@ import "aos/dist/aos.css";
 const Header = ({children, height1, height2, height3}) => {
  
   return (
-    <div className={`relative w-full h-[1070px] sm:h-[660px] md:h-[800px] lg:h-[930px]`}>
+    <div className={`relative w-full h-[1050px] sm:h-[660px] md:h-[800px] lg:h-[930px]`}>
       {/* NAVBAR */}
       <Nav />
       {/* STICKY NAV */}
