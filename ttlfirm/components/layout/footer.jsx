@@ -40,7 +40,7 @@ const Footer = () => {
   const email = "info@turuchilawfirm.com";
 
   return (
-    <footer className="relative bottom-0 flex flex-col-reverse gap-5 sm:gap-3 w-full bg-[#1c314e] h-auto sm:h-[400px] md:h-[350px] lg:h-[380px] m-0 p-0">
+    <footer className="relative bottom-0 flex flex-col-reverse gap-5 sm:gap-3 w-full bg-[#1c314e] h-[1000px] sm:h-[400px] md:h-[350px] lg:h-[380px] m-0 p-0">
       {/* footer details */}
       <div className="absolute w-full flex flex-col-reverse sm:flex-row justify-around md:items-center bottom-[150px] sm:bottom-[120px] md:bottom-[100px] gap-5 sm:gap-4 pl-8 lg:pl-16">
 

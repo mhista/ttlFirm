@@ -16,7 +16,7 @@ const Consultation = ({ content, contact }) => {
   const displayPhone = phone.replace(/\D/g, '').slice(-10).replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
 
   return (
-    <div className="relative w-full overflow-hidden py-16 md:py-24 px-5 md:px-12 bg-gradient-to-br from-[#1c314e] via-[#1e3a5f] to-[#1c314e]">
+    <div className="relative h- w-full overflow-hidden py-16 md:py-24 px-5 md:px-12 bg-gradient-to-br from-[#1c314e] via-[#1e3a5f] to-[#1c314e]">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl animate-pulse"></div>
