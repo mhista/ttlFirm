@@ -9,10 +9,10 @@ const Footer = () => {
 
   // ✅ UPDATED: Uses slugs instead of numeric IDs
   const footerLinks = [
-    { href: "/practice/personal-injury", label: "Personal Injury" },
-    { href: "/practice/immigration", label: "Immigration" },
-    { href: "/practice/workers-compensation", label: "Workers Compensation" },
-    { href: "/practice/municipal-court-traffic-matters", label: "Municipal Matters" },
+    { href: "/practice/personal-injury-lawyer-in-new-jersey", label: "Personal Injury" },
+    { href: "/practice/immigration-lawyer-in-new-jersey", label: "Immigration" },
+    { href: "/practice/new-jersey-workers-compensation-attorney", label: "Workers Compensation" },
+    { href: "/practice/municipal-court-lawyer-in-new-jersey", label: "Municipal Matters" },
   ];
 
   const menuLinks = [
