@@ -14,7 +14,7 @@ const HomeHero = ({ content, height1 = "1200", height2 = "550", height3 }) => {
   // Use CMS content or fallbacks
   const heading = content?.heading || "Trusted New Jersey Law firm delivering the best legal outcomes";
   const headingHighlight = content?.headingHighlight || "New Jersey";
-  const description = content?.description || "We are a dedicated law firm in New Jersey committed to providing exceptional legal representation...";
+  const description = content?.description || "We are a dedicated law firm in New Jersey committed to providing exceptional legal representation rooted in compassion, diligence, and integrity. Our expertise lies in personal injury law, where we relentlessly pursue justice and fair compensation for individuals who have suffered harm due to the negligence of others. Beyond personal injury, our firm offers comprehensive legal services in immigration law, workers' compensation, municipal court matters, and a broad spectrum of additional practice areas.";
   const ctaText = content?.ctaText || "Schedule a free Consultation";
   const ctaLink = content?.ctaLink || "/contact";
   const heroImage = content?.heroImage ? urlFor(content.heroImage).url() : "/assets/images/lawyer.jpg";
@@ -38,7 +38,7 @@ const HomeHero = ({ content, height1 = "1200", height2 = "550", height3 }) => {
 
   return (
     <div
-      className={`w-full relative h-[1000px] sm:h-[660px] md:h-[800px] lg:h-[930px] flex flex-col-reverse sm:flex-row-reverse items-start justify-center sm:items-center gap-7 md:gap-8 lg:gap-4 pt-20 sm:pt-[120px] md:pt-[100px] lg:pt-[120px] px-5 sm:pl-9 md:pl-0 lg:pl-9 md:px-5 lg:px-7`}
+      className={`w-full relative h-[1250px] sm:h-[660px] md:h-[800px] lg:h-[930px] flex flex-col-reverse sm:flex-row-reverse items-start justify-center sm:items-center gap-7 md:gap-8 lg:gap-4 pt-20 sm:pt-[120px] md:pt-[100px] lg:pt-[120px] px-5 sm:pl-9 md:pl-0 lg:pl-9 md:px-5 lg:px-7`}
     >
       <div className="flex flex-col items-center justify-center w-full md:w-[full] md:pr-10 gap-5">
         <Image
@@ -80,7 +80,7 @@ const HomeHero = ({ content, height1 = "1200", height2 = "550", height3 }) => {
         </h1>
         
         <p
-          className="text-base sm:text-sm w-5/6 sm:w-full lg:w-5/6 md:text-base lg:text-lg text-pretty text-justify"
+          className="text-base sm:text-sm w-6/6 sm:w-full lg:w-5/6 md:text-base lg:text-lg text-pretty text-justify"
           data-aos="zoom-in-up"
         >
           {description}
