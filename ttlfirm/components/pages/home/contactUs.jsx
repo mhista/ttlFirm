@@ -4,31 +4,64 @@ import Link from "next/link";
 import { FaEnvelope, FaPhone, FaLocationDot } from "react-icons/fa6";
 import { socialLinks2 } from "@components/common/mediaButttons2";
 
-// ✅ Multiple phones and addresses — edit these arrays to add more
-const phones = [
+// Fallback contact details — used only when Sanity's Site Settings /
+// Contact Page documents don't provide contact info yet.
+const defaultPhones = [
   { number: "+17322106410", display: "732-210-6410" },
-  { number: "+8482286402", display: "848-228-6402" }, // Uncomment to add second number
+  { number: "+8482286402", display: "848-228-6402" },
 ];
 
-const addresses = [
+const defaultAddresses = [
   {
     text: "111 Town Square Pl, Jersey City, NJ 07310",
     mapsUrl: "https://maps.google.com/?q=111+Town+Square+Pl+Jersey+City+NJ+07310",
   },
   {
     text: "30 Knightsbridge Road, Suite 525, Piscataway, New Jersey 08854",
-   mapsUrl: "https://maps.google.com/?q=30+Knightsbridge+Road+Suite+525+Piscataway+NJ+08854",
+    mapsUrl: "https://maps.google.com/?q=30+Knightsbridge+Road+Suite+525+Piscataway+NJ+08854",
   },
 ];
 
-const email = "info@turuchilawfirm.com";
+const defaultEmail = "info@turuchilawfirm.com";
 
-const ContactUs = () => {
+const ContactUs = ({ contact, social, content }) => {
+  // CMS-driven contact info (from siteSettingsQuery's `contact` field, or the
+  // contact page's `mainContent`) falls back to the hardcoded defaults above
+  // when Sanity hasn't been filled in yet.
+  const phones = contact?.phone
+    ? [{ number: contact.phone, display: contact.phone }]
+    : defaultPhones;
+
+  const addresses = contact?.address?.street
+    ? [
+        {
+          text: [
+            contact.address.street,
+            contact.address.city,
+            [contact.address.state, contact.address.zipCode].filter(Boolean).join(" "),
+          ]
+            .filter(Boolean)
+            .join(", "),
+          mapsUrl: `https://maps.google.com/?q=${encodeURIComponent(
+            [contact.address.street, contact.address.city, contact.address.state, contact.address.zipCode]
+              .filter(Boolean)
+              .join(" ")
+          )}`,
+        },
+      ]
+    : defaultAddresses;
+
+  const email = contact?.email || defaultEmail;
+  const heading = content?.heading || "Leave us your info and we will get back to you";
+  const description =
+    content?.description ||
+    "Confide in a trusted law firm in New Jersey. We will review your situation and answer your questions. Then we'll provide legal options tailored to your needs.";
+
   return (
     <div className="w-full py-7">
       <div className="w-full hidden md:flex flex-col items-center justify-around gap-3 md:mt-7">
         <h1 className="font-lora text-4xl font-medium">
-          Leave us your info and we will get back to you
+          {heading}
         </h1>
       </div>
 
@@ -39,13 +72,11 @@ const ContactUs = () => {
             Consult a Reliable New Jersey Law Firm
           </h1>
           <p className="text-lg text-gray-800">
-            Confide in a trusted law firm in New Jersey. We will review your
-            situation and answer your questions. Then we'll provide legal
-            options tailored to your needs.
+            {description}
           </p>
 
           <div className="flex flex-col gap-4 text-black">
-            {/* ✅ Multiple Phone Numbers */}
+            {/* Phone Numbers */}
             {phones.map((phone, i) => (
               <Link
                 key={i}

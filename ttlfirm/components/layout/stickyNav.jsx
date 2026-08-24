@@ -9,6 +9,7 @@ import { FaXmark } from "react-icons/fa6";
 import { FaEnvelope, FaPhone } from "react-icons/fa6";
 
 import { socialLinks } from "@components/common/mediaButtons";
+import { useSiteSettings } from "@/lib/siteSettingsContext";
 
 import _ from "lodash";
 
@@ -16,7 +17,8 @@ const StickyNav = ({ isSticky = false }) => {
   const router = usePathname();
   const id = router.split("/").at(-1);
   const [toggleDropdown, setToggleDropdown] = useState(false);
-  const phoneNumber = "+1 732-210-6410";
+  const siteSettings = useSiteSettings();
+  const phoneNumber = siteSettings?.contact?.phone || "+1 732-210-6410";
   const handlePhoneCall = () => {
     window.location.href = `tel:${phoneNumber}`;
   };
@@ -127,7 +129,7 @@ const StickyNav = ({ isSticky = false }) => {
             className="border p-3 rounded-sm flex justify-between items-center gap-2 text-white text-xl md:text-sm hover:text-blue-200"
           >
             <FaPhone />
-            <span className="lg:text-lg">+1 732-210-6410</span>
+            <span className="lg:text-lg">{phoneNumber}</span>
           </Link>
         </div>
 

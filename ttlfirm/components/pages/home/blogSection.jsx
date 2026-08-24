@@ -15,7 +15,7 @@ async function getFeaturedBlogs() {
   }
 }
 
-export default async function BlogSection() {
+export default async function BlogSection({ content } = {}) {
   const blogs = await getFeaturedBlogs();
 
   if (!blogs || blogs.length === 0) {
@@ -29,13 +29,13 @@ export default async function BlogSection() {
         <div className="flex flex-row items-center gap-3">
           <hr className="bg-amber-600 h-[2px] w-14" />
           <h3 className="text-amber-600 text-lg uppercase font-jost inline font-bold">
-            Our Blog
+            {content?.sectionLabel || "Our Blog"}
           </h3>
           <hr className="bg-amber-600 h-[2px] w-14" />
         </div>
-        <h1 className="font-lora text-4xl text-center">Latest Legal Insights</h1>
+        <h1 className="font-lora text-4xl text-center">{content?.heading || "Latest Legal Insights"}</h1>
         <p className="text-gray-600 max-w-2xl">
-          Stay informed with expert legal advice, case studies, and updates from our attorneys
+          {content?.description || "Stay informed with expert legal advice, case studies, and updates from our attorneys"}
         </p>
       </div>
 
@@ -115,7 +115,7 @@ export default async function BlogSection() {
         href="/blog"
         className="btn mt-4"
       >
-        View All Articles
+        {content?.ctaText || "View All Articles"}
       </Link>
     </div>
   );

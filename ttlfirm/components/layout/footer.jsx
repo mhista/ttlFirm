@@ -3,9 +3,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaEnvelope, FaPhone, FaLocationDot } from "react-icons/fa6";
 import { socialLinks } from "@components/common/mediaButtons";
+import { useSiteSettings } from "@/lib/siteSettingsContext";
+
+// Fallback contact details — used only when Sanity's Site Settings
+// document doesn't provide contact info yet.
+const defaultPhones = [{ number: "+1 732-210-6410", display: "+1 732-210-6410" }];
+const defaultAddresses = [
+  { text: "111 Town Square Pl, Jersey City, NJ 07310", mapsUrl: "https://maps.google.com/?q=111+Town+Square+Pl+Jersey+City+NJ+07310" },
+];
+const defaultEmail = "info@turuchilawfirm.com";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const siteSettings = useSiteSettings();
+  const contact = siteSettings?.contact || {};
 
   // ✅ UPDATED: Uses slugs instead of numeric IDs
   const footerLinks = [
@@ -21,23 +32,32 @@ const Footer = () => {
     { href: "/about", label: "About" },
   ];
 
-  // ✅ Multiple phones supported
-  const phones = [
-    { number: "+1 732-210-6410", display: "+1 732-210-6410" },
-    // Add second phone here when ready:
-    // { number: "+1 555-000-0000", display: "+1 555-000-0000" },
-  ];
+  // CMS-driven contact info (from Site Settings in Sanity) falls back to
+  // the hardcoded defaults above when Sanity hasn't been filled in yet.
+  const phones = contact.phone
+    ? [{ number: contact.phone, display: contact.phone }]
+    : defaultPhones;
 
-  // ✅ Multiple addresses supported
-  const addresses = [
-    { text: "111 Town Square Pl, Jersey City, NJ 07310", mapsUrl: "https://maps.google.com/?q=111+Town+Square+Pl+Jersey+City+NJ+07310" },
-    // Add second address here when ready:
-    // { text: "123 Main St, Newark, NJ 07101", mapsUrl: "https://maps.google.com/?q=..." },
-  ];
+  const addresses = contact.address?.street
+    ? [
+        {
+          text: [
+            contact.address.street,
+            contact.address.city,
+            [contact.address.state, contact.address.zipCode].filter(Boolean).join(" "),
+          ]
+            .filter(Boolean)
+            .join(", "),
+          mapsUrl: `https://maps.google.com/?q=${encodeURIComponent(
+            [contact.address.street, contact.address.city, contact.address.state, contact.address.zipCode]
+              .filter(Boolean)
+              .join(" ")
+          )}`,
+        },
+      ]
+    : defaultAddresses;
 
-  
-
-  const email = "info@turuchilawfirm.com";
+  const email = contact.email || defaultEmail;
 
   return (
     <footer className="relative bottom-0 flex flex-col-reverse gap-5 sm:gap-3 w-full bg-[#1c314e] h-[1000px] sm:h-[400px] md:h-[350px] lg:h-[380px] m-0 p-0">

@@ -8,7 +8,7 @@ import { urlFor } from "@/lib/sanity.client";
 
 register();
 
-const TestimonialCarousel = ({ testimonials = [] }) => {
+const TestimonialCarousel = ({ testimonials = [], content }) => {
   const [nextEl, nextElRef] = useSwiperRef();
   const [prevEl, prevElRef] = useSwiperRef();
   const swiperRef = useRef(null);
@@ -73,15 +73,15 @@ const TestimonialCarousel = ({ testimonials = [] }) => {
         <div className="flex flex-row items-center justify-center gap-3 mb-4">
           <hr className="bg-amber-600 h-1 w-14" />
           <h3 className="text-amber-600 text-sm uppercase font-bold tracking-wider">
-            Client Testimonials
+            {content?.sectionLabel || "Client Testimonials"}
           </h3>
           <hr className="bg-amber-600 h-1 w-14" />
         </div>
         <h2 className="font-lora font-bold text-3xl sm:text-4xl md:text-5xl mb-4">
-          What Our Clients Say
+          {content?.heading || "What Our Clients Say"}
         </h2>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          Don't just take our word for it. Hear from clients who trusted us with their legal matters.
+          {content?.description || "Don't just take our word for it. Hear from clients who trusted us with their legal matters."}
         </p>
       </div>
 

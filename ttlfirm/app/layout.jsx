@@ -2,6 +2,16 @@
 import "@styles/global.css";
 import Footer from "@components/layout/footer";
 import ScrollToTop from "@components/common/scrollToTop";
+import { client } from "@/lib/sanity.client";
+import { siteSettingsQuery } from "@/lib/sanity.queries";
+import { SiteSettingsProvider } from "@/lib/siteSettingsContext";
+
+// Site settings (phone, email, address, social links, stats) are shared by
+// the Nav, StickyNav, and Footer on every page — fetch once here and hand
+// it down via context instead of every page re-fetching it. `revalidate`
+// here also acts as a floor for every route in the app: no page can be
+// staler than this even if it doesn't set its own `revalidate`.
+export const revalidate = 60;
 
 
 export const metadata = {
@@ -67,7 +77,13 @@ export const metadata = {
   },
 };
 
-const Rootlayout = ({ children }) => {
+const Rootlayout = async ({ children }) => {
+  let siteSettings = {};
+  try {
+    siteSettings = (await client.fetch(siteSettingsQuery)) || {};
+  } catch (error) {
+    console.error("Error fetching site settings:", error);
+  }
 
   return (
     <html lang="en">
@@ -76,12 +92,14 @@ const Rootlayout = ({ children }) => {
         content="width=device-width, initial-scale=1.0"
       ></meta>
       <body>
-        <main className="main font-jost">
+        <SiteSettingsProvider value={siteSettings}>
+          <main className="main font-jost">
 
-          {children}
-          <Footer />
-          <ScrollToTop/>
-        </main>
+            {children}
+            <Footer />
+            <ScrollToTop/>
+          </main>
+        </SiteSettingsProvider>
       </body>
     </html>
   );

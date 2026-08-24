@@ -3,14 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaEnvelope, FaPhone } from "react-icons/fa6";
 import {socialLinks} from "@components/common/mediaButtons";
+import { useSiteSettings } from "@/lib/siteSettingsContext";
 
 const Nav = () => {
-  const email = "info@turuchilawfirm.com";
-  const phoneNumber = "+1 732-210-6410";
+  const siteSettings = useSiteSettings();
+  const contact = siteSettings?.contact || {};
+  const email = contact.email || "info@turuchilawfirm.com";
+  const phoneNumber = contact.phone || "+1 732-210-6410";
   const handlePhoneCall = () => {
     window.location.href = `tel:${phoneNumber}`;
   };
-  
+
 
   return (
     <nav className="w-full z-50 absolute">
@@ -29,7 +32,7 @@ const Nav = () => {
             className=" flex justify-between items-center gap-2 hover:text-blue-200"
           >
             <FaPhone />
-            <span className="text-sm" >+1 732-210-6410</span>
+            <span className="text-sm" >{phoneNumber}</span>
           </Link>
           <Link
             href={`mailto:${email}`}
@@ -37,12 +40,12 @@ const Nav = () => {
           >
             <FaEnvelope />
             <span className="text-center mb-1 text-sm">
-              info@turuchilawfirm.com
+              {email}
             </span>
           </Link>
         </div>
       </div>
-     
+
     </nav>
   );
 };

@@ -22,6 +22,11 @@ import TailoredCTA from "@/components/common/TailoredCTA"; // NEW
 export const revalidate = 60;
 
 // Generate static paths
+// NOTE: this route lives at app/practice/[practiceId]/[slug]/page.jsx, so
+// Next.js only ever gives us params.slug — a param named `subService` here
+// was silently ignored, and every page below fell back to `undefined`,
+// which meant the Sanity query always came back empty and the page 404'd
+// regardless of what's published in the CMS.
 export async function generateStaticParams() {
   const practiceAreas = await client.fetch(practiceAreasQuery);
 
@@ -31,7 +36,7 @@ export async function generateStaticParams() {
       for (const service of area.subServices) {
         paths.push({
           practiceId: area.slug.current,
-          subService: service.slug.current,
+          slug: service.slug.current,
         });
       }
     }
@@ -42,7 +47,7 @@ export async function generateStaticParams() {
 
 // Generate metadata
 export async function generateMetadata({ params }) {
-  const { subService: subServiceSlug } = await params;
+  const { slug: subServiceSlug } = await params;
   const subService = await client.fetch(subServiceBySlugQuery, {
     slug: subServiceSlug,
   });
@@ -80,7 +85,7 @@ async function getPracticeAreas() {
 }
 
 export default async function SubServicePage({ params }) {
-  const { subService: subServiceSlug } = await params;
+  const { slug: subServiceSlug } = await params;
   const [subService, practiceAreas] = await Promise.all([
     getSubService(subServiceSlug),
     getPracticeAreas(),
