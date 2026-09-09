@@ -3,11 +3,12 @@ import { blogsByCategoryQuery, categoriesQuery } from "@/lib/sanity.queries";
 import BlogCard from "@/components/blog/BlogCard";
 import Sidebar from "@/components/blog/Sidebar";
 import PageHeader from "@/components/pages/header";
+import { filterRetiredAreas } from "@/lib/siteNav";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const categories = await client.fetch(categoriesQuery);
+  const categories = filterRetiredAreas(await client.fetch(categoriesQuery));
   return categories.map((category) => ({
     slug: category.slug.current,
   }));

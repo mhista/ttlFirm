@@ -101,9 +101,12 @@ const Consultation = ({ content, contact, stats }) => {
         </a>
       </div>
 
-      <p className="mt-6 text-center text-xs text-navy-200">
-        Contacting the firm does not create an attorney-client relationship.
-      </p>
+      {content?.disclaimer !== "" && (
+        <p className="mt-6 text-center text-xs text-navy-200">
+          {content?.disclaimer ||
+            "Contacting the firm does not create an attorney-client relationship."}
+        </p>
+      )}
     </div>
   );
 };

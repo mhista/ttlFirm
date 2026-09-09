@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { FaEnvelope, FaPhone, FaLocationDot, FaClock } from "react-icons/fa6";
 import Form from "@components/common/form";
-import { socialLinks } from "@components/common/mediaButtons";
+import { buildSocialLinks } from "@components/common/mediaButtons";
+import { useSiteSettings } from "@/lib/siteSettingsContext";
 import { FIRM, telHref } from "@/lib/siteNav";
 
 /**
@@ -11,6 +12,8 @@ import { FIRM, telHref } from "@/lib/siteNav";
  * registration.
  */
 const ContactUs = ({ contact, content }) => {
+  const siteSettings = useSiteSettings();
+  const social = buildSocialLinks(siteSettings?.social);
   const phone = contact?.phone || FIRM.phoneDisplay;
   const email = contact?.email || FIRM.email;
 
@@ -29,6 +32,14 @@ const ContactUs = ({ contact, content }) => {
     : FIRM.mapsUrl;
 
   const heading = content?.heading || "Tell us what happened";
+  const eyebrow = content?.sectionLabel || "Get in touch";
+  const hoursLabel =
+    content?.hoursLabel ||
+    siteSettings?.businessHours?.weekdaysDisplay ||
+    "Monday – Friday, 9:00 AM – 5:00 PM";
+  const formHeading = content?.formHeading || "Request a free case review";
+  const formSubheading =
+    content?.formSubheading || "We typically respond the same business day.";
   const description =
     content?.description ||
     "Send a few details and we'll review your situation, answer your questions, and explain the options open to you — free, and with no obligation to hire us.";
@@ -37,7 +48,7 @@ const ContactUs = ({ contact, content }) => {
     { icon: FaPhone, label: "Phone", value: phone, href: telHref(phone) },
     { icon: FaEnvelope, label: "Email", value: email, href: `mailto:${email}` },
     { icon: FaLocationDot, label: "Office", value: addressText, href: mapsUrl, external: true },
-    { icon: FaClock, label: "Hours", value: "Monday – Friday, 9:00 AM – 5:00 PM" },
+    { icon: FaClock, label: "Hours", value: hoursLabel },
   ];
 
   return (
@@ -47,7 +58,7 @@ const ContactUs = ({ contact, content }) => {
         <div>
           <div className="flex items-center gap-3">
             <span className="rule" aria-hidden="true" />
-            <span className="eyebrow">Get in touch</span>
+            <span className="eyebrow">{eyebrow}</span>
           </div>
 
           <h2 className="h-section mt-5">{heading}</h2>
@@ -92,7 +103,7 @@ const ContactUs = ({ contact, content }) => {
           </ul>
 
           <ul className="mt-9 flex items-center gap-2.5">
-            {socialLinks.map((link) => (
+            {social.map((link) => (
               <li key={link.label}>
                 <a
                   href={link.href}
@@ -110,10 +121,7 @@ const ContactUs = ({ contact, content }) => {
 
         {/* Right: form */}
         <div className="rounded-xl border border-surface-line bg-white p-6 shadow-card md:p-8">
-          <Form
-            heading="Request a free case review"
-            subheading="We typically respond the same business day."
-          />
+          <Form heading={formHeading} subheading={formSubheading} />
         </div>
       </div>
     </div>

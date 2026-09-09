@@ -665,7 +665,51 @@ export const siteSettingsQuery = `
       instagram,
       linkedin,
       tiktok,
-      twitter
+      twitter,
+      youtube
+    },
+    header {
+      phoneLabel,
+      ctaText,
+      ctaLink
+    },
+    mainNav[] {
+      label,
+      href,
+      children[] { label, href, blurb }
+    },
+    footer {
+      ctaHeading,
+      ctaSubheading,
+      ctaButtonText,
+      tagline,
+      creditName,
+      creditUrl,
+      legalLinks[] { label, href }
+    },
+    legalNotices {
+      attorneyAdvertising,
+      smsNotice
+    },
+    smsConsent {
+      consentText,
+      helperText,
+      formDisclaimer
+    },
+    textWidget {
+      enabled,
+      buttonLabel,
+      teaserText,
+      panelHeading,
+      panelSubheading,
+      successHeading,
+      successMessage
+    },
+    tracking {
+      metaPixelId,
+      ga4Id,
+      googleAdsId,
+      googleAdsLabel
     },
     stats {
       casesHandled,
@@ -701,39 +745,39 @@ export const siteSettingsQuery = `
 export const homePageQuery = `
   *[_type == "homePage"][0] {
     hero {
+      eyebrow,
       heading,
-      headingHighlight,
       description,
+      bullets,
       ctaText,
       ctaLink,
-      heroImage {
-        asset->{
-          _id,
-          url
-        },
-        alt
-      },
-      backgroundImage {
-        asset->{
-          _id,
-          url
-        }
-      },
-      attorneyLinkText
+      attorneyLinkText,
+      watchFilmLabel
+    },
+    heroMedia {
+      backgroundVideo { asset->{ _id, url } },
+      poster { asset->{ _id, url } },
+      desktopBackdrop { asset->{ _id, url } },
+      fullFilm { asset->{ _id, url } },
+      filmPoster { asset->{ _id, url } }
     },
     statsSection {
       enabled,
+      stats[] { value, label },
       stat1Label,
       stat2Label
     },
     practiceAreasSection {
+      enabled,
       sectionLabel,
       heading,
       description,
+      footnote,
       ctaText,
       ctaLink
     },
     whyChooseUsSection {
+      enabled,
       sectionLabel,
       heading,
       description,
@@ -746,18 +790,20 @@ export const homePageQuery = `
       ctaLink
     },
     consultationSection {
+      enabled,
       sectionLabel,
       heading,
       description,
       ctaPrimaryText,
-      ctaSecondaryText
+      ctaSecondaryText,
+      disclaimer
     },
     testimonialsSection {
       enabled,
       sectionLabel,
       heading,
       description,
-      trustBadgeText
+      disclaimer
     },
     blogSection {
       enabled,
@@ -766,6 +812,16 @@ export const homePageQuery = `
       description,
       ctaText
     },
+    contactSection {
+      enabled,
+      sectionLabel,
+      heading,
+      description,
+      formHeading,
+      formSubheading,
+      hoursLabel
+    },
+    sectionOrder,
     seo {
       metaTitle,
       metaDescription,
@@ -948,4 +1004,98 @@ export const attorneyProfileQuery = `
       }
     }
   }
+`;
+// ============================================
+// LEGAL PAGES  (/privacy-policy, /terms-and-conditions, /disclaimer)
+// ============================================
+export const legalPageBySlugQuery = `
+  *[_type == "legalPage" && slug.current == $slug][0] {
+    title,
+    "slug": slug.current,
+    pageHeader {
+      eyebrow,
+      heading,
+      headingHighlight,
+      description,
+      backgroundImage { asset->{ _id, url } }
+    },
+    effectiveDate,
+    lastUpdated,
+    intro,
+    callout,
+    sections[] {
+      partLabel,
+      heading,
+      "anchor": anchor.current,
+      body,
+      callout
+    },
+    relatedLinks[] { label, href },
+    showContactCard,
+    contactCardHeading,
+    seo { metaTitle, metaDescription }
+  }
+`;
+
+export const legalPageSlugsQuery = `
+  *[_type == "legalPage" && defined(slug.current)].slug.current
+`;
+
+// ============================================
+// LANDING PAGES  (/lp/<slug>)
+// ============================================
+const landingSectionProjection = `
+  _type,
+  _key,
+  eyebrow,
+  heading,
+  subheading,
+  description,
+  bullets,
+  ctaText,
+  ctaLink,
+  showForm,
+  showPhone,
+  formHeading,
+  formSubheading,
+  backgroundImage { asset->{ _id, url }, alt },
+  backgroundVideo { asset->{ _id, url } },
+  video { asset->{ _id, url } },
+  poster { asset->{ _id, url } },
+  orientation,
+  autoplay,
+  items[] { value, label, icon, title, description, question, answer },
+  steps[] { title, description },
+  body,
+  disclaimer,
+  testimonials[]-> {
+    _id,
+    name,
+    role,
+    testimonial,
+    rating,
+    caseType,
+    image { asset->{ _id, url }, alt }
+  }
+`;
+
+export const landingPageBySlugQuery = `
+  *[_type == "landingPage" && slug.current == $slug && published == true][0] {
+    title,
+    "slug": slug.current,
+    published,
+    phoneOverride,
+    metaPixelIdOverride,
+    noIndex,
+    sections[] { ${landingSectionProjection} },
+    seo {
+      metaTitle,
+      metaDescription,
+      ogImage { asset->{ _id, url } }
+    }
+  }
+`;
+
+export const landingPageSlugsQuery = `
+  *[_type == "landingPage" && published == true && defined(slug.current)].slug.current
 `;

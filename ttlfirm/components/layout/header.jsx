@@ -12,10 +12,15 @@ import HeroMedia from "@components/common/heroMedia";
  * ended up floating over the middle of the page. Height is now driven by the
  * content with a viewport-based minimum.
  */
-const Header = ({ children, videoSrc, posterSrc, imageSrc }) => {
+const Header = ({ children, videoSrc, posterSrc, backdropSrc, imageSrc }) => {
   return (
-    <div className="relative isolate flex min-h-[640px] w-full flex-col overflow-hidden bg-navy-950 md:min-h-[88vh] lg:min-h-[760px]">
-      <HeroMedia videoSrc={videoSrc} posterSrc={posterSrc} imageSrc={imageSrc} />
+    <div className="relative isolate flex min-h-[660px] w-full flex-col overflow-hidden bg-navy-950 sm:min-h-[720px] lg:min-h-[820px]">
+      <HeroMedia
+        videoSrc={videoSrc}
+        posterSrc={posterSrc}
+        backdropSrc={backdropSrc}
+        imageSrc={imageSrc}
+      />
 
       <Nav />
       <StickyNav />

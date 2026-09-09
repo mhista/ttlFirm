@@ -7,9 +7,9 @@ import Link from "next/link";
 import { FiMenu } from "react-icons/fi";
 import { FaXmark, FaPhone, FaChevronDown, FaEnvelope } from "react-icons/fa6";
 
-import { socialLinks } from "@components/common/mediaButtons";
+import { buildSocialLinks } from "@components/common/mediaButtons";
 import { useSiteSettings } from "@/lib/siteSettingsContext";
-import { MAIN_NAV, FIRM, telHref } from "@/lib/siteNav";
+import { MAIN_NAV, LEGAL_LINKS, FIRM, telHref } from "@/lib/siteNav";
 
 /**
  * Primary navigation.
@@ -38,6 +38,19 @@ const StickyNav = () => {
 
   const phone = siteSettings?.contact?.phone || FIRM.phoneDisplay;
   const email = siteSettings?.contact?.email || FIRM.email;
+
+  // The menu, the label above the phone number and the header button are all
+  // editable in Site Settings. An empty `mainNav` falls back to the built-in
+  // menu so the header can never end up blank.
+  const navItems = siteSettings?.mainNav?.length ? siteSettings.mainNav : MAIN_NAV;
+  const social = buildSocialLinks(siteSettings?.social);
+  const legalLinks = siteSettings?.footer?.legalLinks?.length
+    ? siteSettings.footer.legalLinks
+    : LEGAL_LINKS;
+  const header = siteSettings?.header || {};
+  const phoneLabel = header.phoneLabel || "Free Case Review";
+  const headerCtaText = header.ctaText || "Contact Us";
+  const headerCtaLink = header.ctaLink || "/contact";
 
   /* Portals need the DOM, which doesn't exist during the server render. */
   useEffect(() => setMounted(true), []);
@@ -134,7 +147,7 @@ const StickyNav = () => {
 
           {/* -------------------------------------------------- Desktop links */}
           <ul className="hidden items-center gap-1 lg:flex">
-            {MAIN_NAV.map((item) => (
+            {navItems.map((item) => (
               <li
                 key={item.label}
                 className="relative"
@@ -201,7 +214,7 @@ const StickyNav = () => {
               </span>
               <span className="hidden xl:block">
                 <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-navy-200">
-                  Free Case Review
+                  {phoneLabel}
                 </span>
                 <span className="block text-sm font-semibold text-white transition-colors group-hover:text-accent-400">
                   {phone}
@@ -209,8 +222,8 @@ const StickyNav = () => {
               </span>
             </a>
 
-            <Link href="/contact" className="btn-primary px-5 py-3 text-xs">
-              Contact Us
+            <Link href={headerCtaLink} className="btn-primary px-5 py-3 text-xs">
+              {headerCtaText}
             </Link>
           </div>
 
@@ -273,7 +286,7 @@ const StickyNav = () => {
             </div>
 
             <ul className="flex flex-1 flex-col px-3 py-4">
-              {MAIN_NAV.map((item) => (
+              {navItems.map((item) => (
                 <li key={item.label} className="border-b border-white/[.07]">
                   <div className="flex items-center">
                     <Link
@@ -323,8 +336,8 @@ const StickyNav = () => {
             </ul>
 
             <div className="space-y-3 border-t border-white/10 px-5 py-5">
-              <Link href="/contact" className="btn-primary w-full">
-                Free Case Review
+              <Link href={headerCtaLink} className="btn-primary w-full">
+                {phoneLabel}
               </Link>
               <a href={telHref(phone)} className="btn-outline w-full">
                 <FaPhone className="text-xs" aria-hidden="true" /> {phone}
@@ -336,8 +349,23 @@ const StickyNav = () => {
                 <FaEnvelope className="text-xs" aria-hidden="true" /> {email}
               </a>
 
+              {/* The Privacy Policy has to be reachable from every page, and on a
+                  phone the footer is a long way down. */}
+              <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-white/10 pt-4">
+                {legalLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="block py-1 text-xs text-navy-200 transition-colors hover:text-accent-400"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
               <ul className="flex items-center justify-center gap-2 pt-1">
-                {socialLinks.map((link) => (
+                {social.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}

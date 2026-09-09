@@ -2,6 +2,20 @@ import PageHeader from "@components/pages/header";
 import Section1 from "@components/common/section1";
 import LegalShell from "@components/pages/legal/legalShell";
 import { FIRM } from "@/lib/siteNav";
+import { client } from "@/lib/sanity.client";
+import { legalPageBySlugQuery } from "@/lib/sanity.queries";
+import CmsLegalPage from "@components/pages/legal/cmsLegalPage";
+
+export const revalidate = 60;
+
+async function getDoc() {
+  try {
+    return await client.fetch(legalPageBySlugQuery, { slug: "privacy-policy" });
+  } catch (error) {
+    console.error("Error fetching legal page:", error);
+    return null;
+  }
+}
 
 export const metadata = {
   title: "Privacy Policy",
@@ -30,7 +44,7 @@ const SECTIONS = [
   { id: "contact", label: "13. Contact Information" },
 ];
 
-const PrivacyPolicy = () => (
+const PrivacyPolicyFallback = () => (
   <>
     <PageHeader
       eyebrow="Legal"
@@ -246,5 +260,15 @@ const PrivacyPolicy = () => (
     </Section1>
   </>
 );
+
+const PrivacyPolicy = async () => {
+  // Sanity wins when the document exists; the wording above ships as the
+  // fallback so the page is never empty and never un-reviewed.
+  const doc = await getDoc();
+  if (doc?.sections?.length) {
+    return <CmsLegalPage doc={doc} breadcrumbLabel="Privacy Policy" />;
+  }
+  return <PrivacyPolicyFallback />;
+};
 
 export default PrivacyPolicy;

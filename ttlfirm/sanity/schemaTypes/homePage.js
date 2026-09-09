@@ -1,173 +1,208 @@
 // ===========================================
-// sanity/schemas/homePage.js
-// Homepage content management
+// sanity/schemaTypes/homePage.js
+// Homepage content management.
+//
+// Every string, image, video, stat and CTA the homepage renders is a field
+// here. Colours, fonts and spacing stay in code on purpose — the palette is
+// part of the brand, not content.
 // ===========================================
+
+const seoFields = {
+  name: 'seo',
+  title: 'SEO Settings',
+  type: 'object',
+  options: { collapsible: true, collapsed: true },
+  fields: [
+    { name: 'metaTitle', title: 'Meta Title', type: 'string', validation: (R) => R.max(60) },
+    { name: 'metaDescription', title: 'Meta Description', type: 'text', rows: 3, validation: (R) => R.max(160) },
+    { name: 'keywords', title: 'Keywords', type: 'array', of: [{ type: 'string' }] },
+    { name: 'ogImage', title: 'Social Share Image', type: 'image', description: '1200 x 630 recommended' },
+  ],
+};
+
 export default {
   name: 'homePage',
   title: 'Homepage',
   type: 'document',
   __experimental_actions: ['update', 'publish'],
+  groups: [
+    { name: 'hero', title: 'Hero' },
+    { name: 'sections', title: 'Sections' },
+    { name: 'seo', title: 'SEO' },
+  ],
   fields: [
     {
       name: 'title',
       title: 'Page Title',
       type: 'string',
       initialValue: 'Homepage',
-      readOnly: true
+      readOnly: true,
+      hidden: true,
     },
-    
-    // HERO SECTION
+
+    // ---------------------------------------------------------------- HERO
     {
       name: 'hero',
       title: 'Hero Section',
       type: 'object',
+      group: 'hero',
+      options: { collapsible: true, collapsed: false },
       fields: [
+        {
+          name: 'eyebrow',
+          title: 'Eyebrow',
+          type: 'string',
+          description: 'Small label above the headline.',
+          initialValue: 'New Jersey',
+        },
         {
           name: 'heading',
           title: 'Main Heading',
           type: 'string',
-          validation: Rule => Rule.required()
-        },
-        {
-          name: 'headingHighlight',
-          title: 'Highlighted Text',
-          type: 'string',
-          description: 'Text to highlight in orange (e.g., "New Jersey")'
+          validation: (R) => R.required().max(90),
+          initialValue: "Personal Injury & Workers' Compensation Lawyers",
         },
         {
           name: 'description',
           title: 'Description',
           type: 'text',
           rows: 4,
-          validation: Rule => Rule.required()
+          validation: (R) => R.required(),
+        },
+        {
+          name: 'bullets',
+          title: 'Proof Points',
+          type: 'array',
+          of: [{ type: 'string' }],
+          description: 'The ticked list under the description. Three works best.',
+          validation: (R) => R.max(4),
         },
         {
           name: 'ctaText',
-          title: 'Call-to-Action Button Text',
+          title: 'Primary Button Text',
           type: 'string',
-          initialValue: 'Schedule a free Consultation'
+          initialValue: 'Get Your Free Case Review',
         },
-        {
-          name: 'ctaLink',
-          title: 'CTA Button Link',
-          type: 'string',
-          initialValue: '/contact'
-        },
-        {
-          name: 'heroImage',
-          title: 'Hero Image',
-          type: 'image',
-          options: {hotspot: true},
-          fields: [
-            {name: 'alt', title: 'Alt Text', type: 'string'}
-          ]
-        },
-        {
-          name: 'backgroundImage',
-          title: 'Background Image',
-          type: 'image',
-          options: {hotspot: true}
-        },
+        { name: 'ctaLink', title: 'Primary Button Link', type: 'string', initialValue: '/contact' },
         {
           name: 'attorneyLinkText',
-          title: 'Attorney Link Text',
+          title: 'Attorney Byline',
           type: 'string',
-          initialValue: 'Turuchi S. Iheanachor, Esq.'
-        }
-      ]
+          initialValue: 'Turuchi S. Iheanachor, Esq.',
+        },
+        {
+          name: 'watchFilmLabel',
+          title: 'Film Button Label',
+          type: 'string',
+          initialValue: 'Watch our film',
+        },
+      ],
     },
 
-    // STATS SECTION (uses stats from siteSettings)
+    // -------------------------------------------------------- HERO MEDIA
     {
-      name: 'statsSection',
-      title: 'Statistics Section',
+      name: 'heroMedia',
+      title: 'Hero Video & Images',
       type: 'object',
+      group: 'hero',
+      description:
+        'Leave any of these empty to keep the version currently shipped with the site.',
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
-          name: 'enabled',
-          title: 'Show Statistics Section',
-          type: 'boolean',
-          initialValue: true
+          name: 'backgroundVideo',
+          title: 'Background Loop',
+          type: 'file',
+          options: { accept: 'video/mp4' },
+          description:
+            'Short silent MP4 that loops behind the hero. 15–30 seconds. Landscape 1920x1080 is ideal; a portrait video is used full-screen on phones and in the framed player on desktop.',
         },
         {
-          name: 'stat1Label',
-          title: 'Stat 1 Label',
-          type: 'string',
-          initialValue: 'Legal Cases Handled'
+          name: 'poster',
+          title: 'Video Poster',
+          type: 'image',
+          description: 'Still shown while the video loads, and instead of it on slow connections.',
         },
         {
-          name: 'stat2Label',
-          title: 'Stat 2 Label',
-          type: 'string',
-          initialValue: 'Years of Industry Experience'
-        }
-      ]
+          name: 'desktopBackdrop',
+          title: 'Desktop Backdrop',
+          type: 'image',
+          description:
+            'Wide still sitting behind the hero on desktop. Only used when the background loop is portrait.',
+        },
+        {
+          name: 'fullFilm',
+          title: 'Full Film (with sound)',
+          type: 'file',
+          options: { accept: 'video/mp4' },
+          description: 'Opens when a visitor presses "Watch our film". Can be any length.',
+        },
+        { name: 'filmPoster', title: 'Film Poster', type: 'image' },
+      ],
     },
 
-    // PRACTICE AREAS SECTION
+    // --------------------------------------------------------------- STATS
+    {
+      name: 'statsSection',
+      title: 'Stats Strip',
+      type: 'object',
+      group: 'hero',
+      options: { collapsible: true, collapsed: true },
+      description: 'The four figures across the bottom of the hero.',
+      fields: [
+        { name: 'enabled', title: 'Show Stats Strip', type: 'boolean', initialValue: true },
+        {
+          name: 'stats',
+          title: 'Stats',
+          type: 'array',
+          validation: (R) => R.max(4),
+          of: [
+            {
+              type: 'object',
+              fields: [
+                { name: 'value', title: 'Value', type: 'string', description: 'e.g. 500+, 8, $0' },
+                { name: 'label', title: 'Label', type: 'string' },
+              ],
+              preview: { select: { title: 'value', subtitle: 'label' } },
+            },
+          ],
+        },
+        // Kept so existing content keeps rendering if `stats` is empty.
+        { name: 'stat1Label', title: 'Stat 1 Label (legacy)', type: 'string', hidden: true },
+        { name: 'stat2Label', title: 'Stat 2 Label (legacy)', type: 'string', hidden: true },
+      ],
+    },
+
+    // ----------------------------------------------------- PRACTICE AREAS
     {
       name: 'practiceAreasSection',
       title: 'Practice Areas Section',
       type: 'object',
+      group: 'sections',
+      options: { collapsible: true, collapsed: true },
       fields: [
-        {
-          name: 'sectionLabel',
-          title: 'Section Label',
-          type: 'string',
-          initialValue: 'What We Do'
-        },
-        {
-          name: 'heading',
-          title: 'Heading',
-          type: 'string',
-          initialValue: 'Practice Areas'
-        },
-        {
-          name: 'description',
-          title: 'Description',
-          type: 'text',
-          rows: 2,
-          initialValue: 'Comprehensive legal services tailored to protect your rights and secure your future'
-        },
-        {
-          name: 'ctaText',
-          title: 'CTA Button Text',
-          type: 'string',
-          initialValue: 'Schedule Free Consultation'
-        },
-        {
-          name: 'ctaLink',
-          title: 'CTA Link',
-          type: 'string',
-          initialValue: '/contact'
-        }
-      ]
+        { name: 'enabled', title: 'Show Section', type: 'boolean', initialValue: true },
+        { name: 'sectionLabel', title: 'Eyebrow', type: 'string', initialValue: 'What We Do' },
+        { name: 'heading', title: 'Heading', type: 'string', initialValue: 'Our Practice Areas' },
+        { name: 'description', title: 'Description', type: 'text', rows: 3 },
+        { name: 'footnote', title: 'Text Above Button', type: 'string', initialValue: 'Not sure which applies to your situation? Tell us what happened.' },
+        { name: 'ctaText', title: 'Button Text', type: 'string', initialValue: 'Schedule a Free Consultation' },
+        { name: 'ctaLink', title: 'Button Link', type: 'string', initialValue: '/contact' },
+      ],
     },
 
-    // WHY CHOOSE US SECTION
+    // ------------------------------------------------------ WHY CHOOSE US
     {
       name: 'whyChooseUsSection',
-      title: 'Why Choose Us Section',
+      title: 'Why Trust Us Section',
       type: 'object',
+      group: 'sections',
+      options: { collapsible: true, collapsed: true },
       fields: [
-        {
-          name: 'sectionLabel',
-          title: 'Section Label',
-          type: 'string',
-          initialValue: 'Why Trust Us'
-        },
-        {
-          name: 'heading',
-          title: 'Heading',
-          type: 'string',
-          initialValue: 'Why Clients Choose Our Legal Team'
-        },
-        {
-          name: 'description',
-          title: 'Description',
-          type: 'text',
-          rows: 5
-        },
+        { name: 'enabled', title: 'Show Section', type: 'boolean', initialValue: true },
+        { name: 'sectionLabel', title: 'Eyebrow', type: 'string', initialValue: 'Why Trust Us' },
+        { name: 'heading', title: 'Heading', type: 'string', initialValue: 'Why Clients Choose Our Legal Team' },
+        { name: 'description', title: 'Description', type: 'text', rows: 5 },
         {
           name: 'features',
           title: 'Features',
@@ -176,193 +211,141 @@ export default {
             {
               type: 'object',
               fields: [
-                {name: 'icon', title: 'Icon Name', type: 'string', description: 'e.g., FaBalanceScale, FaComments'},
-                {name: 'title', title: 'Feature Title', type: 'string'},
-                {name: 'description', title: 'Description', type: 'text', rows: 3}
+                {
+                  name: 'icon',
+                  title: 'Icon',
+                  type: 'string',
+                  options: {
+                    list: [
+                      { title: 'Scales of justice', value: 'FaBalanceScale' },
+                      { title: 'Speech bubbles', value: 'FaComments' },
+                      { title: 'Map pin', value: 'FaMapMarkerAlt' },
+                      { title: 'Handshake', value: 'FaHandshake' },
+                      { title: 'Tick', value: 'FaCheckCircle' },
+                      { title: 'Person in suit', value: 'FaUserTie' },
+                    ],
+                  },
+                  initialValue: 'FaCheckCircle',
+                },
+                { name: 'title', title: 'Title', type: 'string' },
+                { name: 'description', title: 'Description', type: 'text', rows: 3 },
               ],
-              preview: {
-                select: {
-                  title: 'title',
-                  subtitle: 'icon'
-                }
-              }
-            }
-          ]
+              preview: { select: { title: 'title', subtitle: 'icon' } },
+            },
+          ],
         },
-        {
-          name: 'ctaText',
-          title: 'CTA Button Text',
-          type: 'string',
-          initialValue: 'Learn More About Attorney Turuchi Iheanachor'
-        },
-        {
-          name: 'ctaLink',
-          title: 'CTA Link',
-          type: 'string',
-          initialValue: '/profile'
-        }
-      ]
+        { name: 'ctaText', title: 'Button Text', type: 'string', initialValue: 'Meet Attorney Turuchi Iheanachor' },
+        { name: 'ctaLink', title: 'Button Link', type: 'string', initialValue: '/profile' },
+      ],
     },
 
-    // CONSULTATION SECTION
+    // ------------------------------------------------------- CONSULTATION
     {
       name: 'consultationSection',
-      title: 'Free Consultation Section',
+      title: 'Consultation Band',
       type: 'object',
+      group: 'sections',
+      options: { collapsible: true, collapsed: true },
       fields: [
+        { name: 'enabled', title: 'Show Section', type: 'boolean', initialValue: true },
+        { name: 'sectionLabel', title: 'Eyebrow', type: 'string', initialValue: 'Free Case Evaluation' },
+        { name: 'heading', title: 'Heading', type: 'string', initialValue: 'Talk to a New Jersey Attorney Today' },
+        { name: 'description', title: 'Description', type: 'text', rows: 3 },
+        { name: 'ctaPrimaryText', title: 'Primary Button Text', type: 'string', initialValue: 'Start My Free Case Review' },
+        { name: 'ctaSecondaryText', title: 'Call Button Prefix', type: 'string', initialValue: 'Call' },
         {
-          name: 'sectionLabel',
-          title: 'Section Label',
+          name: 'disclaimer',
+          title: 'Small Print',
           type: 'string',
-          initialValue: 'Free Case Evaluation'
+          initialValue: 'Contacting the firm does not create an attorney-client relationship.',
         },
-        {
-          name: 'heading',
-          title: 'Heading',
-          type: 'string',
-          initialValue: 'Confide in a Trusted Law Firm in New Jersey'
-        },
-        {
-          name: 'description',
-          title: 'Description',
-          type: 'text',
-          rows: 3
-        },
-        {
-          name: 'ctaPrimaryText',
-          title: 'Primary CTA Text',
-          type: 'string',
-          initialValue: 'Schedule Free Consultation'
-        },
-        {
-          name: 'ctaSecondaryText',
-          title: 'Secondary CTA Text',
-          type: 'string',
-          initialValue: 'Call Now'
-        }
-      ]
+      ],
     },
 
-    // TESTIMONIALS SECTION
+    // -------------------------------------------------------- TESTIMONIALS
     {
       name: 'testimonialsSection',
       title: 'Testimonials Section',
       type: 'object',
+      group: 'sections',
+      options: { collapsible: true, collapsed: true },
       fields: [
+        { name: 'enabled', title: 'Show Section', type: 'boolean', initialValue: true },
+        { name: 'sectionLabel', title: 'Eyebrow', type: 'string', initialValue: 'Client Testimonials' },
+        { name: 'heading', title: 'Heading', type: 'string', initialValue: 'What Our Clients Say' },
+        { name: 'description', title: 'Description', type: 'text', rows: 2 },
         {
-          name: 'enabled',
-          title: 'Show Testimonials Section',
-          type: 'boolean',
-          initialValue: true
-        },
-        {
-          name: 'sectionLabel',
-          title: 'Section Label',
-          type: 'string',
-          initialValue: 'Client Testimonials'
-        },
-        {
-          name: 'heading',
-          title: 'Heading',
-          type: 'string',
-          initialValue: 'What Our Clients Say'
-        },
-        {
-          name: 'description',
-          title: 'Description',
+          name: 'disclaimer',
+          title: 'Small Print',
           type: 'text',
-          rows: 2
+          rows: 2,
+          initialValue:
+            'Testimonials reflect the facts of those particular matters. Prior results do not guarantee a similar outcome.',
         },
-        {
-          name: 'trustBadgeText',
-          title: 'Trust Badge Text',
-          type: 'string',
-          initialValue: 'Trusted by 500+ clients across New Jersey'
-        }
-      ]
+      ],
     },
 
-    // BLOG SECTION
+    // ---------------------------------------------------------------- BLOG
     {
       name: 'blogSection',
       title: 'Blog Section',
       type: 'object',
+      group: 'sections',
+      options: { collapsible: true, collapsed: true },
       fields: [
-        {
-          name: 'enabled',
-          title: 'Show Blog Section',
-          type: 'boolean',
-          initialValue: true
-        },
-        {
-          name: 'sectionLabel',
-          title: 'Section Label',
-          type: 'string',
-          initialValue: 'Our Blog'
-        },
-        {
-          name: 'heading',
-          title: 'Heading',
-          type: 'string',
-          initialValue: 'Latest Legal Insights'
-        },
-        {
-          name: 'description',
-          title: 'Description',
-          type: 'text',
-          rows: 2
-        },
-        {
-          name: 'ctaText',
-          title: 'CTA Button Text',
-          type: 'string',
-          initialValue: 'View All Articles'
-        }
-      ]
+        { name: 'enabled', title: 'Show Section', type: 'boolean', initialValue: true },
+        { name: 'sectionLabel', title: 'Eyebrow', type: 'string', initialValue: 'Our Blog' },
+        { name: 'heading', title: 'Heading', type: 'string', initialValue: 'Latest Legal Insights' },
+        { name: 'description', title: 'Description', type: 'text', rows: 2 },
+        { name: 'ctaText', title: 'Button Text', type: 'string', initialValue: 'View All Articles' },
+      ],
     },
 
-    // SEO
+    // ------------------------------------------------------------- CONTACT
     {
-      name: 'seo',
-      title: 'SEO Settings',
+      name: 'contactSection',
+      title: 'Contact Section',
       type: 'object',
-      options: {
-        collapsible: true,
-        collapsed: false
-      },
+      group: 'sections',
+      options: { collapsible: true, collapsed: true },
       fields: [
+        { name: 'enabled', title: 'Show Section', type: 'boolean', initialValue: true },
+        { name: 'sectionLabel', title: 'Eyebrow', type: 'string', initialValue: 'Get in touch' },
+        { name: 'heading', title: 'Heading', type: 'string', initialValue: 'Tell us what happened' },
+        { name: 'description', title: 'Description', type: 'text', rows: 3 },
+        { name: 'formHeading', title: 'Form Heading', type: 'string', initialValue: 'Request a free case review' },
+        { name: 'formSubheading', title: 'Form Subheading', type: 'string', initialValue: 'We typically respond the same business day.' },
+        { name: 'hoursLabel', title: 'Opening Hours', type: 'string', initialValue: 'Monday – Friday, 9:00 AM – 5:00 PM' },
+      ],
+    },
+
+    // -------------------------------------------------------- SECTION ORDER
+    {
+      name: 'sectionOrder',
+      title: 'Section Order',
+      type: 'array',
+      group: 'sections',
+      description:
+        'Drag to reorder the homepage. Anything left out of this list falls back to the default order. The hero is always first.',
+      of: [
         {
-          name: 'metaTitle',
-          title: 'Meta Title',
           type: 'string',
-          validation: Rule => Rule.max(60)
+          options: {
+            list: [
+              { title: 'Practice Areas', value: 'practiceAreas' },
+              { title: 'Why Trust Us', value: 'whyChooseUs' },
+              { title: 'Consultation Band', value: 'consultation' },
+              { title: 'Testimonials', value: 'testimonials' },
+              { title: 'Blog', value: 'blog' },
+              { title: 'Contact', value: 'contact' },
+            ],
+          },
         },
-        {
-          name: 'metaDescription',
-          title: 'Meta Description',
-          type: 'text',
-          rows: 3,
-          validation: Rule => Rule.max(160)
-        },
-        {
-          name: 'keywords',
-          title: 'Keywords',
-          type: 'array',
-          of: [{type: 'string'}]
-        },
-        {
-          name: 'ogImage',
-          title: 'Open Graph Image',
-          type: 'image'
-        }
-      ]
-    }
+      ],
+      options: { layout: 'tags' },
+    },
+
+    { ...seoFields, group: 'seo' },
   ],
-  preview: {
-    prepare() {
-      return {
-        title: 'Homepage Content'
-      }
-    }
-  }
-}
+  preview: { prepare: () => ({ title: 'Homepage Content' }) },
+};

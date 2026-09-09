@@ -133,10 +133,12 @@ const TestimonialCarousel = ({ testimonials = [], content }) => {
         </div>
       </div>
 
-      <p className="mt-8 text-center text-xs text-ink-soft">
-        Testimonials reflect the facts of those particular matters. Prior results do not guarantee a
-        similar outcome.
-      </p>
+      {content?.disclaimer !== "" && (
+        <p className="mt-8 text-center text-xs text-ink-soft">
+          {content?.disclaimer ||
+            "Testimonials reflect the facts of those particular matters. Prior results do not guarantee a similar outcome."}
+        </p>
+      )}
     </div>
   );
 };

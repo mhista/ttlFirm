@@ -12,6 +12,8 @@ import homePage from './homePage'
 import aboutPage from './aboutPage'
 import contactPage from './contactPage'
 import attorneyProfile from './attorneyProfile'
+import legalPage from './legalPage'
+import landingPage from './landingPage'
 
 export const schemaTypes = [
   blog,
@@ -27,5 +29,7 @@ export const schemaTypes = [
   homePage,
   aboutPage,
   contactPage,
-  attorneyProfile
+  attorneyProfile,
+  legalPage,
+  landingPage,
 ]

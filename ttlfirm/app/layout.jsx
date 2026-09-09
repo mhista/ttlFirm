@@ -1,7 +1,7 @@
 import "@styles/global.css";
-import Footer from "@components/layout/footer";
-import ScrollToTop from "@components/common/scrollToTop";
-import TextUsWidget from "@components/common/textUsWidget";
+import SiteChrome from "@components/layout/siteChrome";
+import Tracking from "@components/common/tracking";
+import { FilmProvider } from "@components/common/filmPlayer";
 import { client } from "@/lib/sanity.client";
 import { siteSettingsQuery } from "@/lib/sanity.queries";
 import { SiteSettingsProvider } from "@/lib/siteSettingsContext";
@@ -101,12 +101,14 @@ const Rootlayout = async ({ children }) => {
             Skip to main content
           </a>
 
-          <main id="main-content" className="main font-sans">
-            {children}
-            <Footer />
-            <ScrollToTop />
-            <TextUsWidget />
-          </main>
+          <Tracking />
+
+          <FilmProvider>
+            <main id="main-content" className="main font-sans">
+              {children}
+              <SiteChrome />
+            </main>
+          </FilmProvider>
         </SiteSettingsProvider>
       </body>
     </html>

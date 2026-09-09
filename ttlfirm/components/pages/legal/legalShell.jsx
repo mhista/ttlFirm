@@ -3,14 +3,36 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaPhone, FaEnvelope, FaLocationDot } from "react-icons/fa6";
 import { FIRM, telHref } from "@/lib/siteNav";
+import { useSiteSettings } from "@/lib/siteSettingsContext";
 
 /**
  * Shared shell for /privacy-policy, /terms-and-conditions and /disclaimer.
  * Provides the sticky contents rail, scroll-spy, and the contact card that
  * every one of these documents has to end with.
  */
-const LegalShell = ({ sections = [], effectiveDate, lastUpdated, children, related = [] }) => {
+const LegalShell = ({
+  sections = [],
+  effectiveDate,
+  lastUpdated,
+  children,
+  related = [],
+  showContactCard = true,
+  contactCardHeading = "Questions about this policy?",
+}) => {
   const [activeId, setActiveId] = useState(sections[0]?.id);
+  const siteSettings = useSiteSettings();
+
+  const contact = siteSettings?.contact || {};
+  const phone = contact.phone || FIRM.phoneDisplay;
+  const email = contact.email || FIRM.email;
+  const addressLines = contact.address?.street
+    ? [
+        contact.address.street,
+        [contact.address.city, [contact.address.state, contact.address.zipCode].filter(Boolean).join(" ")]
+          .filter(Boolean)
+          .join(", "),
+      ].filter(Boolean)
+    : [FIRM.addressLine1, FIRM.addressLine2];
 
   useEffect(() => {
     const headings = sections
@@ -79,37 +101,41 @@ const LegalShell = ({ sections = [], effectiveDate, lastUpdated, children, relat
             </div>
           )}
 
+          {showContactCard && (
           <div className="mt-4 rounded-xl bg-navy-900 p-5 text-white">
-            <p className="font-display text-lg font-bold">Questions about this policy?</p>
+            <p className="font-display text-lg font-bold">{contactCardHeading}</p>
             <ul className="mt-4 space-y-3 text-[13px]">
               <li>
                 <a
-                  href={telHref(FIRM.phoneHref)}
+                  href={telHref(phone)}
                   className="flex items-start gap-2.5 text-navy-100 transition-colors hover:text-accent-400"
                 >
                   <FaPhone className="mt-0.5 text-[11px] text-accent-400" aria-hidden="true" />
-                  {FIRM.phoneDisplay}
+                  {phone}
                 </a>
               </li>
               <li>
                 <a
-                  href={`mailto:${FIRM.email}`}
+                  href={`mailto:${email}`}
                   className="flex items-start gap-2.5 break-all text-navy-100 transition-colors hover:text-accent-400"
                 >
                   <FaEnvelope className="mt-0.5 text-[11px] text-accent-400" aria-hidden="true" />
-                  {FIRM.email}
+                  {email}
                 </a>
               </li>
               <li className="flex items-start gap-2.5 text-navy-100">
                 <FaLocationDot className="mt-0.5 text-[11px] text-accent-400" aria-hidden="true" />
                 <span>
-                  {FIRM.addressLine1}
-                  <br />
-                  {FIRM.addressLine2}
+                  {addressLines.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
                 </span>
               </li>
             </ul>
           </div>
+          )}
         </div>
       </aside>
 

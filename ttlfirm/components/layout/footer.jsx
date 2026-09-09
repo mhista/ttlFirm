@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaEnvelope, FaPhone, FaLocationDot, FaArrowRightLong } from "react-icons/fa6";
-import { socialLinks } from "@components/common/mediaButtons";
+import { buildSocialLinks } from "@components/common/mediaButtons";
 import { useSiteSettings } from "@/lib/siteSettingsContext";
 import { PRACTICE_AREAS, LEGAL_LINKS, FIRM, telHref } from "@/lib/siteNav";
 
@@ -20,9 +20,30 @@ const Footer = () => {
   const year = new Date().getFullYear();
   const siteSettings = useSiteSettings();
   const contact = siteSettings?.contact || {};
+  const social = buildSocialLinks(siteSettings?.social);
 
   const phone = contact.phone || FIRM.phoneDisplay;
   const email = contact.email || FIRM.email;
+
+  // Footer copy and legal notices are editable in Site Settings; the strings
+  // below are the fallbacks when a field is left empty in the Studio.
+  const f = siteSettings?.footer || {};
+  const notices = siteSettings?.legalNotices || {};
+  const ctaHeading = f.ctaHeading || "Injured in New Jersey? Let's talk today.";
+  const ctaSubheading = f.ctaSubheading || "Free consultation. No fee unless we recover for you.";
+  const ctaButtonText = f.ctaButtonText || "Request a Case Review";
+  const tagline =
+    f.tagline ||
+    "A New Jersey firm representing injured people and injured workers. Every case is handled personally by an attorney who has sat on the insurance company's side of the table and knows how they value a claim.";
+  const creditName = f.creditName || "Kymaa Digital Solutions";
+  const creditUrl = f.creditUrl || "https://www.kymaa.tech";
+  const legalLinks = f.legalLinks?.length ? f.legalLinks : LEGAL_LINKS;
+  const attorneyAdvertising =
+    notices.attorneyAdvertising ||
+    "The information on this website is for general informational purposes only and is not legal advice. Viewing this site, submitting a form, or contacting the firm does not create an attorney-client relationship. Prior results do not guarantee a similar outcome.";
+  const smsNotice =
+    notices.smsNotice ||
+    "Consent to receive text messages from The Turuchi Law Firm is optional and is not a condition of purchasing services, retaining the firm, or receiving legal services. Message and data rates may apply and message frequency varies. Reply STOP to opt out or HELP for help. No mobile opt-in or text message consent will be shared with third parties or affiliates for marketing or promotional purposes.";
 
   const addressLines = contact.address?.street
     ? [
@@ -56,6 +77,10 @@ const Footer = () => {
     { href: "/about", label: "About the Firm" },
     { href: "/blog", label: "Legal Insights" },
     { href: "/contact", label: "Contact" },
+    // Also carried in the colophon — the A2P registration wants the Privacy
+    // Policy prominent, not buried in the small print.
+    { href: "/privacy-policy", label: "Privacy Policy" },
+    { href: "/terms-and-conditions", label: "Terms & Conditions" },
   ];
 
   return (
@@ -65,18 +90,16 @@ const Footer = () => {
         <div className="container-x flex flex-col items-center gap-5 py-9 text-center md:flex-row md:justify-between md:text-left">
           <div>
             <h2 className="font-display text-2xl font-bold text-white md:text-[1.75rem]">
-              Injured in New Jersey? Let&rsquo;s talk today.
+              {ctaHeading}
             </h2>
-            <p className="mt-1.5 text-sm text-navy-200">
-              Free consultation. No fee unless we recover for you.
-            </p>
+            <p className="mt-1.5 text-sm text-navy-200">{ctaSubheading}</p>
           </div>
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <a href={telHref(phone)} className="btn-primary whitespace-nowrap">
               <FaPhone className="text-xs" aria-hidden="true" /> {phone}
             </a>
             <Link href="/contact" className="btn-outline whitespace-nowrap">
-              Request a Case Review
+              {ctaButtonText}
             </Link>
           </div>
         </div>
@@ -100,7 +123,7 @@ const Footer = () => {
             claim.
           </p>
           <ul className="mt-6 flex items-center gap-2">
-            {socialLinks.map((link) => (
+            {social.map((link) => (
               <li key={link.label}>
                 <a
                   href={link.href}
@@ -211,10 +234,7 @@ const Footer = () => {
         <div className="container-x py-8">
           <p className="text-xs leading-relaxed text-navy-300/90">
             <strong className="font-semibold text-navy-100">Attorney advertising.</strong>{" "}
-            The information on this website is for general informational purposes only and is not
-            legal advice. Viewing this site, submitting a form, or contacting the firm does not
-            create an attorney-client relationship. Prior results do not guarantee a similar
-            outcome. Read our{" "}
+            {attorneyAdvertising} Read our{" "}
             <Link href="/privacy-policy" className="text-accent-400 underline-offset-4 hover:underline">
               Privacy Policy
             </Link>{" "}
@@ -225,12 +245,7 @@ const Footer = () => {
             .
           </p>
           <p className="mt-3 text-xs leading-relaxed text-navy-300/90">
-            <strong className="font-semibold text-navy-100">SMS notice.</strong> Consent to receive
-            text messages from The Turuchi Law Firm is optional and is not a condition of purchasing
-            services, retaining the firm, or receiving legal services. Message and data rates may
-            apply and message frequency varies. Reply STOP to opt out or HELP for help. No mobile
-            opt-in or text message consent will be shared with third parties or affiliates for
-            marketing or promotional purposes.
+            <strong className="font-semibold text-navy-100">SMS notice.</strong> {smsNotice}
           </p>
         </div>
       </div>
@@ -241,7 +256,7 @@ const Footer = () => {
           <p>&copy; {year} The Turuchi Law Firm. All rights reserved.</p>
 
           <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            {LEGAL_LINKS.map((link) => (
+            {legalLinks.map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className="transition-colors hover:text-accent-400">
                   {link.label}
@@ -253,12 +268,12 @@ const Footer = () => {
           <p>
             Built and managed by{" "}
             <a
-              href="https://www.kymaa.tech"
+              href={creditUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-accent-400 underline-offset-4 hover:underline"
             >
-              Kymaa Digital Solutions
+              {creditName}
             </a>
           </p>
         </div>

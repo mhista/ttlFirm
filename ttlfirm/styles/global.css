@@ -161,17 +161,19 @@
 }
 
 /* ------------------------------------------------------- motion & utilities */
-.hero-scrim {
+/* Desktop hero ground: the copy sits on the left, the framed film player on
+   the right, so this stays deep on the left and opens slightly to the right. */
+.hero-scrim-desktop {
   background: linear-gradient(
     100deg,
-    rgba(6, 21, 37, 0.94) 0%,
-    rgba(10, 35, 64, 0.86) 42%,
-    rgba(10, 35, 64, 0.55) 72%,
-    rgba(10, 35, 64, 0.42) 100%
+    rgba(6, 21, 37, 0.97) 0%,
+    rgba(10, 35, 64, 0.93) 45%,
+    rgba(10, 35, 64, 0.86) 75%,
+    rgba(15, 48, 87, 0.82) 100%
   );
 }
 .hero-scrim-mobile {
-  background: linear-gradient(180deg, rgba(6, 21, 37, 0.62) 0%, rgba(6, 21, 37, 0.8) 55%, rgba(6, 21, 37, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(6, 21, 37, 0.72) 0%, rgba(6, 21, 37, 0.55) 32%, rgba(6, 21, 37, 0.82) 70%, rgba(6, 21, 37, 0.95) 100%);
 }
 
 /* Legacy: `.main` used to be 100vw, which caused horizontal scroll whenever a

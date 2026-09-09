@@ -42,6 +42,11 @@ export async function generateMetadata() {
   const homePage = await getHomePageData();
   const seo = homePage?.seo || {};
 
+  const ogImage =
+    seo.ogImage?.asset?.url ||
+    homePage?.heroMedia?.poster?.asset?.url ||
+    "/assets/videos/hero-poster.jpg";
+
   return {
     title: seo.metaTitle || fallbackTitle,
     description: seo.metaDescription || fallbackDescription,
@@ -53,32 +58,20 @@ export async function generateMetadata() {
       "slip and fall attorney NJ",
       "work injury lawyer New Jersey",
       "Jersey City personal injury attorney",
-      "Essex County injury lawyer",
-      "Union County workers comp attorney",
-      "Hudson County accident lawyer",
     ],
     openGraph: {
       title: seo.metaTitle || fallbackTitle,
       description: seo.metaDescription || fallbackDescription,
       url: "https://turuchilawfirm.com",
       siteName: "Turuchi Law Firm",
-      images: seo.ogImage
-        ? [
-            {
-              url: urlFor(seo.ogImage).width(1200).height(630).url(),
-              width: 1200,
-              height: 630,
-              alt: "Turuchi Law Firm — New Jersey Personal Injury Attorney",
-            },
-          ]
-        : [
-            {
-              url: "/assets/video/hero-poster.jpg",
-              width: 1200,
-              height: 630,
-              alt: "Turuchi Law Firm — New Jersey Personal Injury Attorney",
-            },
-          ],
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: "Turuchi Law Firm — New Jersey Personal Injury Attorney",
+        },
+      ],
       locale: "en_US",
       type: "website",
     },
@@ -86,52 +79,65 @@ export async function generateMetadata() {
       card: "summary_large_image",
       title: seo.metaTitle || fallbackTitle,
       description: seo.metaDescription || fallbackDescription,
-      images: ["/assets/video/hero-poster.jpg"],
+      images: [ogImage],
     },
     alternates: { canonical: "https://turuchilawfirm.com" },
   };
 }
 
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "LegalService",
-  name: "The Turuchi Law Firm, LLC",
-  image: "https://turuchilawfirm.com/assets/images/logo.png",
-  url: "https://turuchilawfirm.com",
-  telephone: "+17322106410",
-  email: "info@turuchilawfirm.com",
-  description:
-    "New Jersey law firm focused on personal injury and workers' compensation representation.",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "111 Town Square Pl, Ste 1238 #492165",
-    addressLocality: "Jersey City",
-    addressRegion: "NJ",
-    postalCode: "07310",
-    addressCountry: "US",
-  },
-  geo: { "@type": "GeoCoordinates", latitude: "40.7178", longitude: "-74.0431" },
-  areaServed: [{ "@type": "State", name: "New Jersey" }],
-  priceRange: "$$",
-  knowsAbout: ["Personal Injury Law", "Workers' Compensation Law"],
-  founder: {
-    "@type": "Person",
-    name: "Turuchi S. Iheanachor",
-    jobTitle: "Founder & Managing Attorney",
-  },
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "17:00",
+function buildOrganizationSchema(siteSettings) {
+  const contact = siteSettings?.contact || {};
+  const address = contact.address || {};
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "LegalService",
+    name: siteSettings?.title || "The Turuchi Law Firm, LLC",
+    image: "https://turuchilawfirm.com/assets/images/logo.png",
+    url: "https://turuchilawfirm.com",
+    telephone: contact.phone || FIRM.phoneHref,
+    email: contact.email || FIRM.email,
+    description:
+      siteSettings?.description ||
+      "New Jersey law firm focused on personal injury and workers' compensation representation.",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: address.street || "111 Town Square Pl, Ste 1238 #492165",
+      addressLocality: address.city || "Jersey City",
+      addressRegion: address.state || "NJ",
+      postalCode: address.zipCode || "07310",
+      addressCountry: address.country || "US",
     },
-  ],
-  sameAs: [
-    "https://www.facebook.com/turuchilawfirm",
-    "https://www.linkedin.com/company/turuchi-law-firm",
-  ],
-};
+    geo: { "@type": "GeoCoordinates", latitude: "40.7178", longitude: "-74.0431" },
+    areaServed: [{ "@type": "State", name: "New Jersey" }],
+    priceRange: "$$",
+    knowsAbout: ["Personal Injury Law", "Workers' Compensation Law"],
+    founder: {
+      "@type": "Person",
+      name: "Turuchi S. Iheanachor",
+      jobTitle: "Founder & Managing Attorney",
+    },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "09:00",
+        closes: "17:00",
+      },
+    ],
+    sameAs: Object.values(siteSettings?.social || {}).filter(Boolean),
+  };
+}
+
+// Default order, used when nothing is set in the Studio.
+const DEFAULT_ORDER = [
+  "practiceAreas",
+  "whyChooseUs",
+  "consultation",
+  "testimonials",
+  "blog",
+  "contact",
+];
 
 const Home = async () => {
   const [homePage, testimonials, practiceAreasRaw, siteSettings] = await Promise.all([
@@ -143,58 +149,80 @@ const Home = async () => {
 
   const practiceAreas = filterRetiredAreas(practiceAreasRaw);
   const hero = homePage?.hero || {};
+  const heroMedia = homePage?.heroMedia || {};
   const stats = siteSettings?.stats || {};
   const contact = siteSettings?.contact || {};
+
+  // Hero media: whatever the Studio holds wins; otherwise the files shipped
+  // with the site are used.
+  const videoSrc = heroMedia.backgroundVideo?.asset?.url || "/assets/videos/hero-loop.mp4";
+  const posterSrc = heroMedia.poster?.asset?.url || "/assets/videos/hero-poster.jpg";
+  const backdropSrc =
+    heroMedia.desktopBackdrop?.asset?.url || "/assets/videos/hero-backdrop.jpg";
+  const filmSrc = heroMedia.fullFilm?.asset?.url || "/assets/videos/turuchi-law-firm-film.mp4";
+  const filmPoster = heroMedia.filmPoster?.asset?.url || "/assets/videos/film-poster.jpg";
+
+  // Section visibility and order are both editable. A section is shown unless
+  // it has been explicitly switched off.
+  const on = (key) => homePage?.[key]?.enabled !== false;
+  const order = homePage?.sectionOrder?.length ? homePage.sectionOrder : DEFAULT_ORDER;
+
+  const sections = {
+    practiceAreas: on("practiceAreasSection") && (
+      <Section1 key="practiceAreas">
+        <PracticeArea practiceAreas={practiceAreas} content={homePage?.practiceAreasSection} />
+      </Section1>
+    ),
+    whyChooseUs: on("whyChooseUsSection") && (
+      <Section3 key="whyChooseUs">
+        <WhyChooseUs content={homePage?.whyChooseUsSection} stats={stats} />
+      </Section3>
+    ),
+    consultation: on("consultationSection") && (
+      <Section4 key="consultation">
+        <Consultation content={homePage?.consultationSection} contact={contact} />
+      </Section4>
+    ),
+    testimonials: on("testimonialsSection") && (
+      <Section1 key="testimonials">
+        <TestimonialCarousel
+          testimonials={testimonials}
+          content={homePage?.testimonialsSection}
+        />
+      </Section1>
+    ),
+    blog: on("blogSection") && (
+      <Section2 key="blog">
+        <BlogSection content={homePage?.blogSection} />
+      </Section2>
+    ),
+    contact: on("contactSection") && (
+      <Section1 key="contact">
+        <ContactUs contact={contact} content={homePage?.contactSection} />
+      </Section1>
+    ),
+  };
 
   return (
     <>
       <Script
         id="organization-schema"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildOrganizationSchema(siteSettings)),
+        }}
       />
 
-      <Header
-        videoSrc="/assets/video/hero-placeholder.mp4"
-        posterSrc="/assets/video/hero-poster.jpg"
-      >
+      <Header videoSrc={videoSrc} posterSrc={posterSrc} backdropSrc={backdropSrc}>
         <HomeHero
           content={{ ...hero, phone: contact.phone || FIRM.phoneDisplay }}
           stats={stats}
+          statsSection={homePage?.statsSection}
+          film={{ src: filmSrc, poster: filmPoster, loop: videoSrc, loopPoster: posterSrc }}
         />
       </Header>
 
-      <Section1>
-        <PracticeArea
-          practiceAreas={practiceAreas}
-          heading={homePage?.practiceSection?.heading}
-          description={homePage?.practiceSection?.description}
-          eyebrow={homePage?.practiceSection?.sectionLabel}
-        />
-      </Section1>
-
-      <Section3>
-        <WhyChooseUs content={homePage?.whyChooseUsSection} stats={stats} />
-      </Section3>
-
-      <Section4>
-        <Consultation content={homePage?.consultationSection} contact={contact} stats={stats} />
-      </Section4>
-
-      <Section1>
-        <TestimonialCarousel
-          testimonials={testimonials}
-          content={homePage?.testimonialsSection}
-        />
-      </Section1>
-
-      <Section2>
-        <BlogSection content={homePage?.blogSection} />
-      </Section2>
-
-      <Section1>
-        <ContactUs contact={contact} social={siteSettings?.social} />
-      </Section1>
+      {order.map((key) => sections[key]).filter(Boolean)}
     </>
   );
 };

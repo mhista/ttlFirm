@@ -59,18 +59,49 @@ every page rendered at ~1560px on phones. There's a comment in the file warning 
 
 ## 4. Hero video
 
-- `public/assets/video/hero-placeholder.mp4` — 18s, 1600×900, 1.3 MB, silent, looping. Generated
-  from `public/assets/images/bg.jpg` with a slow ken-burns push-in.
-- `public/assets/video/hero-poster.jpg` — first frame, shown until the video can play.
+The firm's own film is now in place. **It is portrait — 576 × 1024, 9:16, 62 seconds**, shot on a
+phone and delivered over WhatsApp (which recompressed it and left a rotation flag rather than
+rotating the pixels). That constraint drives the whole hero layout.
 
-**When she supplies her own footage**, drop it in as `hero-placeholder.mp4` (or change the
-`videoSrc` prop on `<Header>` in `app/page.jsx`) and export a matching poster frame. Target:
-1600×900 or 1920×1080, H.264, **no audio**, under ~4 MB, 15–25 seconds, and shot so the
-left third stays visually quiet — that's where the headline sits.
+### Files — `public/assets/videos/`
 
-`components/common/heroMedia.jsx` skips the video entirely when the visitor has
-`prefers-reduced-motion`, `saveData`, or a 2G connection, and falls back to the poster if autoplay
-is refused. That matters: a personal-injury site gets heavy mobile traffic on cellular.
+| File | What it is |
+|---|---|
+| `hero-loop.mp4` | 0–28s, silent, 2.4 MB. Background loop. Trimmed before the dark stretch at ~30s and cross-faded at both ends so the wrap is invisible |
+| `hero-poster.jpg` | First frame of the loop — shown until the video can play |
+| `turuchi-law-firm-film.mp4` | The full 62s film with audio, 8.5 MB. Plays in the modal |
+| `film-poster.jpg` | Poster for the modal |
+| `hero-backdrop.jpg` | A wide, softly blurred courthouse still from the same footage — the desktop hero ground |
+
+All encodes bake the rotation into the pixels (`rotate=0` metadata) rather than relying on the
+rotation flag, because some browsers and CDNs ignore it and would play the film sideways.
+
+### How it's used
+
+- **Below `lg`** — the film is the full-bleed background. A phone viewport is itself portrait, so
+  9:16 fills it with almost no crop.
+- **At `lg` and up** — cropping 9:16 into a ~2:1 hero would show a narrow horizontal band across
+  the middle of the frame, so instead the background is `hero-backdrop.jpg` under a heavy navy
+  scrim, and the film plays in a framed vertical player beside the copy (`FilmCard`).
+- **Everywhere** — the `WatchFilmButton` in the hero action row opens the full film with sound and
+  native controls in a modal (`components/common/filmPlayer.jsx`). The card and the button share
+  one modal through `FilmProvider`, mounted in `app/layout.jsx`.
+
+`heroMedia.jsx` skips the video entirely for `prefers-reduced-motion`, `saveData` and 2G, and falls
+back to the poster if autoplay is refused. That matters — a personal-injury site gets heavy mobile
+traffic on cellular.
+
+### If she supplies landscape footage
+
+Drop it in as `hero-loop.mp4` (silent, trimmed) plus a matching `hero-poster.jpg`, and the desktop
+hero can go full-bleed. Specs to give her:
+
+- Landscape 16:9, **1920 × 1080 minimum**, MP4 / H.264, 24 or 30 fps
+- 15–30 seconds for the loop; send the long cut separately for the modal
+- No text or logo burned in — the site puts its own headline over it
+- Slow, steady shots; bright and evenly lit (it sits under a dark navy scrim)
+- **Keep the left third of the frame clear** — headline and buttons live there
+- Send as a file via Drive / WeTransfer, **not over WhatsApp**, which recompresses and rotates
 
 ---
 

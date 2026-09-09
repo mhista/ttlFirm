@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { FaCircleCheck, FaCircleExclamation, FaXmark, FaSpinner } from "react-icons/fa6";
 import SmsConsent from "@components/common/smsConsent";
+import { useSiteSettings } from "@/lib/siteSettingsContext";
+import { trackLead } from "@/lib/trackLead";
 
 const EMPTY = { name: "", phone: "", email: "", message: "" };
 const COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes, matching the message shown.
@@ -16,7 +18,13 @@ const COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes, matching the message shown.
  *  - Adds the required, optional, unchecked SMS consent checkbox.
  *  - Real labels instead of duplicated `id="name"` on every input.
  */
-const Form = ({ tone = "light", heading, subheading }) => {
+const Form = ({ tone = "light", heading, subheading, submitLabel, source = "Website contact form" }) => {
+  const siteSettings = useSiteSettings();
+  const disclaimer =
+    siteSettings?.smsConsent?.formDisclaimer ||
+    "Submitting this form does not create an attorney-client relationship and does not make the firm your lawyer. Please do not send confidential or time-sensitive information through this form.";
+  const firmPhone = siteSettings?.contact?.phone || "732-210-6410";
+
   const [formData, setFormData] = useState(EMPTY);
   const [smsConsent, setSmsConsent] = useState(false);
   const [isSending, setIsSending] = useState(false);
@@ -70,12 +78,21 @@ const Form = ({ tone = "light", heading, subheading }) => {
         body: JSON.stringify({
           ...formData,
           smsConsent,
-          source: "Website contact form",
+          source,
           consentTimestamp: new Date().toISOString(),
         }),
       });
 
       if (response.ok) {
+        // Conversion signal for Meta and Google. Without this an ad set
+        // optimising for leads has nothing to learn from.
+        trackLead({
+          source,
+          google: {
+            adsId: siteSettings?.tracking?.googleAdsId,
+            label: siteSettings?.tracking?.googleAdsLabel,
+          },
+        });
         setToast({
           type: "success",
           message: "Thank you — your message has been sent. We'll be in touch shortly.",
@@ -91,13 +108,13 @@ const Form = ({ tone = "light", heading, subheading }) => {
       } else {
         setToast({
           type: "error",
-          message: "We couldn't send that. Please call 732-210-6410 and we'll help right away.",
+          message: `We couldn't send that. Please call ${firmPhone} and we'll help right away.`,
         });
       }
     } catch (error) {
       setToast({
         type: "error",
-        message: "Something went wrong. Please call 732-210-6410 and we'll help right away.",
+        message: `Something went wrong. Please call ${firmPhone} and we'll help right away.`,
       });
     } finally {
       setIsSending(false);
@@ -202,14 +219,12 @@ const Form = ({ tone = "light", heading, subheading }) => {
               <FaSpinner className="animate-spin text-sm" aria-hidden="true" /> Sending…
             </>
           ) : (
-            "Request My Free Case Review"
+            submitLabel || "Request My Free Case Review"
           )}
         </button>
 
         <p className={`text-[11px] leading-relaxed ${isDark ? "text-navy-200" : "text-ink-soft"}`}>
-          Submitting this form does not create an attorney-client relationship and does not make
-          the firm your lawyer. Please do not send confidential or time-sensitive information
-          through this form.
+          {disclaimer}
         </p>
       </form>
 

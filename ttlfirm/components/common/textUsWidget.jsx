@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { FaXmark, FaCommentDots, FaSpinner, FaCircleCheck } from "react-icons/fa6";
 import SmsConsent from "@components/common/smsConsent";
+import { useSiteSettings } from "@/lib/siteSettingsContext";
+import { trackLead } from "@/lib/trackLead";
 
 const EMPTY = { name: "", phone: "", message: "" };
 
@@ -22,6 +24,21 @@ const HIDE_ON = ["/privacy-policy", "/terms-and-conditions", "/disclaimer"];
 
 const TextUsWidget = () => {
   const pathname = usePathname();
+  const siteSettings = useSiteSettings();
+
+  // All copy is editable in Sanity (Site Settings -> SMS & Widget); the
+  // defaults below are what renders when a field is left empty.
+  const w = siteSettings?.textWidget || {};
+  const enabled = w.enabled !== false;
+  const buttonLabel = w.buttonLabel || "Text us!";
+  const teaserText = w.teaserText || "Want to schedule a consultation? Text us!";
+  const panelHeading = w.panelHeading || "Send us a text";
+  const panelSubheading = w.panelSubheading || "Add your details and we'll respond by text.";
+  const successHeading = w.successHeading || "Message received";
+  const successMessage =
+    w.successMessage || "Thank you. Someone from the firm will get back to you shortly.";
+  const firmPhone = siteSettings?.contact?.phone || "732-210-6410";
+  const firmPhoneHref = `tel:${String(firmPhone).replace(/[^\d+]/g, "")}`;
 
   const [visible, setVisible] = useState(false);
   const [teaserOpen, setTeaserOpen] = useState(false);
@@ -33,19 +50,27 @@ const TextUsWidget = () => {
   const [error, setError] = useState("");
   const firstFieldRef = useRef(null);
 
-  /* Appear after a moment so it doesn't compete with the hero. */
+  /* Appear after a moment so it doesn't compete with the hero, then retire
+     the teaser on its own. Left up, it permanently covers whatever sits in
+     the bottom-right of the page — on a phone that was the hero's "Watch our
+     film" button. The pill stays; only the speech bubble withdraws. */
   useEffect(() => {
     const show = setTimeout(() => setVisible(true), 2500);
+    let hide;
     const teaser = setTimeout(() => {
       try {
-        if (!sessionStorage.getItem("textUsTeaserDismissed")) setTeaserOpen(true);
+        if (sessionStorage.getItem("textUsTeaserDismissed")) return;
       } catch {
-        setTeaserOpen(true);
+        /* private mode — show it anyway */
       }
+      setTeaserOpen(true);
+      hide = setTimeout(() => setTeaserOpen(false), 9000);
     }, 4500);
+
     return () => {
       clearTimeout(show);
       clearTimeout(teaser);
+      clearTimeout(hide);
     };
   }, []);
 
@@ -68,7 +93,7 @@ const TextUsWidget = () => {
     }
   };
 
-  if (HIDE_ON.includes(pathname)) return null;
+  if (!enabled || HIDE_ON.includes(pathname)) return null;
 
   const submit = async (e) => {
     e.preventDefault();
@@ -96,11 +121,18 @@ const TextUsWidget = () => {
       });
 
       if (!res.ok) throw new Error("send failed");
+      trackLead({
+        source: "Text Us widget",
+        google: {
+          adsId: siteSettings?.tracking?.googleAdsId,
+          label: siteSettings?.tracking?.googleAdsLabel,
+        },
+      });
       setSent(true);
       setForm(EMPTY);
       setSmsConsent(false);
     } catch {
-      setError("We couldn't send that. Please call 732-210-6410 and we'll help right away.");
+      setError(`We couldn't send that. Please call ${firmPhone} and we'll help right away.`);
     } finally {
       setSending(false);
     }
@@ -121,10 +153,8 @@ const TextUsWidget = () => {
         >
           <div className="flex items-center justify-between bg-navy-900 px-5 py-4">
             <div>
-              <p className="font-display text-lg font-bold text-white">Send us a text</p>
-              <p className="mt-0.5 text-xs text-navy-200">
-                Add your details and we&rsquo;ll respond by text.
-              </p>
+              <p className="font-display text-lg font-bold text-white">{panelHeading}</p>
+              <p className="mt-0.5 text-xs text-navy-200">{panelSubheading}</p>
             </div>
             <button
               type="button"
@@ -140,13 +170,12 @@ const TextUsWidget = () => {
             <div className="px-5 py-8 text-center">
               <FaCircleCheck className="mx-auto text-3xl text-accent-500" aria-hidden="true" />
               <p className="mt-4 font-display text-lg font-semibold text-navy-900">
-                Message received
+                {successHeading}
               </p>
               <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-                Thank you. Someone from the firm will get back to you shortly. If it&rsquo;s
-                urgent, call{" "}
-                <a href="tel:+17322106410" className="link-accent">
-                  732-210-6410
+                {successMessage} If it&rsquo;s urgent, call{" "}
+                <a href={firmPhoneHref} className="link-accent">
+                  {firmPhone}
                 </a>
                 .
               </p>
@@ -241,7 +270,7 @@ const TextUsWidget = () => {
             }}
             className="text-left text-sm font-medium leading-snug text-navy-900"
           >
-            Want to schedule a consultation? Text us!
+            {teaserText}
           </button>
           <button
             type="button"
@@ -270,7 +299,7 @@ const TextUsWidget = () => {
             className="relative flex min-h-[52px] items-center gap-2.5 rounded-full bg-accent-500 px-6 py-3.5 font-sans text-sm font-bold text-navy-950 shadow-widget transition-all duration-300 hover:bg-accent-400 active:translate-y-px"
           >
             <FaCommentDots className="text-base" aria-hidden="true" />
-            Text us!
+            {buttonLabel}
           </button>
         </div>
       )}

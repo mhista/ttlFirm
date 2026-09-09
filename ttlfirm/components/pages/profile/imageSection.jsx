@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FaEnvelope, FaPhone } from "react-icons/fa6";
-import { socialLinks } from "@components/common/mediaButtons";
+import { socialLinks } from "@components/common/mediaButtons";  // static list is fine here
 import { telHref } from "@/lib/siteNav";
 
 /**

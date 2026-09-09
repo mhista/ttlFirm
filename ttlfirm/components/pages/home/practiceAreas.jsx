@@ -9,7 +9,17 @@ import { PRACTICE_AREAS, filterRetiredAreas } from "@/lib/siteNav";
  * filters out retired areas (immigration, municipal court) in case those
  * documents are still published in Sanity.
  */
-const PracticeArea = ({ practiceAreas = [], heading, description, eyebrow }) => {
+const PracticeArea = ({ practiceAreas = [], content, heading, description, eyebrow }) => {
+  // `content` is the CMS object; the loose props are kept for the pages that
+  // still pass individual strings.
+  const label = content?.sectionLabel ?? eyebrow;
+  const title = content?.heading ?? heading;
+  const blurb = content?.description ?? description;
+  const footnote =
+    content?.footnote ?? "Not sure which applies to your situation? Tell us what happened.";
+  const ctaText = content?.ctaText || "Schedule a Free Consultation";
+  const ctaLink = content?.ctaLink || "/contact";
+
   const areas = filterRetiredAreas(practiceAreas);
 
   const cards =
@@ -39,12 +49,12 @@ const PracticeArea = ({ practiceAreas = [], heading, description, eyebrow }) => 
       <div className="mx-auto max-w-3xl text-center">
         <div className="flex items-center justify-center gap-3">
           <span className="rule" aria-hidden="true" />
-          <span className="eyebrow">{eyebrow || "What We Do"}</span>
+          <span className="eyebrow">{label || "What We Do"}</span>
           <span className="rule" aria-hidden="true" />
         </div>
-        <h2 className="h-section mt-5">{heading || "Our Practice Areas"}</h2>
+        <h2 className="h-section mt-5">{title || "Our Practice Areas"}</h2>
         <p className="lede mt-5">
-          {description ||
+          {blurb ||
             "Focused representation in the two areas where an experienced advocate changes the outcome most — serious injury claims and workplace injury benefits."}
         </p>
       </div>
@@ -65,11 +75,9 @@ const PracticeArea = ({ practiceAreas = [], heading, description, eyebrow }) => 
 
       {/* CTA */}
       <div className="mt-12 flex flex-col items-center gap-4 text-center">
-        <p className="text-sm text-ink-muted">
-          Not sure which applies to your situation? Tell us what happened.
-        </p>
-        <Link href="/contact" className="btn-navy">
-          Schedule a Free Consultation
+        {footnote && <p className="text-sm text-ink-muted">{footnote}</p>}
+        <Link href={ctaLink} className="btn-navy">
+          {ctaText}
         </Link>
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { FaEnvelope, FaPhone } from "react-icons/fa6";
-import { socialLinks } from "@components/common/mediaButtons";
+import { socialLinks, buildSocialLinks } from "@components/common/mediaButtons";
 import { useSiteSettings } from "@/lib/siteSettingsContext";
 import { FIRM, telHref } from "@/lib/siteNav";
 
@@ -17,6 +17,7 @@ const Nav = () => {
   const contact = siteSettings?.contact || {};
   const email = contact.email || FIRM.email;
   const phone = contact.phone || FIRM.phoneDisplay;
+  const links = buildSocialLinks(siteSettings?.social);
 
   return (
     <nav aria-label="Secondary" className="absolute inset-x-0 top-0 z-50 w-full">
@@ -24,7 +25,7 @@ const Nav = () => {
         <div className="container-x flex h-11 items-center justify-between">
           {/* Social */}
           <ul className="flex items-center gap-1">
-            {socialLinks.map((link) => (
+            {links.map((link) => (
               <li key={link.label}>
                 <a
                   href={link.href}

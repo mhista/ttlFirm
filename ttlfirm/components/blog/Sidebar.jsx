@@ -4,9 +4,14 @@ import { urlFor } from "@/lib/sanity.client";
 import { BiTime } from "react-icons/bi";
 import { CiFileOn } from "react-icons/ci";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { PRACTICE_AREAS } from "@/lib/siteNav";
+import { PRACTICE_AREAS, filterRetiredAreas } from "@/lib/siteNav";
 
 export default function Sidebar({ recentPosts, categories, tags }) {
+  // Categories come straight from Sanity and still include the retired
+  // practice areas until those documents are unpublished. `filterRetiredAreas`
+  // matches on title as well as slug, so they drop out here regardless.
+  const visibleCategories = filterRetiredAreas(categories);
+
   return (
     <div className="w-full md:w-[350px] lg:w-[400px]">
       <div className="flex sm:px-[100px] md:px-0 flex-col p-10 gap-16 sticky top-24">
@@ -62,11 +67,11 @@ export default function Sidebar({ recentPosts, categories, tags }) {
         )}
 
         {/* Categories */}
-        {categories && categories.length > 0 && (
+        {visibleCategories && visibleCategories.length > 0 && (
           <div className="flex flex-col gap-5">
             <h1 className="font-display text-2xl font-medium">Categories</h1>
             <div className="flex flex-col gap-3">
-              {categories.map((category) => (
+              {visibleCategories.map((category) => (
                 <div key={category._id}>
                   <hr className="w-full h-[1.5px] bg-accent-500 opacity-20 mb-3" />
                   <Link
