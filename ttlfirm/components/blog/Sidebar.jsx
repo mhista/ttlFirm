@@ -4,6 +4,7 @@ import { urlFor } from "@/lib/sanity.client";
 import { BiTime } from "react-icons/bi";
 import { CiFileOn } from "react-icons/ci";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { PRACTICE_AREAS } from "@/lib/siteNav";
 
 export default function Sidebar({ recentPosts, categories, tags }) {
   return (
@@ -12,7 +13,7 @@ export default function Sidebar({ recentPosts, categories, tags }) {
         {/* Recent Posts */}
         {recentPosts && recentPosts.length > 0 && (
           <div className="flex flex-col gap-7">
-            <h1 className="font-lora text-2xl font-medium">Recent Articles</h1>
+            <h1 className="font-display text-2xl font-medium">Recent Articles</h1>
             {recentPosts.map((post) => (
               <Link
                 key={post._id}
@@ -30,14 +31,14 @@ export default function Sidebar({ recentPosts, categories, tags }) {
                   </div>
                 )}
                 <div className="flex flex-col gap-2">
-                  <h3 className="font-semibold text-gray-700 text-sm group-hover:text-amber-600 transition line-clamp-2">
+                  <h3 className="font-semibold text-ink-muted text-sm group-hover:text-accent-600 transition line-clamp-2">
                     {post.title}
                   </h3>
                   <span className="flex items-center gap-2">
-                    <BiTime className="text-gray-400 text-sm" />
+                    <BiTime className="text-ink-soft text-sm" />
                     <time
                       dateTime={post.publishedAt}
-                      className="text-gray-400 uppercase text-xs font-medium"
+                      className="text-ink-soft uppercase text-xs font-medium"
                     >
                       {new Date(post.publishedAt).toLocaleDateString("en-US", {
                         year: "numeric",
@@ -48,8 +49,8 @@ export default function Sidebar({ recentPosts, categories, tags }) {
                   </span>
                   {post.author && (
                     <span className="flex items-center gap-2">
-                      <CiFileOn className="text-gray-400" />
-                      <p className="text-gray-400 uppercase text-xs font-medium">
+                      <CiFileOn className="text-ink-soft" />
+                      <p className="text-ink-soft uppercase text-xs font-medium">
                         {post.author.name}
                       </p>
                     </span>
@@ -63,14 +64,14 @@ export default function Sidebar({ recentPosts, categories, tags }) {
         {/* Categories */}
         {categories && categories.length > 0 && (
           <div className="flex flex-col gap-5">
-            <h1 className="font-lora text-2xl font-medium">Categories</h1>
+            <h1 className="font-display text-2xl font-medium">Categories</h1>
             <div className="flex flex-col gap-3">
               {categories.map((category) => (
                 <div key={category._id}>
-                  <hr className="w-full h-[1.5px] bg-amber-600 opacity-20 mb-3" />
+                  <hr className="w-full h-[1.5px] bg-accent-500 opacity-20 mb-3" />
                   <Link
                     href={`/blog/category/${category.slug.current}`}
-                    className="hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-sm"
+                    className="hover:ml-4 hover:text-accent-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-sm"
                   >
                     <FaArrowRightLong className="text-xs" />
                     <span>
@@ -87,13 +88,13 @@ export default function Sidebar({ recentPosts, categories, tags }) {
         {/* Tags */}
         {tags && tags.length > 0 && (
           <div className="flex flex-col gap-5">
-            <h1 className="font-lora text-2xl font-medium">Tags</h1>
+            <h1 className="font-display text-2xl font-medium">Tags</h1>
             <div className="flex gap-3 items-center flex-wrap">
               {tags.map((tag) => (
                 <Link
                   key={tag._id}
                   href={`/blog/tag/${tag.slug.current}`}
-                  className="bg-amber-600 text-gray-200 px-4 py-2 uppercase font-jost tracking-widest text-xs font-semibold opacity-85 cursor-pointer transition-all hover:opacity-100 hover:bg-amber-700"
+                  className="bg-accent-500 text-white px-4 py-2 uppercase font-sans tracking-widest text-xs font-semibold opacity-85 cursor-pointer transition-all hover:opacity-100 hover:bg-accent-600"
                 >
                   {tag.title}
                 </Link>
@@ -104,40 +105,20 @@ export default function Sidebar({ recentPosts, categories, tags }) {
 
         {/* Practice Areas */}
         <div className="flex flex-col gap-5">
-          <h1 className="font-lora text-2xl font-medium">Practice Areas</h1>
+          <h2 className="font-display text-2xl font-bold text-navy-900">Practice Areas</h2>
           <div className="flex flex-col gap-3">
-            <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
-            <Link
-              href="/practice/1"
-              className="hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-sm"
-            >
-              <FaArrowRightLong className="text-xs" />
-              <span>Personal Injury</span>
-            </Link>
-            <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
-            <Link
-              href="/practice/2"
-              className="hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-sm"
-            >
-              <FaArrowRightLong className="text-xs" />
-              <span>Immigration Law</span>
-            </Link>
-            <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
-            <Link
-              href="/practice/3"
-              className="hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-sm"
-            >
-              <FaArrowRightLong className="text-xs" />
-              <span>Workers' Compensation</span>
-            </Link>
-            <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
-            <Link
-              href="/practice/4"
-              className="hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-sm"
-            >
-              <FaArrowRightLong className="text-xs" />
-              <span>Municipal Court Matters</span>
-            </Link>
+            {PRACTICE_AREAS.map((area) => (
+              <div key={area.slug} className="flex flex-col gap-3">
+                <hr className="h-px w-full border-0 bg-surface-line" />
+                <Link
+                  href={`/practice/${area.slug}`}
+                  className="group flex flex-row items-center gap-3 text-sm font-medium text-ink transition-colors hover:text-accent-600"
+                >
+                  <FaArrowRightLong className="text-xs text-accent-500 transition-transform group-hover:translate-x-1" />
+                  <span>{area.label}</span>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </div>

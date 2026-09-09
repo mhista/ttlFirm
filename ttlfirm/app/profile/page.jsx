@@ -4,6 +4,7 @@ import { urlFor } from "@/lib/sanity.client";
 import { PortableText } from "@portabletext/react";
 import PortableTextComponents from "@/components/blog/PortableTextComponents";
 import ImageSection from "@components/pages/profile/imageSection";
+import Section1 from "@components/common/section1";
 import Section4 from "@components/common/section4";
 import Consultation from "@components/pages/home/consult";
 import PageHeader from "@components/pages/header";
@@ -30,12 +31,11 @@ export async function generateMetadata() {
   
   return {
     title: seo.metaTitle || `${attorney.name}, ${attorney.credentials} | Founder & Managing Attorney | NJ Lawyer`,
-    description: seo.metaDescription || `Meet ${attorney.name}, experienced NJ attorney with expertise in Personal Injury, Immigration & Workers' Compensation. Former insurance defense attorney now fighting for clients.`,
+    description: seo.metaDescription || `Meet ${attorney.name}, experienced NJ attorney with focused practice in personal injury and workers' compensation. Former insurance defense attorney now fighting for clients.`,
     keywords: seo.keywords || [
       attorney.name,
       "New Jersey attorney",
       "personal injury lawyer NJ",
-      "immigration attorney",
       "workers compensation lawyer",
       "experienced NJ lawyer"
     ],
@@ -89,20 +89,23 @@ function generateAttorneySchema(data) {
 }
 
 // Component for Practice Area items
-const Area = ({ title }) => {
-  return (
-    <span className="flex gap-2 items-center opacity-85">
-      <div className="h-[13px] w-[13px] rounded-full border-2 border-gray-600 flex justify-center items-center">
-        <div className="h-[5px] w-[5px] rounded-full bg-gray-600"></div>
-      </div>
-      <p className="text-gray-600">{title}</p>
-    </span>
-  );
-};
+const Area = ({ title }) => (
+  <li className="flex items-start gap-3 text-[15px] text-ink-muted">
+    <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500" aria-hidden="true" />
+    <span>{title}</span>
+  </li>
+);
+
+const InfoBlock = ({ heading, children }) => (
+  <section className="border-t border-surface-line pt-8">
+    <h2 className="font-display text-2xl font-bold text-navy-900">{heading}</h2>
+    <div className="mt-4">{children}</div>
+  </section>
+);
 
 const Profile = async () => {
   const data = await getPageData();
-  
+
   const attorney = data?.attorney || {};
   const introduction = data?.introduction || {};
   const careerHighlights = data?.careerHighlights || [];
@@ -110,7 +113,7 @@ const Profile = async () => {
   const education = data?.education || {};
   const barAdmissions = data?.barAdmissions || {};
   const honorsAndAwards = data?.honorsAndAwards || {};
-  
+
   const attorneySchema = generateAttorneySchema(data);
 
   return (
@@ -120,136 +123,139 @@ const Profile = async () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(attorneySchema) }}
       />
-      
-      <div>
-        <PageHeader 
-          text="Meet Our" 
-          text2="Founder" 
-        />
-        
-        <div className="relative w-full flex flex-col md:flex-row justify-center md:items-start md:justify-around items-center pt-6 md:py-8 md:gap-7 md:px-7 z-[60] bg-white">
-          {/* Image Section */}
-          {attorney?.profileImage && (
-            <ImageSection 
-              image={urlFor(attorney.profileImage).url()}
-              name={attorney.name}
-              title={attorney.title}
-              email={attorney.email}
-              phone={attorney.phone}
-            />
-          )}
-          
-          <div className="md:w-full">
-            {/* Introduction */}
-            {introduction?.content && (
-              <div className="sm:p-16 md:p-0 w-full">
-                <div className="flex flex-col gap-4 p-8 sm:pt-0">
-                  <h1 className="font-lora text-2xl font-medium">
-                    {introduction?.heading || "Meet Our Founder"}
-                  </h1>
-                  <div className="prose prose-lg max-w-none text-gray-500 text-justify">
-                    <PortableText 
-                      value={introduction.content} 
-                      components={PortableTextComponents}
-                    />
-                  </div>
+
+      <PageHeader
+        eyebrow="Attorney Profile"
+        text="Meet Our"
+        text2="Founder"
+        description={
+          attorney?.name
+            ? `${attorney.name}${attorney.title ? ` — ${attorney.title}` : ""}`
+            : "The attorney who will handle your case, and the experience behind it."
+        }
+        image="/assets/images/lawyer2.jpg"
+        breadcrumbs={[{ label: "Attorney Profile" }]}
+      />
+
+      <Section1>
+        <div className="container-x section-y">
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+            {/* Portrait + contact card */}
+            {attorney?.profileImage && (
+              <div className="lg:col-span-4">
+                <div className="lg:sticky lg:top-28">
+                  <ImageSection
+                    image={urlFor(attorney.profileImage).width(720).url()}
+                    name={attorney.name}
+                    title={attorney.title}
+                    email={attorney.email}
+                    phone={attorney.phone}
+                  />
                 </div>
               </div>
             )}
 
-            {/* Career Highlights */}
-            {careerHighlights && careerHighlights.length > 0 && (
-              <div className="flex flex-col p-8 gap-8">
-                {careerHighlights.map((highlight, index) => (
-                  <div key={index} className="flex flex-col gap-4">
-                    <h1 className="font-lora text-xl font-medium">
-                      {highlight.heading}
-                    </h1>
-                    <div className="prose prose-lg max-w-none text-gray-500 text-justify">
-                      <PortableText 
-                        value={highlight.content} 
+            {/* Biography */}
+            <div className={attorney?.profileImage ? "lg:col-span-8" : "lg:col-span-12"}>
+              <div className="space-y-10">
+                {introduction?.content && (
+                  <section>
+                    <div className="flex items-center gap-3">
+                      <span className="rule" aria-hidden="true" />
+                      <span className="eyebrow">About</span>
+                    </div>
+                    <h2 className="h-section mt-4">
+                      {introduction?.heading || "Meet Our Founder"}
+                    </h2>
+                    <div className="mt-5 max-w-prose2 text-[15px] leading-relaxed text-ink-muted md:text-base [&_p]:mb-4">
+                      <PortableText
+                        value={introduction.content}
                         components={PortableTextComponents}
                       />
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-            
-            {/* Practice Areas */}
-            {practiceAreas?.areas && practiceAreas.areas.length > 0 && (
-              <div className="flex flex-col p-8 gap-4">
-                <h1 className="font-lora text-2xl font-medium">
-                  {practiceAreas?.heading || "Practice Areas"}
-                </h1>
-                {practiceAreas.areas.map((area, index) => (
-                  <Area key={index} title={area} />
-                ))}
-              </div>
-            )}
-            
-            <span className="flex justify-center items-center md:justify-center">
-              <hr className="w-[90%] opacity-85 bg-amber-600 my-5" />
-            </span>
-            
-            {/* Education */}
-            {education?.degrees && education.degrees.length > 0 && (
-              <div className="flex flex-col p-8 gap-4">
-                <h1 className="font-lora text-2xl font-medium">
-                  {education?.heading || "Education"}
-                </h1>
-                {education.degrees.map((degree, index) => (
-                  <p key={index} className="text-gray-500">
-                    {degree.institution} {degree.degree} {degree.year && `(${degree.year})`}
-                  </p>
-                ))}
-              </div>
-            )}
-            
-            <span className="flex justify-center items-center md:justify-center my-5">
-              <hr className="w-[90%] opacity-85 bg-amber-600" />
-            </span>
-            
-            {/* Bar Admissions */}
-            {barAdmissions?.admissions && barAdmissions.admissions.length > 0 && (
-              <div className="flex flex-col p-8 gap-4">
-                <h1 className="font-lora text-2xl font-medium">
-                  {barAdmissions?.heading || "Bar Admission"}
-                </h1>
-                {barAdmissions.admissions.map((admission, index) => (
-                  <p key={index} className="text-gray-500">
-                    {admission}
-                  </p>
-                ))}
-              </div>
-            )}
+                  </section>
+                )}
 
-            {/* Honors & Awards */}
-            {honorsAndAwards?.items && honorsAndAwards.items.length > 0 && (
-              <div className="flex flex-col p-8 gap-4">
-                <h1 className="font-lora text-2xl font-medium">
-                  {honorsAndAwards?.heading || "Honors & Awards"}
-                </h1>
-                {honorsAndAwards.items.map((item, index) => (
-                  <div key={index} className="flex flex-col gap-2">
-                    <h3 className="font-semibold text-lg">{item.title}</h3>
-                    {item.organization && (
-                      <p className="text-sm text-gray-600">{item.organization} {item.year && `- ${item.year}`}</p>
-                    )}
-                    {item.description && (
-                      <p className="text-gray-500">{item.description}</p>
-                    )}
-                  </div>
-                ))}
+                {careerHighlights?.length > 0 &&
+                  careerHighlights.map((highlight, index) => (
+                    <InfoBlock key={index} heading={highlight.heading}>
+                      <div className="max-w-prose2 text-[15px] leading-relaxed text-ink-muted [&_p]:mb-4">
+                        <PortableText
+                          value={highlight.content}
+                          components={PortableTextComponents}
+                        />
+                      </div>
+                    </InfoBlock>
+                  ))}
+
+                {practiceAreas?.areas?.length > 0 && (
+                  <InfoBlock heading={practiceAreas?.heading || "Practice Areas"}>
+                    <ul className="space-y-2.5">
+                      {practiceAreas.areas.map((area, index) => (
+                        <Area key={index} title={area} />
+                      ))}
+                    </ul>
+                  </InfoBlock>
+                )}
+
+                {education?.degrees?.length > 0 && (
+                  <InfoBlock heading={education?.heading || "Education"}>
+                    <ul className="space-y-2.5">
+                      {education.degrees.map((degree, index) => (
+                        <Area
+                          key={index}
+                          title={`${degree.institution} ${degree.degree}${
+                            degree.year ? ` (${degree.year})` : ""
+                          }`}
+                        />
+                      ))}
+                    </ul>
+                  </InfoBlock>
+                )}
+
+                {barAdmissions?.admissions?.length > 0 && (
+                  <InfoBlock heading={barAdmissions?.heading || "Bar Admissions"}>
+                    <ul className="space-y-2.5">
+                      {barAdmissions.admissions.map((admission, index) => (
+                        <Area key={index} title={admission} />
+                      ))}
+                    </ul>
+                  </InfoBlock>
+                )}
+
+                {honorsAndAwards?.items?.length > 0 && (
+                  <InfoBlock heading={honorsAndAwards?.heading || "Honors & Awards"}>
+                    <div className="space-y-6">
+                      {honorsAndAwards.items.map((item, index) => (
+                        <div key={index}>
+                          <h3 className="font-sans text-base font-bold text-navy-900">
+                            {item.title}
+                          </h3>
+                          {item.organization && (
+                            <p className="mt-0.5 text-sm text-ink-soft">
+                              {item.organization}
+                              {item.year && ` — ${item.year}`}
+                            </p>
+                          )}
+                          {item.description && (
+                            <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </InfoBlock>
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
-        
-        <Section4>
-          <Consultation />
-        </Section4>
-      </div>
+      </Section1>
+
+      <Section4>
+        <Consultation />
+      </Section4>
     </>
   );
 };

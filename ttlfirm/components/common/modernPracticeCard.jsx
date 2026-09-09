@@ -1,82 +1,71 @@
 "use client";
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaArrowRightLong, FaChevronRight } from "react-icons/fa6";
+import { FaArrowRightLong, FaCheck } from "react-icons/fa6";
 
+/**
+ * Practice-area card.
+ * Reworked for a two-column layout — the firm now has two practice areas, so
+ * a four-across grid of near-empty cards no longer makes sense.
+ */
 const ModernPracticeCard = ({ image1, title, subtitle, slug, subAreas = [] }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
-    <div
-      className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Image Section with Gradient Overlay */}
-      <div className="relative h-[280px] sm:h-[320px] overflow-hidden">
+    <article className="group card flex flex-col overflow-hidden">
+      {/* Image */}
+      <div className="relative h-[220px] overflow-hidden sm:h-[260px]">
         <Image
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           src={image1}
-          width={500}
-          height={320}
-          alt={title}
+          width={720}
+          height={420}
+          alt=""
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-
-        {/* Title on Image */}
-        <div className="absolute bottom-0 left-0 right-0 p-6">
-          <h2 className="font-lora text-white text-2xl md:text-3xl font-bold mb-2 uppercase">
-            {title}
-          </h2>
-        </div>
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/45 to-transparent"
+          aria-hidden="true"
+        />
+        <h3 className="absolute inset-x-0 bottom-0 p-6 font-display text-2xl font-bold text-white md:text-[1.75rem]">
+          {title}
+        </h3>
       </div>
 
-      {/* Content Section */}
-      <div className="p-6">
-        <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-          {subtitle}
-        </p>
-
-        {/* Sub-Areas List */}
-        {subAreas.length > 0 && (
-          <div className="mb-6 space-y-2">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-              Our Services:
-            </p>
-            {subAreas.slice(0, 4).map((area, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-2 text-sm text-gray-700 hover:text-amber-600 transition-colors"
-              >
-                <FaChevronRight className="text-amber-600 text-xs flex-shrink-0" />
-                <span>{area}</span>
-              </div>
-            ))}
-            {subAreas.length > 4 && (
-              <p className="text-xs text-gray-500 italic pl-5">
-                +{subAreas.length - 4} more services
-              </p>
-            )}
-          </div>
+      {/* Body */}
+      <div className="flex flex-1 flex-col p-6 md:p-7">
+        {subtitle && (
+          <p className="text-sm leading-relaxed text-ink-muted">{subtitle}</p>
         )}
 
-        {/* ✅ FIXED: correct JSX template literal syntax */}
+        {subAreas.length > 0 && (
+          <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
+            {subAreas.slice(0, 6).map((area) => (
+              <li key={area} className="flex items-start gap-2.5 text-sm text-ink">
+                <span className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-accent-500/15">
+                  <FaCheck className="text-[8px] text-accent-600" aria-hidden="true" />
+                </span>
+                <span>{area}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {subAreas.length > 6 && (
+          <p className="mt-3 text-xs italic text-ink-soft">
+            + {subAreas.length - 6} more services
+          </p>
+        )}
+
         <Link
           href={`/practice/${slug}`}
-          className="group/btn inline-flex items-center gap-2 text-amber-600 font-semibold text-sm hover:text-amber-700 transition-all"
+          className="mt-auto inline-flex items-center gap-2 pt-7 font-sans text-sm font-semibold uppercase tracking-wider text-navy-700 transition-colors hover:text-accent-600"
         >
-          <span>Explore Services</span>
+          Explore this practice
           <FaArrowRightLong
-            className={`transition-transform duration-300 ${
-              isHovered ? "translate-x-2" : "translate-x-0"
-            }`}
+            className="text-xs transition-transform duration-300 group-hover:translate-x-1"
+            aria-hidden="true"
           />
         </Link>
       </div>
-
-      <div className="absolute top-4 right-4 w-16 h-16 bg-amber-600/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
-    </div>
+    </article>
   );
 };
 

@@ -2,93 +2,163 @@ import { EmailClient, KnownEmailSendStatus } from "@azure/communication-email";
 
 const connectionString = process.env.ACS_CONNECTION_STRING;
 const senderAddress = process.env.SENDER_EMAIL_ADDRESS;
+const recipient = process.env.LEAD_RECIPIENT_EMAIL || "info@turuchilawfirm.com";
+
+const escapeHtml = (value = "") =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 export const POST = async (req) => {
-  const { name, email, message, phone } = await req.json();
-
-  if (!name || !email || !message || !phone) {
-    return new Response(JSON.stringify({ success: false, message: "Missing required fields" }), { status: 400 });
+  let payload;
+  try {
+    payload = await req.json();
+  } catch {
+    return Response.json({ success: false, message: "Invalid request body" }, { status: 400 });
   }
 
-  // Check if request has a valid IP (network check)
-  const userIP = req.headers.get("x-forwarded-for") || req.headers.get("remote-addr");
-  if (!userIP) {
-    return new Response(JSON.stringify({ success: false, message: "Network error detected. Please check your internet." }), {
-      status: 503,
-      headers: { "Content-Type": "application/json" },
-    });
+  const {
+    name,
+    email = "",
+    message,
+    phone,
+    smsConsent = false,
+    source = "Website form",
+    consentTimestamp = new Date().toISOString(),
+  } = payload || {};
+
+  // Email is optional for the Text Us widget, which only collects a mobile
+  // number — so it is not part of the required set.
+  if (!name || !message || !phone) {
+    return Response.json(
+      { success: false, message: "Missing required fields" },
+      { status: 400 }
+    );
   }
+
+  const userIP =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    "unknown";
+  const userAgent = req.headers.get("user-agent") || "unknown";
+
+  /**
+   * Consent record. The A2P registration requires the firm to be able to
+   * evidence, per number, that opt-in was given: what was agreed, when, from
+   * where, and through which form. Keep these lines in the notification email
+   * so there is a durable record in the firm's mailbox.
+   */
+  const consentBlock = smsConsent
+    ? [
+        "SMS CONSENT: GRANTED",
+        `Consent text: "I consent to receive conversational, transactional, informational and promotional SMS messages from The Turuchi Law Firm at the number provided. Consent is not a condition of purchasing services, retaining the firm, or receiving legal services. Message and data rates may apply and message frequency varies. Reply STOP to opt out or HELP for help."`,
+        `Timestamp (UTC): ${consentTimestamp}`,
+        `Captured via: ${source}`,
+        `IP address: ${userIP}`,
+        `User agent: ${userAgent}`,
+      ].join("\n")
+    : "SMS CONSENT: NOT GRANTED — do not text this number. Contact by phone or email only.";
+
+  const plainText = [
+    `Source: ${source}`,
+    `Name: ${name}`,
+    `Phone: ${phone}`,
+    email ? `Email: ${email}` : "Email: (not provided)",
+    "",
+    "Message:",
+    message,
+    "",
+    "----------------------------------------",
+    consentBlock,
+  ].join("\n");
+
+  const html = `
+  <div style="max-width:640px;margin:0 auto;font-family:Helvetica,Arial,sans-serif;background:#ffffff;border:1px solid #E3E8EF;border-radius:10px;overflow:hidden;">
+    <div style="background:#0A2340;color:#ffffff;padding:20px 24px;">
+      <p style="margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#E9A94A;">${escapeHtml(source)}</p>
+      <h2 style="margin:6px 0 0;font-size:20px;font-weight:700;">New enquiry from the website</h2>
+    </div>
+
+    <div style="padding:24px;">
+      <table style="width:100%;border-collapse:collapse;font-size:15px;color:#0F172A;">
+        <tr><td style="padding:6px 0;width:110px;color:#4A5568;">Name</td><td style="padding:6px 0;font-weight:600;">${escapeHtml(name)}</td></tr>
+        <tr><td style="padding:6px 0;color:#4A5568;">Phone</td><td style="padding:6px 0;font-weight:600;"><a href="tel:${escapeHtml(phone)}" style="color:#1C5389;">${escapeHtml(phone)}</a></td></tr>
+        <tr><td style="padding:6px 0;color:#4A5568;">Email</td><td style="padding:6px 0;font-weight:600;">${email ? `<a href="mailto:${escapeHtml(email)}" style="color:#1C5389;">${escapeHtml(email)}</a>` : "&mdash;"}</td></tr>
+      </table>
+
+      <div style="margin-top:18px;background:#F5F7FA;border-left:3px solid #D98324;border-radius:6px;padding:16px;">
+        <p style="margin:0;font-size:15px;line-height:1.6;color:#0F172A;white-space:pre-wrap;">${escapeHtml(message)}</p>
+      </div>
+
+      <div style="margin-top:18px;padding:14px 16px;border-radius:6px;background:${smsConsent ? "#ECF7EE" : "#FDF3F3"};border:1px solid ${smsConsent ? "#BFE3C6" : "#F0CFCF"};">
+        <p style="margin:0;font-size:13px;font-weight:700;color:${smsConsent ? "#1E6B33" : "#9A2222"};">
+          ${smsConsent ? "SMS consent granted" : "SMS consent NOT granted — do not text this number"}
+        </p>
+        ${
+          smsConsent
+            ? `<p style="margin:8px 0 0;font-size:12px;line-height:1.6;color:#4A5568;">
+                 Timestamp (UTC): ${escapeHtml(consentTimestamp)}<br/>
+                 Captured via: ${escapeHtml(source)}<br/>
+                 IP address: ${escapeHtml(userIP)}<br/>
+                 User agent: ${escapeHtml(userAgent)}
+               </p>
+               <p style="margin:8px 0 0;font-size:11px;line-height:1.6;color:#6B7280;">
+                 Retain this email as the consent record for A2P 10DLC compliance.
+               </p>`
+            : ""
+        }
+      </div>
+
+      ${
+        email
+          ? `<div style="text-align:center;margin-top:22px;">
+               <a href="mailto:${escapeHtml(email)}" style="display:inline-block;background:#D98324;color:#061525;text-decoration:none;font-weight:700;padding:12px 24px;border-radius:6px;font-size:14px;">Reply now</a>
+             </div>`
+          : ""
+      }
+    </div>
+  </div>`;
+
+  if (!connectionString || !senderAddress) {
+    console.error("Email is not configured: ACS_CONNECTION_STRING / SENDER_EMAIL_ADDRESS missing.");
+    return Response.json(
+      { success: false, message: "Email service is not configured" },
+      { status: 500 }
+    );
+  }
+
+  const emailMessage = {
+    senderAddress,
+    recipients: { to: [{ address: recipient }] },
+    replyTo: email ? [{ address: email, displayName: name }] : undefined,
+    content: {
+      subject: `New ${smsConsent ? "[SMS OPT-IN] " : ""}enquiry — ${name}`,
+      plainText,
+      html,
+    },
+  };
 
   try {
     const client = new EmailClient(connectionString);
-    const email_message = {
-      senderAddress,
-      recipients: { to: [{ address: "info@turuchilawfirm.com" }] },
-      content: {
-        subject: "New Client Message",
-        plainText: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,
-        html:`<div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); border: 1px solid #ddd;">
-    
-        <h2 style="background: #0073e6; color: #ffffff; text-align: center; padding: 15px; margin: -20px -20px 20px -20px; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-            📩 New Client Message
-        </h2>
-        
-        <p style="font-size: 16px; color: #333;"><strong>Name:</strong> ${name}</p>
-        <p style="font-size: 16px; color: #333;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #0073e6;">${email}</a></p>
-        <p style="font-size: 16px; color: #333;"><strong>Phone:</strong> ${phone}</p>
-    
-        <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; margin-top: 15px;">
-            <p style="font-size: 16px; font-style: italic; color: #555; margin: 0;">
-                ${message}
-            </p>
-        </div>
-    
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="mailto:${email}" style="display: inline-block; background: #0073e6; color: #ffffff; text-decoration: none; font-weight: bold; padding: 10px 20px; border-radius: 5px;">
-                Reply Now
-            </a>
-        </div>
-    
-        
-    </div>`,
-      },
-    };
-
-    const poller = await client.beginSend(email_message);
-
-    if (!poller.getOperationState().isStarted) {
-      throw new Error("Email send operation failed to start.");
-      
-        }
-
+    const poller = await client.beginSend(emailMessage);
     const result = await poller.pollUntilDone();
 
     if (result.status === KnownEmailSendStatus.Succeeded) {
-      return new Response(JSON.stringify({ success: true, message: "Email sent successfully!" }), { status: 200 });
-    } else {
-      throw new Error("Email send failed.");
+      return Response.json({ success: true, message: "Message sent" }, { status: 200 });
     }
+    throw new Error(`Send finished with status ${result.status}`);
   } catch (error) {
-    console.error("Error sending email:", error);
-
-    // Retry sending in background (silent retry)
-    setTimeout(async () => {
-      try {
-        console.log("Retrying email send...");
-        const client = new EmailClient(connectionString);
-        const retryPoller = await client.beginSend(email_message);
-        await retryPoller.pollUntilDone();
-        console.log("Retry email sent successfully.");
-      } catch (retryError) {
-        console.error("Retry failed:", retryError);
-      }
-    }, 10000); // Retry after 10 seconds
-
-    return new Response(JSON.stringify({ success: false, message: "Failed to send email" }), { status: 500 });
+    // The previous version tried to "retry in the background" inside a
+    // setTimeout after the response had already been returned — on a
+    // serverless runtime that callback is never guaranteed to run, and it
+    // referenced a variable that was out of scope, so it always threw.
+    console.error("Error sending lead email:", error);
+    return Response.json(
+      { success: false, message: "Failed to send message" },
+      { status: 500 }
+    );
   }
 };
-
-
-
-
-

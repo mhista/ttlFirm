@@ -1,212 +1,362 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
-
+import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { FiMenu } from "react-icons/fi";
-import { FaXmark } from "react-icons/fa6";
-import { FaEnvelope, FaPhone } from "react-icons/fa6";
+import { FaXmark, FaPhone, FaChevronDown, FaEnvelope } from "react-icons/fa6";
 
 import { socialLinks } from "@components/common/mediaButtons";
 import { useSiteSettings } from "@/lib/siteSettingsContext";
+import { MAIN_NAV, FIRM, telHref } from "@/lib/siteNav";
 
-import _ from "lodash";
-
-const StickyNav = ({ isSticky = false }) => {
-  const router = usePathname();
-  const id = router.split("/").at(-1);
-  const [toggleDropdown, setToggleDropdown] = useState(false);
+/**
+ * Primary navigation.
+ *
+ * Two visual states:
+ *  - "over hero"  — transparent, sitting on top of the hero video, offset
+ *                   below the navy utility bar on `sm` and up.
+ *  - "docked"     — fixed to the top on a solid navy bar once the user has
+ *                   scrolled past the hero.
+ *
+ * The old version toggled on a `scrollY < lastScrollY` comparison that fought
+ * itself during momentum scrolling and flickered. This one docks on a simple
+ * threshold and hides only when scrolling *down* past it.
+ */
+const StickyNav = () => {
+  const pathname = usePathname();
   const siteSettings = useSiteSettings();
-  const phoneNumber = siteSettings?.contact?.phone || "+1 732-210-6410";
-  const handlePhoneCall = () => {
-    window.location.href = `tel:${phoneNumber}`;
-  };
 
-  // handle scrolling
-  const [scrollState, setScrollState] = useState({
-    isSticky: false,
-    isScrollingUp: false,
-  });
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [selectedLink, setSelectedLink] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState(null);
+  const [docked, setDocked] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+  const desktopSubmenuTimer = useRef(null);
 
+  const phone = siteSettings?.contact?.phone || FIRM.phoneDisplay;
+  const email = siteSettings?.contact?.email || FIRM.email;
+
+  /* Portals need the DOM, which doesn't exist during the server render. */
+  useEffect(() => setMounted(true), []);
+
+  /* ----------------------------------------------------------- scroll state */
   useEffect(() => {
-    let ticking = false;
+    let frame = null;
 
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const bodyHeight = document.body.scrollHeight;
-
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrollState((prevState) => ({
-            isSticky:
-              currentScrollY > 250 &&
-              (currentScrollY < lastScrollY ||
-                currentScrollY + windowHeight < bodyHeight),
-            isScrollingUp: currentScrollY < lastScrollY && currentScrollY > 250,
-          }));
-          setLastScrollY(currentScrollY);
-          ticking = false;
-        });
-        ticking = true;
-      }
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        const y = window.scrollY;
+        setDocked(y > 120);
+        // Only auto-hide well below the fold, and never while the mobile
+        // drawer is open.
+        setHidden(y > 400 && y > lastY.current && !menuOpen);
+        lastY.current = y;
+        frame = null;
+      });
     };
 
-    const throttledScroll = _.throttle(handleScroll, 100);
-    window.addEventListener("scroll", throttledScroll);
-    return () => window.removeEventListener("scroll", throttledScroll);
-  }, [lastScrollY]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [menuOpen]);
 
-  const menuLinks = [
-    { href: "/", label: "Home", isDropdown: false },
-    { href: "/practice", label: "Practice Areas", isDropdown: false },
-    { href: "/profile", label: "Attorney Profile", isDropdown: false },
-    { href: "/about", label: "About", isDropdown: false },
-    { href: "/blog", label: "Blog", isDropdown: false }, // ← ADDED BLOG LINK
-  ];
+  /* --------------------------------------- close the drawer on route change */
+  useEffect(() => {
+    setMenuOpen(false);
+    setOpenSubmenu(null);
+  }, [pathname]);
+
+  /* ------------------------- lock body scroll + escape key while drawer open */
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => e.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
+  const isActive = (href) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  /* Hover intent: a short close delay stops the submenu vanishing when the
+     pointer crosses the gap between the trigger and the panel. */
+  const openDesktopSubmenu = (label) => {
+    clearTimeout(desktopSubmenuTimer.current);
+    setOpenSubmenu(label);
+  };
+  const closeDesktopSubmenu = () => {
+    clearTimeout(desktopSubmenuTimer.current);
+    desktopSubmenuTimer.current = setTimeout(() => setOpenSubmenu(null), 140);
+  };
 
   return (
-    <div
-      className={`
-        transition-all w-full duration-[400ms] z-[75] ${
-          scrollState.isSticky
-            ? "fixed bg-[#1c314e] top-0 ease-in-out"
-            : "absolute bg-transparent sm:top-10 sm:bg-gradient-to-b sm:from-black sm:to-transparent ease-in"
-        }`}
+    <header
+      className={[
+        "w-full transition-all duration-300 ease-out",
+        docked
+          ? "fixed inset-x-0 top-0 z-[75] border-b border-white/10 bg-navy-950/95 shadow-[0_8px_30px_-12px_rgba(6,21,37,.6)] backdrop-blur-md"
+          : "absolute inset-x-0 top-0 z-[75] bg-gradient-to-b from-navy-950/70 to-transparent sm:top-11",
+        hidden ? "-translate-y-full" : "translate-y-0",
+      ].join(" ")}
     >
-      <nav className="w-full h-15 flex justify-between items-center px-5 lg:px-10 py-3.5 z-50">
-        {/* LOGO */}
-        <Link href="/">
-          <Image
-            className={`text-white cursor-pointer ${
-              scrollState.isSticky ? "w-[58px] sm:w-[65px] md:w-[70px]" : "sm:w-[90px] md:w-[100px] lg:w-32 pt-2"
-            }`}
-            src="/assets/images/logo.png"
-            width={65}
-            height={65}
-            alt="Turuchi law firm logo"
-          />
-        </Link>
-
-        {/* DESKTOP MENU */}
-        <div className={`hidden md:flex justify-between items-center text-white uppercase gap-4 md:gap-2 lg:gap-6 font-semibold md:font-normal lg:font-medium md:text-sm lg:text-base ${scrollState.isSticky ? "" : "lg:mt-[-50px]"}`}>
-          {menuLinks.map((link, index) => (
-            link.isDropdown ? (
-              <span
-                key={index}
-                className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`}
-                onClick={() => {
-                  setSelectedLink(id);
-                }}
-              >
-                {link.label}
-              </span>
-            ) : (
-              <Link
-                href={link.href}
-                key={index}
-                className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} hover:text-amber-600`}
-                onClick={() => {
-                  setSelectedLink(id);
-                }}
-              >
-                {link.label}
-              </Link>
-            )
-          ))}
-        </div>
-
-        <div className={`flex gap-4 flex-row-reverse ${scrollState.isSticky ? "" : "lg:mt-[-50px]"}`}>
-          <Link href={`/contact`} className="btn hidden md:flex">
-            Contact us
-          </Link>
-          <Link
-            href=""
-            onClick={handlePhoneCall}
-            className="border p-3 rounded-sm flex justify-between items-center gap-2 text-white text-xl md:text-sm hover:text-blue-200"
-          >
-            <FaPhone />
-            <span className="lg:text-lg">{phoneNumber}</span>
-          </Link>
-        </div>
-
-        {/* MOBILE MENU */}
-        <div className="relative md:hidden">
-          {!toggleDropdown ? (
-            <FiMenu
-              className={`md:hidden w-8 h-8 text-white hover:cursor-pointer hover:text-yellow-600 transition-all duration-[400ms]`}
-              onClick={() => {
-                setToggleDropdown((prev) => !prev);
-              }}
+      <nav aria-label="Primary" className="container-x">
+        <div
+          className={[
+            "flex items-center justify-between gap-4 transition-all duration-300",
+            docked ? "h-[68px]" : "h-[76px] lg:h-[92px]",
+          ].join(" ")}
+        >
+          {/* ----------------------------------------------------------- Logo */}
+          <Link href="/" className="flex shrink-0 items-center" aria-label="Turuchi Law Firm — home">
+            <Image
+              src="/assets/images/logo.png"
+              width={140}
+              height={70}
+              priority
+              alt="The Turuchi Law Firm"
+              className={[
+                "w-auto transition-all duration-300",
+                docked ? "h-11 md:h-12" : "h-12 md:h-14 lg:h-16",
+              ].join(" ")}
             />
-          ) : (
-            <FaXmark
-              className="md:hidden w-8 h-8 text-white hover:cursor-pointer hover:text-yellow-600 transition-all duration-[400ms]"
-              onClick={() => {
-                setToggleDropdown((prev) => !prev);
-              }}
-            />
-          )}
+          </Link>
 
-          {toggleDropdown && (
-            <div className="dropdown min-w-[300px] text-white uppercase gap-6 font-semibold transition-all duration-[400ms] ease-in">
-              {menuLinks.map((link, index) => (
-                link.isDropdown ? (
-                  <span
-                    key={index}
-                    className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`}
-                    onClick={() => {
-                      setSelectedLink(id);
-                      setToggleDropdown((prev) => !prev);
-                    }}
-                  >
-                    {link.label}
-                  </span>
-                ) : (
-                  <Link
-                    href={link.href}
-                    key={index}
-                    className={`${selectedLink === link.label ? "text-yellow-600" : "text-white"} cursor-pointer hover:text-amber-600`}
-                    onClick={() => {
-                      setSelectedLink(id);
-                      setToggleDropdown((prev) => !prev);
-                    }}
-                  >
-                    {link.label}
-                  </Link>
-                )
-              ))}
-
-              <hr className="w-full bg-gray-300" />
-
-              <div className="w-full text-white flex items-center justify-between">
+          {/* -------------------------------------------------- Desktop links */}
+          <ul className="hidden items-center gap-1 lg:flex">
+            {MAIN_NAV.map((item) => (
+              <li
+                key={item.label}
+                className="relative"
+                onMouseEnter={() => item.children && openDesktopSubmenu(item.label)}
+                onMouseLeave={() => item.children && closeDesktopSubmenu()}
+              >
                 <Link
-                  href={`/contact`}
-                  className="bg-amber-600 text-[#1c314e] rounded-sm px-4 py-3 text-center uppercase font-jost text-xs tracking-wider font-semibold opacity-85 cursor-pointer transition-all hover:bg-transparent hover:border hover:outline-none hover:border-yellow-900 hover:text-white"
-                  onClick={() => setToggleDropdown((prev) => !prev)}
+                  href={item.href}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  aria-expanded={item.children ? openSubmenu === item.label : undefined}
+                  className={[
+                    "flex items-center gap-1.5 rounded-md px-3 py-2 font-sans text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors xl:text-sm",
+                    isActive(item.href)
+                      ? "text-accent-400"
+                      : "text-white hover:text-accent-400",
+                  ].join(" ")}
                 >
-                  Contact us
+                  {item.label}
+                  {item.children && (
+                    <FaChevronDown
+                      className={`text-[9px] transition-transform duration-200 ${
+                        openSubmenu === item.label ? "rotate-180" : ""
+                      }`}
+                      aria-hidden="true"
+                    />
+                  )}
                 </Link>
-                <div className="flex justify-between items-center gap-4 pr-4 text-lg">
-                  {socialLinks.map((link, index) => (
-                    <Link
-                      key={index}
-                      href={link.href}
-                      onClick={() => setToggleDropdown((prev) => !prev)}
-                    >
-                      {link.icon}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+
+                {/* Submenu */}
+                {item.children && openSubmenu === item.label && (
+                  <div className="absolute left-1/2 top-full w-[330px] -translate-x-1/2 pt-3">
+                    <div className="animate-slide-up overflow-hidden rounded-xl border border-white/10 bg-navy-950 p-2 shadow-widget ring-1 ring-black/20">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className="block rounded-lg px-4 py-3 transition-colors hover:bg-white/[.07]"
+                        >
+                          <span className="block font-sans text-sm font-semibold text-white">
+                            {child.label}
+                          </span>
+                          {child.blurb && (
+                            <span className="mt-0.5 block text-xs leading-relaxed text-navy-200">
+                              {child.blurb}
+                            </span>
+                          )}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          {/* ------------------------------------------------- Desktop actions */}
+          <div className="hidden shrink-0 items-center gap-4 md:flex">
+            <a
+              href={telHref(phone)}
+              className="group flex items-center gap-3 border-l border-white/20 pl-4 text-left"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-500/15 text-accent-400 transition-colors group-hover:bg-accent-500 group-hover:text-navy-950">
+                <FaPhone className="text-xs" aria-hidden="true" />
+              </span>
+              <span className="hidden xl:block">
+                <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-navy-200">
+                  Free Case Review
+                </span>
+                <span className="block text-sm font-semibold text-white transition-colors group-hover:text-accent-400">
+                  {phone}
+                </span>
+              </span>
+            </a>
+
+            <Link href="/contact" className="btn-primary px-5 py-3 text-xs">
+              Contact Us
+            </Link>
+          </div>
+
+          {/* --------------------------------------------- Mobile menu trigger */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <a
+              href={telHref(phone)}
+              aria-label={`Call ${phone}`}
+              className="flex h-11 w-11 items-center justify-center rounded-md bg-accent-500 text-navy-950 md:hidden"
+            >
+              <FaPhone className="text-sm" aria-hidden="true" />
+            </a>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              className="flex h-11 w-11 items-center justify-center rounded-md border border-white/25 text-white transition-colors hover:border-accent-400 hover:text-accent-400"
+            >
+              {menuOpen ? <FaXmark className="h-5 w-5" /> : <FiMenu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </nav>
-    </div>
+
+      {/* ------------------------------------------------------ Mobile drawer
+          Rendered through a portal into <body>: this <header> always carries a
+          transform for the auto-hide, and a transformed ancestor becomes the
+          containing block for fixed-position descendants — which collapsed the
+          drawer into the height of the header bar. */}
+      {mounted &&
+        menuOpen &&
+        createPortal(
+          <>
+          <div
+            className="fixed inset-0 z-[120] bg-navy-950/60 backdrop-blur-sm lg:hidden"
+            onClick={() => setMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <div
+            id="mobile-menu"
+            className="fixed inset-y-0 right-0 z-[130] flex w-[86%] max-w-[380px] animate-slide-up flex-col overflow-y-auto overscroll-contain bg-navy-950 lg:hidden"
+          >
+            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+              <Image
+                src="/assets/images/logo.png"
+                width={110}
+                height={55}
+                alt="Turuchi Law Firm"
+                className="h-11 w-auto"
+              />
+              <button
+                type="button"
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close navigation menu"
+                className="flex h-11 w-11 items-center justify-center rounded-md border border-white/25 text-white"
+              >
+                <FaXmark className="h-5 w-5" />
+              </button>
+            </div>
+
+            <ul className="flex flex-1 flex-col px-3 py-4">
+              {MAIN_NAV.map((item) => (
+                <li key={item.label} className="border-b border-white/[.07]">
+                  <div className="flex items-center">
+                    <Link
+                      href={item.href}
+                      className={[
+                        "flex-1 px-3 py-4 font-sans text-[15px] font-semibold uppercase tracking-wide transition-colors",
+                        isActive(item.href) ? "text-accent-400" : "text-white",
+                      ].join(" ")}
+                    >
+                      {item.label}
+                    </Link>
+                    {item.children && (
+                      <button
+                        type="button"
+                        aria-label={`Toggle ${item.label} submenu`}
+                        aria-expanded={openSubmenu === item.label}
+                        onClick={() =>
+                          setOpenSubmenu((cur) => (cur === item.label ? null : item.label))
+                        }
+                        className="flex h-12 w-12 items-center justify-center text-navy-200"
+                      >
+                        <FaChevronDown
+                          className={`text-xs transition-transform duration-200 ${
+                            openSubmenu === item.label ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    )}
+                  </div>
+
+                  {item.children && openSubmenu === item.label && (
+                    <ul className="pb-3 pl-3">
+                      {item.children.map((child) => (
+                        <li key={child.href}>
+                          <Link
+                            href={child.href}
+                            className="block rounded-md px-3 py-3 text-sm text-navy-100 transition-colors hover:bg-white/5 hover:text-accent-400"
+                          >
+                            {child.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+
+            <div className="space-y-3 border-t border-white/10 px-5 py-5">
+              <Link href="/contact" className="btn-primary w-full">
+                Free Case Review
+              </Link>
+              <a href={telHref(phone)} className="btn-outline w-full">
+                <FaPhone className="text-xs" aria-hidden="true" /> {phone}
+              </a>
+              <a
+                href={`mailto:${email}`}
+                className="flex items-center justify-center gap-2 py-1 text-sm text-navy-200 hover:text-accent-400"
+              >
+                <FaEnvelope className="text-xs" aria-hidden="true" /> {email}
+              </a>
+
+              <ul className="flex items-center justify-center gap-2 pt-1">
+                {socialLinks.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={link.label}
+                      className="flex h-11 w-11 items-center justify-center rounded-md border border-white/15 text-navy-200 transition-colors hover:border-accent-400 hover:text-accent-400"
+                    >
+                      {link.icon}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          </>,
+          document.body
+        )}
+    </header>
   );
 };
 

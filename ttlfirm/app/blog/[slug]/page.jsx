@@ -72,16 +72,16 @@ export default async function BlogPost({ params }) {
       {/* ... rest of your component stays the same */}
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Breadcrumbs */}
-        <nav className="flex gap-2 text-sm text-gray-600 mb-6">
-          <Link href="/" className="hover:text-amber-600">
+        <nav className="flex gap-2 text-sm text-ink-muted mb-6">
+          <Link href="/" className="hover:text-accent-600">
             Home
           </Link>
           <span>/</span>
-          <Link href="/blog" className="hover:text-amber-600">
+          <Link href="/blog" className="hover:text-accent-600">
             Blog
           </Link>
           <span>/</span>
-          <span className="text-gray-800">{blog.title}</span>
+          <span className="text-navy-900">{blog.title}</span>
         </nav>
 
         {/* Article Header */}
@@ -108,7 +108,7 @@ export default async function BlogPost({ params }) {
                   <Link
                     key={category.slug.current}
                     href={`/blog/category/${category.slug.current}`}
-                    className="bg-amber-600 text-white px-3 py-1 text-xs uppercase tracking-wider rounded"
+                    className="bg-accent-500 text-white px-3 py-1 text-xs uppercase tracking-wider rounded"
                   >
                     {category.title}
                   </Link>
@@ -117,12 +117,12 @@ export default async function BlogPost({ params }) {
             )}
 
             {/* Title */}
-            <h1 className="font-lora text-4xl md:text-5xl font-bold mb-6">
+            <h1 className="font-display text-4xl md:text-5xl font-bold mb-6">
               {blog.title}
             </h1>
 
             {/* Meta Info */}
-            <div className="flex flex-wrap gap-4 text-gray-600 mb-8 pb-8 border-b">
+            <div className="flex flex-wrap gap-4 text-ink-muted mb-8 pb-8 border-b">
               {/* Author */}
               {blog.author && (
                 <div className="flex items-center gap-2">
@@ -138,12 +138,12 @@ export default async function BlogPost({ params }) {
                   <div>
                     <Link
                       href={`/author/${blog.author.slug.current}`}
-                      className="font-medium text-gray-800 hover:text-amber-600"
+                      className="font-medium text-navy-900 hover:text-accent-600"
                     >
                       {blog.author.name}
                     </Link>
                     {blog.author.title && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-ink-soft">
                         {blog.author.title}
                       </p>
                     )}
@@ -160,7 +160,7 @@ export default async function BlogPost({ params }) {
 
             {/* Excerpt */}
             {blog.excerpt && (
-              <p className="text-xl text-gray-700 mb-8 italic">
+              <p className="text-xl text-ink-muted mb-8 italic">
                 {blog.excerpt}
               </p>
             )}
@@ -176,13 +176,13 @@ export default async function BlogPost({ params }) {
             {/* Tags */}
             {blog.tags && blog.tags.length > 0 && (
               <div className="mt-12 pt-8 border-t">
-                <h3 className="font-lora text-lg font-semibold mb-4">Tags:</h3>
+                <h3 className="font-display text-lg font-semibold mb-4">Tags:</h3>
                 <div className="flex flex-wrap gap-2">
                   {blog.tags.map((tag) => (
                     <Link
                       key={tag.slug.current}
                       href={`/blog/tag/${tag.slug.current}`}
-                      className="bg-gray-200 text-gray-700 px-3 py-1 text-sm rounded hover:bg-amber-600 hover:text-white transition"
+                      className="rounded bg-navy-50 px-3 py-1 text-sm text-navy-800 transition-colors hover:bg-navy-900 hover:text-white"
                     >
                       #{tag.title}
                     </Link>
@@ -193,8 +193,8 @@ export default async function BlogPost({ params }) {
 
             {/* Author Bio - FIXED IMAGE ASPECT RATIO */}
             {blog.author && blog.author.bio && (
-              <div className="mt-12 p-6 md:p-8 bg-gray-50 rounded-lg">
-                <h3 className="font-lora text-xl font-semibold mb-6">
+              <div className="mt-12 p-6 md:p-8 bg-surface-alt rounded-lg">
+                <h3 className="font-display text-xl font-semibold mb-6">
                   About the Author
                 </h3>
                 <div className="flex flex-col sm:flex-row gap-6">
@@ -219,7 +219,7 @@ export default async function BlogPost({ params }) {
                       {blog.author.name}
                     </h4>
                     {blog.author.title && (
-                      <p className="text-sm text-gray-600 mb-3">
+                      <p className="text-sm text-ink-muted mb-3">
                         {blog.author.title}
                       </p>
                     )}
@@ -239,7 +239,7 @@ export default async function BlogPost({ params }) {
         {/* Related Posts */}
         {blog.relatedPosts && blog.relatedPosts.length > 0 && (
           <div className="mt-12">
-            <h2 className="font-lora text-3xl font-bold mb-6">
+            <h2 className="font-display text-3xl font-bold mb-6">
               Related Articles
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -251,8 +251,8 @@ export default async function BlogPost({ params }) {
         )}
 
         {/* CTA */}
-        <div className="mt-12 bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-lg p-8 text-center">
-          <h2 className="font-lora text-3xl font-bold mb-4">
+        <div className="mt-12 bg-gradient-to-r from-accent-500 to-accent-600 text-white rounded-lg p-8 text-center">
+          <h2 className="font-display text-3xl font-bold mb-4">
             Need Legal Assistance?
           </h2>
           <p className="text-lg mb-6">
@@ -260,7 +260,7 @@ export default async function BlogPost({ params }) {
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-white text-amber-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+            className="btn-primary"
           >
             Contact Us Today
           </Link>

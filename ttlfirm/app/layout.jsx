@@ -1,68 +1,66 @@
-
 import "@styles/global.css";
 import Footer from "@components/layout/footer";
 import ScrollToTop from "@components/common/scrollToTop";
+import TextUsWidget from "@components/common/textUsWidget";
 import { client } from "@/lib/sanity.client";
 import { siteSettingsQuery } from "@/lib/sanity.queries";
 import { SiteSettingsProvider } from "@/lib/siteSettingsContext";
 
+// Fonts are pulled in by an @import at the top of styles/global.css rather
+// than next/font, so the production build never depends on being able to
+// reach Google Fonts at build time (some CI networks block it, and next/font
+// turns that into a hard build failure). Note: do NOT add a raw <head>
+// element to this layout — it suppresses Next's own metadata and viewport
+// injection, which silently breaks mobile rendering.
+
 // Site settings (phone, email, address, social links, stats) are shared by
 // the Nav, StickyNav, and Footer on every page — fetch once here and hand
 // it down via context instead of every page re-fetching it. `revalidate`
-// here also acts as a floor for every route in the app: no page can be
-// staler than this even if it doesn't set its own `revalidate`.
+// here also acts as a floor for every route in the app.
 export const revalidate = 60;
 
+const SITE_DESCRIPTION =
+  "New Jersey personal injury and workers' compensation attorney. We represent injured people against insurance companies across New Jersey. Free consultation, no fee unless we recover.";
 
 export const metadata = {
-  metadataBase: new URL('https://turuchilawfirm.com'), // Replace with your domain
+  metadataBase: new URL("https://turuchilawfirm.com"),
   title: {
-    default: "Reliable Law firm in New Jersey | The Turuchi Law Firm",
-    template: "%s | Turuchi Law Firm"
+    default: "New Jersey Personal Injury & Workers' Compensation Lawyer | The Turuchi Law Firm",
+    template: "%s | Turuchi Law Firm",
   },
-  description: "Experienced law firm in New Jersey offering immigration, personal injury, workers’ compensation, and municipal court representation. Get a free consultation.",
+  description: SITE_DESCRIPTION,
   keywords: [
-    "New Jersey lawyer",
-    "personal injury attorney",
-    "immigration lawyer",
-    "workers compensation",
-    "municipal court defense"
+    "New Jersey personal injury lawyer",
+    "NJ workers compensation attorney",
+    "car accident lawyer New Jersey",
+    "slip and fall attorney NJ",
+    "work injury lawyer New Jersey",
+    "Jersey City personal injury attorney",
   ],
   authors: [{ name: "Turuchi Law Firm" }],
   creator: "Turuchi Law Firm",
   publisher: "Turuchi Law Firm",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
+  formatDetection: { email: false, address: false, telephone: false },
   verification: {
-    google: 'your-google-verification-code', // Add after creating Google Search Console
-    // yandex: 'your-yandex-verification-code',
-    // bing: 'your-bing-verification-code',
+    google: "your-google-verification-code",
   },
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://turuchilawfirm.com',
-    siteName: 'Turuchi Law Firm',
-    title: 'Reliable Law firm in New Jersey | The Turuchi Law Firm',
-    description: 'Experienced law firm in New Jersey offering immigration, personal injury, workers’ compensation, and municipal court representation. Get a free consultation.',
+    type: "website",
+    locale: "en_US",
+    url: "https://turuchilawfirm.com",
+    siteName: "Turuchi Law Firm",
+    title: "New Jersey Personal Injury & Workers' Compensation Lawyer | The Turuchi Law Firm",
+    description: SITE_DESCRIPTION,
     images: [
-      {
-        url: '/assets/images/logo.png',
-        width: 1200,
-        height: 630,
-        alt: 'Turuchi Law Firm',
-      },
+      { url: "/assets/images/logo.png", width: 1200, height: 630, alt: "Turuchi Law Firm" },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Turuchi Law Firm',
-    description: 'Experienced law firm in New Jersey offering immigration, personal injury, workers’ compensation, and municipal court representation. Get a free consultation.',
-    creator: '@turuchilawfirm', // Add your Twitter handle
-    images: ['/assets/images/logo.png'],
+    card: "summary_large_image",
+    title: "Turuchi Law Firm",
+    description: SITE_DESCRIPTION,
+    creator: "@turuchilawfirm",
+    images: ["/assets/images/logo.png"],
   },
   robots: {
     index: true,
@@ -70,11 +68,17 @@ export const metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0A2340",
 };
 
 const Rootlayout = async ({ children }) => {
@@ -87,17 +91,21 @@ const Rootlayout = async ({ children }) => {
 
   return (
     <html lang="en">
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-      ></meta>
-      <body>
+      <body className="bg-white">
         <SiteSettingsProvider value={siteSettings}>
-          <main className="main font-jost">
+          {/* Keyboard and screen-reader users land here first. */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-md focus:bg-navy-900 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
+          >
+            Skip to main content
+          </a>
 
+          <main id="main-content" className="main font-sans">
             {children}
             <Footer />
-            <ScrollToTop/>
+            <ScrollToTop />
+            <TextUsWidget />
           </main>
         </SiteSettingsProvider>
       </body>

@@ -27,14 +27,14 @@ export default async function BlogSection({ content } = {}) {
       {/* Section Header */}
       <div className="flex flex-col items-center gap-3 text-center">
         <div className="flex flex-row items-center gap-3">
-          <hr className="bg-amber-600 h-[2px] w-14" />
-          <h3 className="text-amber-600 text-lg uppercase font-jost inline font-bold">
+          <hr className="bg-accent-500 h-[2px] w-14" />
+          <h3 className="eyebrow">
             {content?.sectionLabel || "Our Blog"}
           </h3>
-          <hr className="bg-amber-600 h-[2px] w-14" />
+          <hr className="bg-accent-500 h-[2px] w-14" />
         </div>
-        <h1 className="font-lora text-4xl text-center">{content?.heading || "Latest Legal Insights"}</h1>
-        <p className="text-gray-600 max-w-2xl">
+        <h1 className="h-section text-center">{content?.heading || "Latest Legal Insights"}</h1>
+        <p className="lede max-w-2xl">
           {content?.description || "Stay informed with expert legal advice, case studies, and updates from our attorneys"}
         </p>
       </div>
@@ -45,7 +45,7 @@ export default async function BlogSection({ content } = {}) {
           <Link
             key={blog._id}
             href={`/blog/${blog.slug.current}`}
-            className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group flex flex-col"
+            className="card group flex flex-col overflow-hidden"
           >
             {/* Blog Image */}
             {blog.mainImage && (
@@ -67,7 +67,7 @@ export default async function BlogSection({ content } = {}) {
                   {blog.categories.slice(0, 2).map((category) => (
                     <span
                       key={category.slug.current}
-                      className="bg-amber-600 text-white px-2 py-1 text-xs uppercase tracking-wider rounded"
+                      className="rounded bg-navy-900 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white"
                     >
                       {category.title}
                     </span>
@@ -76,13 +76,13 @@ export default async function BlogSection({ content } = {}) {
               )}
 
               {/* Title */}
-              <h3 className="font-lora text-xl font-semibold mb-3 group-hover:text-amber-600 transition line-clamp-2">
+              <h3 className="font-display text-xl font-semibold mb-3 transition-colors group-hover:text-accent-600 line-clamp-2">
                 {blog.title}
               </h3>
 
               {/* Excerpt */}
               {blog.excerpt && (
-                <p className="text-gray-600 text-sm line-clamp-3 mb-4 flex-1">
+                <p className="mb-4 flex-1 text-sm leading-relaxed text-ink-muted line-clamp-3">
                   {blog.excerpt}
                 </p>
               )}
@@ -113,7 +113,7 @@ export default async function BlogSection({ content } = {}) {
       {/* View All Button */}
       <Link
         href="/blog"
-        className="btn mt-4"
+        className="btn-navy mt-4"
       >
         {content?.ctaText || "View All Articles"}
       </Link>

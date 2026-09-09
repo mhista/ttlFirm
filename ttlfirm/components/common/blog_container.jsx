@@ -16,7 +16,7 @@ const BlogContainer = ()=>{
           </div>
           <div className="flex flex-col max-w-[300px] sm:max-w-[450px] md:max-w-[530px] lg:max-w-[800px] p-14 gap-4 bg-white">
             <div className="flex flex-col items-center lg:items-start">
-              <h2 className="text-2xl font-medium font-lora hover:text-gray-600">
+              <h2 className="text-2xl font-medium font-display hover:text-gray-600">
                 Unmarried Parents in California – Child Custody Issues
               </h2>
               <p className="mt-3 text-gray-700">
@@ -30,11 +30,11 @@ const BlogContainer = ()=>{
               <h5>January 10, 2025</h5>
               <div className="flex flex-wrap w-full flex-row ">
                 <span className="flex gap-2 items-center opacity-85 p-3">
-                  <div className="h-[3px] w-[3px] rounded-full bg-amber-600"></div>
+                  <div className="h-[3px] w-[3px] rounded-full bg-accent-500"></div>
                   <p className=" ">John Smith</p>
                 </span>
                 <span className="flex gap-2 items-center opacity-85 p-3">
-                  <div className="h-[3px] w-[3px] rounded-full bg-amber-600"></div>
+                  <div className="h-[3px] w-[3px] rounded-full bg-accent-500"></div>
                   <p className=" ">Bankruptcy, Family</p>
                 </span>
               </div>

@@ -2,10 +2,10 @@ export default function manifest() {
   return {
     name: 'Turuchi Law Firm',
     short_name: 'Turuchi Law',
-    description: 'Expert legal representation in NJ for Personal Injury, Immigration, Workers Comp & Municipal Court matters',
+    description: "New Jersey personal injury and workers' compensation representation. Free consultation.",
     start_url: '/',
     display: 'standalone',
-    background_color: '#1c314e',
+    background_color: '#0A2340',
     theme_color: '#D97706',
     icons: [
       {

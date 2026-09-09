@@ -22,7 +22,7 @@
 //         <div className="flex sm:px-[100px] md:px-0  flex-col p-10  gap-16 ">
 //           {/* recents */}
 //           <div className="flex flex-col gap-7">
-//             <h1 className="font-lora text-2xl font-medium">Recent Articles</h1>
+//             <h1 className="font-display text-2xl font-medium">Recent Articles</h1>
 //             <div className="flex gap-4 items-center md:items-start">
 //               <Image
 //                 // sm:w-[450px] sm:h-[500px] md:w-[260px]  md:h-[300px]  lg:w-[450px] lg:h-[500px]
@@ -33,18 +33,18 @@
 //                 alt="law"
 //               />
 //               <div className="flex flex-col gap-2">
-//                 <h3 className="font-semibold text-gray-700 text-pretty">
+//                 <h3 className="font-semibold text-ink-muted text-pretty">
 //                   Domestic Violence in California How a Lawyer Can Help
 //                 </h3>
 //                 <span className="flex items-center gap-2 tracking-wider">
-//                   <BiTime className="text-gray-400 font-light" />
-//                   <p className="text-gray-400 uppercase text-xs font-medium">
+//                   <BiTime className="text-ink-soft font-light" />
+//                   <p className="text-ink-soft uppercase text-xs font-medium">
 //                     january 16, 2025
 //                   </p>
 //                 </span>
 //                 <span className="flex items-center gap-2 tracking-wider">
-//                   <CiFileOn className="text-gray-400 font-light" />
-//                   <p className="text-gray-400 uppercase text-xs font-medium">
+//                   <CiFileOn className="text-ink-soft font-light" />
+//                   <p className="text-ink-soft uppercase text-xs font-medium">
 //                     Onwuzuruoha Turuchi
 //                   </p>
 //                 </span>
@@ -53,29 +53,29 @@
 //           </div>
 //           {/* tags */}
 //           <div className="flex flex-col gap-5">
-//             <h1 className="font-lora text-2xl font-medium"> Tags</h1>
+//             <h1 className="font-display text-2xl font-medium"> Tags</h1>
 //             <div className="flex gap-4 items-center flex-wrap">
 //               <Link
 //                 href=""
-//                 className="bg-amber-600 text-gray-200 px-4 py-2 uppercase font-jost tracking-widest text-xs  font-semibold opacity-85 cursor-pointer transition-all  hover:opacity-80"
+//                 className="bg-accent-500 text-white px-4 py-2 uppercase font-sans tracking-widest text-xs  font-semibold opacity-85 cursor-pointer transition-all  hover:opacity-80"
 //               >
 //                 Law
 //               </Link>
 //               <Link
 //                 href=""
-//                 className="bg-amber-600 text-gray-200 px-4 py-2 uppercase font-jost tracking-widest text-xs  font-semibold opacity-85 cursor-pointer transition-all  hover:opacity-80"
+//                 className="bg-accent-500 text-white px-4 py-2 uppercase font-sans tracking-widest text-xs  font-semibold opacity-85 cursor-pointer transition-all  hover:opacity-80"
 //               >
 //                 Business
 //               </Link>
 //               <Link
 //                 href=""
-//                 className="bg-amber-600 text-gray-200 px-4 py-2 uppercase font-jost tracking-widest text-xs  font-semibold opacity-85 cursor-pointer transition-all  hover:opacity-80"
+//                 className="bg-accent-500 text-white px-4 py-2 uppercase font-sans tracking-widest text-xs  font-semibold opacity-85 cursor-pointer transition-all  hover:opacity-80"
 //               >
 //                 Finance
 //               </Link>
 //               <Link
 //                 href=""
-//                 className="bg-amber-600 text-gray-200 px-4 py-2 uppercase font-jost tracking-widest text-xs  font-semibold opacity-85 cursor-pointer transition-all  hover:opacity-80"
+//                 className="bg-accent-500 text-white px-4 py-2 uppercase font-sans tracking-widest text-xs  font-semibold opacity-85 cursor-pointer transition-all  hover:opacity-80"
 //               >
 //                 Non-profit
 //               </Link>
@@ -83,10 +83,10 @@
 //           </div>
 //           {/* Practice areas */}
 //           <div className="flex flex-col gap-5">
-//             <h1 className="font-lora text-2xl font-medium">Practice Areas</h1>
+//             <h1 className="font-display text-2xl font-medium">Practice Areas</h1>
 //             <div className="flex flex-col gap-4">
-//               <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
-//               <Link href="" className={`hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row  transition-all duration-300 gap-3 font-josh items-center font-medium text-sm`}>
+//               <hr className="w-full h-[1.5px] bg-accent-500 opacity-20" />
+//               <Link href="" className={`hover:ml-4 hover:text-accent-600 hover:opacity-80 flex flex-row  transition-all duration-300 gap-3 font-sans items-center font-medium text-sm`}>
 //                 <FaArrowRightLong
 //                   className={` text-xs`}
 //                 />
@@ -133,14 +133,21 @@ export default async function BlogPage() {
 
   return (
     <div className="bg-zinc-100 z-[60] relative">
-      <PageHeader text="Legal" text2="Blog" />
+      <PageHeader
+        eyebrow="Insights"
+        text="Legal"
+        text2="Blog"
+        description="Plain-English notes on New Jersey injury and workers' compensation claims — what the rules are, and what they mean for your case."
+        image="/assets/images/laws.jpg"
+        breadcrumbs={[{ label: "Blog" }]}
+      />
 
       <div className="relative flex flex-col md:flex-row w-full bg-zinc-100 gap-10 md:px-12 py-10 md:py-14 z-[60]">
         {/* Blog List */}
         <div className="flex flex-col w-full items-center gap-10 z-[60]">
           {blogs.length === 0 ? (
             <div className="text-center py-20">
-              <h2 className="text-2xl font-lora text-gray-600">
+              <h2 className="text-2xl font-display text-ink-muted">
                 No blog posts yet. Check back soon!
               </h2>
             </div>

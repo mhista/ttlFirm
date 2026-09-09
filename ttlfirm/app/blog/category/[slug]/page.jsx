@@ -44,7 +44,7 @@ export default async function CategoryPage({ params }) {
         <div className="flex flex-col w-full items-center gap-10 z-[60]">
           {blogs.length === 0 ? (
             <div className="text-center py-20">
-              <h2 className="text-2xl font-lora text-gray-600">
+              <h2 className="text-2xl font-display text-ink-muted">
                 No posts in this category yet.
               </h2>
             </div>

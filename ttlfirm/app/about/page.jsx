@@ -4,6 +4,7 @@ import { urlFor } from "@/lib/sanity.client";
 import { PortableText } from "@portabletext/react";
 import PortableTextComponents from "@/components/blog/PortableTextComponents";
 import Accordion from "@components/uiComponents/accordion";
+import Section1 from "@components/common/section1";
 import Section4 from "@components/common/section4";
 import ImageSection from "@components/pages/profile/imageSection";
 import Consultation from "@components/pages/home/consult";
@@ -30,7 +31,7 @@ export async function generateMetadata() {
   
   return {
     title: seo.metaTitle || "About Turuchi Law Firm | Experienced New Jersey Attorneys",
-    description: seo.metaDescription || "Learn about our commitment to justice, compassion, and exceptional legal representation. Serving NJ with expertise in Personal Injury, Immigration, Workers' Comp & more.",
+    description: seo.metaDescription || "Learn about our commitment to justice, compassion, and exceptional legal representation. Serving New Jersey with focused representation in personal injury and workers' compensation.",
     keywords: seo.keywords || [
       "about Turuchi Law Firm",
       "New Jersey law firm",
@@ -64,7 +65,7 @@ function generateLawFirmSchema(data) {
     "@context": "https://schema.org",
     "@type": "LegalService",
     "name": "Turuchi Law Firm, LLC",
-    "description": whoWeAre?.content?.[0]?.children?.[0]?.text || "Expert legal representation in Personal Injury, Immigration, Workers' Compensation, and Municipal Court matters.",
+    "description": whoWeAre?.content?.[0]?.children?.[0]?.text || "Focused representation in personal injury and workers' compensation matters.",
     "url": "https://turuchilawfirm.com/about",
     "telephone": "+17322106410",
     "address": {
@@ -103,88 +104,116 @@ const AboutUs = async () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(lawFirmSchema) }}
       />
 
-      <div className="z-[60] bg-white">
-        <PageHeader 
-          text={pageHeader?.heading || "About"} 
-          text2={pageHeader?.headingHighlight || "Us"}
-          image={pageHeader?.backgroundImage ? urlFor(pageHeader.backgroundImage).url() : undefined}
-        />
+      <PageHeader
+        eyebrow="About the Firm"
+        text={pageHeader?.heading || "About"}
+        text2={pageHeader?.headingHighlight || "Us"}
+        description={
+          pageHeader?.description ||
+          "Who we are, how we work, and what you can expect when you bring us a case."
+        }
+        image={
+          pageHeader?.backgroundImage
+            ? urlFor(pageHeader.backgroundImage).url()
+            : "/assets/images/bgg.jpg"
+        }
+        breadcrumbs={[{ label: "About" }]}
+      />
 
-        <div className="relative w-full flex flex-col md:flex-row justify-center md:items-start md:justify-around items-center pt-6 md:py-8 md:gap-7 md:px-7 z-[60] bg-white">
-          {/* Image Section */}
-          {whoWeAre?.mainImage && (
-            <ImageSection 
-              image={urlFor(whoWeAre.mainImage).url()} 
-              alt={whoWeAre.mainImage.alt}
-            />
-          )}
+      <Section1>
+        <div className="container-x section-y">
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+            {whoWeAre?.mainImage && (
+              <div className="lg:col-span-5">
+                <div className="lg:sticky lg:top-28">
+                  <ImageSection
+                    image={urlFor(whoWeAre.mainImage).width(900).url()}
+                    alt={whoWeAre.mainImage.alt}
+                  />
+                </div>
+              </div>
+            )}
 
-          <div className="md:w-full">
-            {/* Who We Are Section */}
-            {whoWeAre?.content && (
-              <div className="sm:p-16 md:p-0 w-full mb-10">
-                <div className="flex flex-col gap-4 p-8 sm:pt-0">
-                  <h1 className="font-lora text-2xl font-medium">
-                    {whoWeAre?.heading || "Who We Are"}
-                  </h1>
-                  <div className="prose prose-lg max-w-none text-gray-500">
-                    <PortableText 
-                      value={whoWeAre.content} 
-                      components={PortableTextComponents}
+            <div className={whoWeAre?.mainImage ? "lg:col-span-7" : "lg:col-span-12"}>
+              <div className="space-y-12">
+                {whoWeAre?.content && (
+                  <section>
+                    <div className="flex items-center gap-3">
+                      <span className="rule" aria-hidden="true" />
+                      <span className="eyebrow">Our Story</span>
+                    </div>
+                    <h2 className="h-section mt-4">{whoWeAre?.heading || "Who We Are"}</h2>
+                    <div className="mt-5 max-w-prose2 text-[15px] leading-relaxed text-ink-muted md:text-base [&_p]:mb-4">
+                      <PortableText
+                        value={whoWeAre.content}
+                        components={PortableTextComponents}
+                      />
+                    </div>
+                  </section>
+                )}
+
+                {missionAndValues?.enabled && (
+                  <section className="border-t border-surface-line pt-10">
+                    <h2 className="font-display text-2xl font-bold text-navy-900 md:text-3xl">
+                      {missionAndValues?.heading || "Our Mission & Values"}
+                    </h2>
+
+                    {missionAndValues?.mission && (
+                      <div className="mt-5 rounded-lg border-l-[3px] border-accent-500 bg-navy-50 px-5 py-4">
+                        <p className="font-sans text-xs font-bold uppercase tracking-[0.16em] text-navy-800">
+                          Our Mission
+                        </p>
+                        <p className="mt-2 text-[15px] leading-relaxed text-navy-900">
+                          {missionAndValues.mission}
+                        </p>
+                      </div>
+                    )}
+
+                    {missionAndValues?.values?.length > 0 && (
+                      <div className="mt-8">
+                        <h3 className="font-sans text-sm font-bold uppercase tracking-wide text-navy-800">
+                          Our Core Values
+                        </h3>
+                        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                          {missionAndValues.values.map((value, index) => (
+                            <div
+                              key={index}
+                              className="rounded-xl border border-surface-line p-5"
+                            >
+                              <h4 className="font-display text-lg font-semibold text-navy-900">
+                                {value.title}
+                              </h4>
+                              <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+                                {value.description}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </section>
+                )}
+
+                {accordionData.length > 0 && (
+                  <div className="border-t border-surface-line pt-10">
+                    <Accordion
+                      title={faqs?.heading || "Frequently Asked Questions"}
+                      accordionData={accordionData}
+                      usePadding={false}
                     />
                   </div>
-                </div>
+                )}
               </div>
-            )}
-
-            {/* Mission & Values Section (Optional) */}
-            {missionAndValues?.enabled && (
-              <div className="sm:p-16 md:p-0 w-full mb-10">
-                <div className="flex flex-col gap-4 p-8">
-                  <h1 className="font-lora text-2xl font-medium">
-                    {missionAndValues?.heading || "Our Mission & Values"}
-                  </h1>
-                  {missionAndValues?.mission && (
-                    <div className="mb-6">
-                      <h3 className="font-semibold text-lg mb-2">Our Mission</h3>
-                      <p className="text-gray-500">{missionAndValues.mission}</p>
-                    </div>
-                  )}
-                  {missionAndValues?.values && missionAndValues.values.length > 0 && (
-                    <div>
-                      <h3 className="font-semibold text-lg mb-4">Our Core Values</h3>
-                      <div className="grid gap-4">
-                        {missionAndValues.values.map((value, index) => (
-                          <div key={index} className="border-l-4 border-amber-600 pl-4">
-                            <h4 className="font-semibold text-base mb-1">{value.title}</h4>
-                            <p className="text-gray-500 text-sm">{value.description}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* FAQs Section */}
-            {accordionData.length > 0 && (
-              <Accordion
-                title={faqs?.heading || "Frequently Asked Questions"}
-                accordionData={accordionData}
-                usePadding={true}
-              />
-            )}
+            </div>
           </div>
         </div>
+      </Section1>
 
-        {/* CTA Section */}
-        {ctaSection?.enabled !== false && (
-          <Section4>
-            <Consultation content={ctaSection} />
-          </Section4>
-        )}
-      </div>
+      {ctaSection?.enabled !== false && (
+        <Section4>
+          <Consultation content={ctaSection} />
+        </Section4>
+      )}
     </>
   );
 };

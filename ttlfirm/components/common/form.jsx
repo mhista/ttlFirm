@@ -1,71 +1,44 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Snackbar, Alert, Button, CircularProgress } from "@mui/material";
+import { useEffect, useState } from "react";
+import { FaCircleCheck, FaCircleExclamation, FaXmark, FaSpinner } from "react-icons/fa6";
+import SmsConsent from "@components/common/smsConsent";
 
-import { styled } from "@mui/system";
+const EMPTY = { name: "", phone: "", email: "", message: "" };
+const COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes, matching the message shown.
 
-const CustomButton = styled(Button)({
-  backgroundColor: "#e88e2e", // Orange color
-  color: "#173042", // Dark blue text color
-  fontWeight: "bold",
-  textTransform: "uppercase",
-  borderRadius: "5px",
-  width: "100%", // Full width
-  padding: "12px 0",
-  "&:hover": {
-    backgroundColor: "transparent", // Darker orange on hover
-    border:'1px solid black'
-  },
-});
-
-const InputField = ({
-  labelName,
-  placeholder,
-  type,
-  name,
-  value,
-  onChange,
-}) => {
-  return (
-    <div className=" w-full flex flex-col">
-      {/* <label className="text-gray-400">{labelName}</label> */}
-      <input
-        className="w-full flex mt-2 py-5 pl-2 pr-20  text-black outline-0 outline-none  border text-start border-gray-100 bg-white "
-        type={type}
-        id="name"
-        name={name}
-        placeholder={placeholder}
-        value={value ?? ""}
-        onChange={onChange}
-        required
-      />
-    </div>
-  );
-};
-
-const Form = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    message: "",
-  });
-
-  const [status, setStatus] = useState("");
+/**
+ * Lead form.
+ *
+ * Changes from the previous version:
+ *  - MUI (Button / Snackbar / CircularProgress) dropped — it pulled Emotion
+ *    into the client bundle for three widgets and forced an inline orange.
+ *  - The cooldown notice said "10 minutes" while the check used one hour.
+ *  - Adds the required, optional, unchecked SMS consent checkbox.
+ *  - Real labels instead of duplicated `id="name"` on every input.
+ */
+const Form = ({ tone = "light", heading, subheading }) => {
+  const [formData, setFormData] = useState(EMPTY);
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
-  const [cooldown, setCooldown] = useState(false);
+  const [toast, setToast] = useState(null); // { type, message }
+  const [cooldownUntil, setCooldownUntil] = useState(0);
+
+  const isDark = tone === "dark";
 
   useEffect(() => {
-    // Check if the user has sent an email within the last hour
-    const lastSentTime = localStorage.getItem("lastEmailSent");
-    if (lastSentTime) {
-      const timeElapsed = Date.now() - parseInt(lastSentTime, 10);
-      if (timeElapsed < 3600000) {
-        setCooldown(true);
-      }
+    try {
+      const last = Number(localStorage.getItem("lastEmailSent") || 0);
+      if (last && Date.now() - last < COOLDOWN_MS) setCooldownUntil(last + COOLDOWN_MS);
+    } catch {
+      /* storage can be unavailable in private mode — not fatal */
     }
   }, []);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 7000);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,108 +48,205 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!navigator.onLine) {
-      setSnackbar({ open: true, message: "No internet connection. Please check your network.", type: "error" });
-      return;
-    }
-    if (cooldown) {
-      setSnackbar({ open: true, message: "You can only send an email once every 10 minutes.", severity: "warning" });
+    if (typeof navigator !== "undefined" && navigator.onLine === false) {
+      setToast({ type: "error", message: "No internet connection. Please check your network." });
       return;
     }
 
-    
+    if (Date.now() < cooldownUntil) {
+      const mins = Math.max(1, Math.ceil((cooldownUntil - Date.now()) / 60000));
+      setToast({
+        type: "warning",
+        message: `You've already sent a message. Please try again in ${mins} minute${mins === 1 ? "" : "s"}, or call us directly.`,
+      });
+      return;
+    }
 
     setIsSending(true);
-    // setStatus("Sending...");
-
     try {
-      console.log(formData);
       const response = await fetch("/api/email", {
         method: "POST",
-        // headers: {
-        //     "Content-Type": "application/json",
-        // },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          smsConsent,
+          source: "Website contact form",
+          consentTimestamp: new Date().toISOString(),
+        }),
       });
 
-      const result = response.json();
-
       if (response.ok) {
-        setSnackbar({ open: true, message: "Email sent successfully!", severity: "success" });
-        localStorage.setItem("lastEmailSent", Date.now().toString());
-        setCooldown(true);
-        setTimeout(() => setCooldown(false), 600000);
+        setToast({
+          type: "success",
+          message: "Thank you — your message has been sent. We'll be in touch shortly.",
+        });
+        setFormData(EMPTY);
+        setSmsConsent(false);
+        try {
+          localStorage.setItem("lastEmailSent", String(Date.now()));
+        } catch {
+          /* ignore */
+        }
+        setCooldownUntil(Date.now() + COOLDOWN_MS);
       } else {
-        setSnackbar({ open: true, message: "Failed to send email. Try again later.", severity: "error" });
+        setToast({
+          type: "error",
+          message: "We couldn't send that. Please call 732-210-6410 and we'll help right away.",
+        });
       }
     } catch (error) {
-      console.log("Error:", error);
-      setSnackbar({ open: true, message: "An error occurred. Please try again.", severity: "error" });
-    }finally{
+      setToast({
+        type: "error",
+        message: "Something went wrong. Please call 732-210-6410 and we'll help right away.",
+      });
+    } finally {
       setIsSending(false);
     }
   };
 
+  const labelClass = isDark
+    ? "mb-1.5 block font-sans text-xs font-semibold uppercase tracking-wide text-navy-100"
+    : "field-label";
+  const inputClass = isDark
+    ? "w-full rounded-md border border-white/15 bg-white/5 px-4 py-3.5 text-[15px] text-white placeholder:text-navy-200/70 transition-colors focus:border-accent-400 focus:outline-none focus:ring-2 focus:ring-accent-400/25"
+    : "field";
+
   return (
-    <div>
-      <form
-        className="flex w-full flex-col gap-6 px-2 sm:px-5 text-white"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex w-full gap-4">
-          <InputField
-            labelName="Full Name"
-            placeholder="Full name"
-            type={"text"}
-            name={"name"}
+    <div className="w-full">
+      {heading && (
+        <h3 className={`font-display text-2xl font-bold ${isDark ? "text-white" : "text-navy-900"}`}>
+          {heading}
+        </h3>
+      )}
+      {subheading && (
+        <p className={`mt-2 text-sm ${isDark ? "text-navy-100" : "text-ink-muted"}`}>{subheading}</p>
+      )}
+
+      <form onSubmit={handleSubmit} className={`flex w-full flex-col gap-5 ${heading ? "mt-6" : ""}`} noValidate={false}>
+        <div>
+          <label htmlFor="lead-name" className={labelClass}>
+            Full name
+          </label>
+          <input
+            id="lead-name"
+            name="name"
+            type="text"
+            autoComplete="name"
+            required
+            placeholder="Jane Doe"
             value={formData.name}
             onChange={handleChange}
-          />
-          {/* <InputField labelName="Last Name" placeholder="last name" /> */}
-        </div>
-        <div className="flex flex-wrap w-full gap-4">
-          <InputField
-            labelName="Phone number"
-            placeholder="Phone number"
-            type={"tel"}
-            name={"phone"}
-            value={formData.phone}
-            onChange={handleChange}
-          />
-          <InputField
-            labelName="Email address"
-            placeholder="Email address"
-            type={"email"}
-            name={"email"}
-            value={formData.email}
-            onChange={handleChange}
+            className={inputClass}
           />
         </div>
 
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="lead-phone" className={labelClass}>
+              Mobile number
+            </label>
+            <input
+              id="lead-phone"
+              name="phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              required
+              placeholder="(732) 210-6410"
+              value={formData.phone}
+              onChange={handleChange}
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label htmlFor="lead-email" className={labelClass}>
+              Email address
+            </label>
+            <input
+              id="lead-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              placeholder="you@example.com"
+              value={formData.email}
+              onChange={handleChange}
+              className={inputClass}
+            />
+          </div>
+        </div>
+
+        {/* SMS consent sits directly beneath the phone field, per the
+            carrier registration requirements. */}
+        <SmsConsent checked={smsConsent} onChange={setSmsConsent} tone={tone} />
+
         <div>
+          <label htmlFor="lead-message" className={labelClass}>
+            How can we help?
+          </label>
           <textarea
-            className="w-full flex  h-[100px] mt-2 p-3 outline-0 outline-none  border border-gray-100 bg-white text-black  resize-none"
-            placeholder="Please provide a brief description of your inquiry"
+            id="lead-message"
             name="message"
+            rows={5}
+            required
+            placeholder="Briefly describe what happened and when."
             value={formData.message}
             onChange={handleChange}
-            required
+            className={`${inputClass} resize-none`}
           />
         </div>
-        <CustomButton type="submit" variant="contained" className="btn rounded-lg text-white w-full hover:text-black" disabled={isSending} disableElevation>
-        {isSending ? <CircularProgress size={24} /> : "Send Email"}
-        </CustomButton>
+
+        <button type="submit" disabled={isSending} className="btn-primary w-full disabled:opacity-70">
+          {isSending ? (
+            <>
+              <FaSpinner className="animate-spin text-sm" aria-hidden="true" /> Sending…
+            </>
+          ) : (
+            "Request My Free Case Review"
+          )}
+        </button>
+
+        <p className={`text-[11px] leading-relaxed ${isDark ? "text-navy-200" : "text-ink-soft"}`}>
+          Submitting this form does not create an attorney-client relationship and does not make
+          the firm your lawyer. Please do not send confidential or time-sensitive information
+          through this form.
+        </p>
       </form>
-       {/* Snackbar for Success and Failure Messages */}
-       <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-      >
-        <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+
+      {/* Toast */}
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-5 left-1/2 z-[120] w-[calc(100%-2.5rem)] max-w-md -translate-x-1/2 animate-slide-up sm:left-6 sm:translate-x-0"
+        >
+          <div
+            className={[
+              "flex items-start gap-3 rounded-lg px-4 py-3.5 text-sm shadow-widget",
+              toast.type === "success" && "bg-navy-900 text-white",
+              toast.type === "error" && "bg-red-700 text-white",
+              toast.type === "warning" && "bg-accent-500 text-navy-950",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            {toast.type === "success" ? (
+              <FaCircleCheck className="mt-0.5 shrink-0 text-accent-400" aria-hidden="true" />
+            ) : (
+              <FaCircleExclamation className="mt-0.5 shrink-0" aria-hidden="true" />
+            )}
+            <span className="flex-1">{toast.message}</span>
+            <button
+              type="button"
+              onClick={() => setToast(null)}
+              aria-label="Dismiss"
+              className="shrink-0 opacity-70 transition-opacity hover:opacity-100"
+            >
+              <FaXmark />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -47,14 +47,14 @@ const PracticeContainer = ({ image1, title, subtitle, id, subAreas = [] }) => {
           </div></>}
           </div>
 
-          <h1 className="font-lora uppercase font-medium tracking-wider ">{title}</h1>
+          <h1 className="font-display uppercase font-medium tracking-wider ">{title}</h1>
           <p className="w-[280px] sm:mx-0 sm:w-[300] overflow-hidden text-ellipsis text-pretty text-gray-700">
 {subtitle}
 </p>
         </div>
         <div
-          className={` text-amber-600 mt-5
-           flex justify-normal items-start font-jost uppercase tracking-wider text-sm font-medium`}
+          className={` text-accent-500 mt-5
+           flex justify-normal items-start font-sans uppercase tracking-wider text-sm font-medium`}
         >
           Read more{" "}
           <FaArrowRightLong
@@ -79,15 +79,15 @@ height={50}
 alt="business image"
 />
 <h1 className="font-bold text-2xl ">{title}</h1>
-<hr className={`${isHovered ? "bg-white" :"bg-amber-600"} h-1 w-14`} />
+<hr className={`${isHovered ? "bg-white" :"bg-accent-500"} h-1 w-14`} />
 <p className="w-[280px] mx-auto sm:mx-0 sm:w-[300] overflow-hidden text-ellipsis text-pretty">
 {subtitle}
 </p>
 <div
-className={`${isHovered ?"text-white":"text-amber-600"} font-semibold flex justify-center items-center`}
+className={`${isHovered ?"text-white":"text-accent-500"} font-semibold flex justify-center items-center`}
 >
 Read more <FaArrowRightLong className={`mt-1 ${isHovered?"ml-3":"ml-2"} transition-all duration-500`} />
 </div> */
 }
 
-// ${isHovered ?"text-white bg-amber-600 opacity-70":"text-black bg-white"} h-[290px] w-[300px] sm:w-[350px] shadow-lg  flex flex-col items-start justify-around gap-4 px-3 sm:pr-0 sm-:pl-10  py-8 rounded-lg
+// ${isHovered ?"text-white bg-accent-500 opacity-70":"text-black bg-white"} h-[290px] w-[300px] sm:w-[350px] shadow-lg  flex flex-col items-start justify-around gap-4 px-3 sm:pr-0 sm-:pl-10  py-8 rounded-lg

@@ -10,18 +10,20 @@ import PortableTextComponents from "@/components/blog/PortableTextComponents";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Section2 from "@/components/common/section2";
+import Section1 from "@/components/common/section1";
+import PageHeader from "@components/pages/header";
 import Accordion from "@/components/uiComponents/accordion";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { generateLocalBusinessSchema } from "@/lib/seo";
 import Script from "next/script";
 import TailoredCTA from "@/components/common/TailoredCTA"; // NEW
+import { filterRetiredAreas, RETIRED_PRACTICE_SLUGS } from "@/lib/siteNav";
 
 export const revalidate = 60;
 
 // Generate static paths using SLUGS
 export async function generateStaticParams() {
-  const practiceAreas = await client.fetch(practiceAreasQuery);
+  const practiceAreas = filterRetiredAreas(await client.fetch(practiceAreasQuery));
   return practiceAreas.map((area) => ({
     practiceId: area.slug.current,
   }));
@@ -66,7 +68,9 @@ export default async function PracticeAreaPage({ params }) {
     slug: practiceId,
   });
 
-  if (!practiceArea) {
+  // Retired practice areas (immigration, municipal court) must 404 even if
+  // the Sanity document is still published.
+  if (!practiceArea || RETIRED_PRACTICE_SLUGS.includes(practiceId)) {
     notFound();
   }
 
@@ -104,64 +108,30 @@ export default async function PracticeAreaPage({ params }) {
       />
 
       <div className="w-full flex flex-col">
-        {/* Header with Image */}
-        <div className="relative w-full h-[400px] bg-gradient-to-r from-gray-900 to-gray-800">
-          {practiceArea.image && (
-            <Image
-              src={urlFor(practiceArea.image).width(1920).height(600).url()}
-              alt={practiceArea.image.alt || practiceArea.name}
-              fill
-              className="object-cover opacity-40"
-            />
-          )}
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-white z-10 px-4">
-            {/* Breadcrumbs */}
-            <nav className="flex gap-2 text-sm mb-4">
-              <Link href="/" className="hover:text-amber-600">
-                Home
-              </Link>
-              <span>/</span>
-              <Link href="/practice" className="hover:text-amber-600">
-                Practice Areas
-              </Link>
-              <span>/</span>
-              <span>{practiceArea.name}</span>
-            </nav>
-
-            <h1 className="font-lora text-4xl md:text-5xl font-bold text-center mb-4">
-              {practiceArea.name}
-            </h1>
-
-            {practiceArea.excerpt && (
-              <p className="text-xl text-gray-200 text-center max-w-3xl">
-                {practiceArea.excerpt}
-              </p>
-            )}
-
-            {/* Counties */}
-            {practiceArea.counties && practiceArea.counties.length > 0 && (
-              <div className="mt-6 flex gap-2 flex-wrap justify-center">
-                {practiceArea.counties.map((county) => (
-                  <span
-                    key={county.slug.current}
-                    className="bg-amber-600 text-white px-3 py-1 text-sm rounded"
-                  >
-                    {county.name}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+        <PageHeader
+          eyebrow="Practice Area"
+          text={practiceArea.name}
+          description={practiceArea.excerpt}
+          image={
+            practiceArea.image
+              ? urlFor(practiceArea.image).width(1920).height(700).url()
+              : "/assets/images/inju.jpg"
+          }
+          subAreas={practiceArea.counties?.map((c) => c.name) ?? []}
+          breadcrumbs={[
+            { href: "/practice", label: "Practice Areas" },
+            { label: practiceArea.name },
+          ]}
+        />
 
         {/* Content */}
-        <Section2>
-          <div className="relative w-full flex flex-col md:flex-row-reverse justify-center items-start md:justify-around md:pl-5 py-12">
+        <Section1>
+          <div className="container-x grid gap-10 py-14 md:py-20 lg:grid-cols-12 lg:gap-12">
             {/* Main Content */}
-            <div className="flex flex-col w-full md:w-[70%] p-8 sm:p-16 md:px-12 gap-8">
+            <div className="flex flex-col gap-10 lg:order-1 lg:col-span-8">
               {/* Overview */}
               {practiceArea.overview && (
-                <div className="prose prose-lg max-w-none">
+                <div className="max-w-prose2 text-[15px] leading-relaxed text-ink-muted md:text-base [&_h2]:mb-3 [&_h2]:mt-8 [&_h2]:font-display [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-navy-900 [&_h3]:mb-2 [&_h3]:mt-6 [&_h3]:font-sans [&_h3]:text-base [&_h3]:font-bold [&_h3]:text-navy-800 [&_p]:mb-4 [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1.5">
                   <PortableText
                     value={practiceArea.overview}
                     components={PortableTextComponents}
@@ -172,23 +142,21 @@ export default async function PracticeAreaPage({ params }) {
               {/* Process Steps */}
               {practiceArea.process && practiceArea.process.length > 0 && (
                 <div>
-                  <h2 className="font-lora text-3xl font-bold mb-6">
-                    Our Process
-                  </h2>
+                  <h2 className="mb-6 font-display text-2xl font-bold text-navy-900 md:text-3xl">Our Process</h2>
                   <div className="space-y-6">
                     {practiceArea.process.map((step, index) => (
                       <div
                         key={index}
-                        className="flex gap-4 p-6 bg-white rounded-lg shadow-md"
+                        className="flex gap-5 rounded-xl border border-surface-line bg-white p-6 shadow-card"
                       >
-                        <div className="flex-shrink-0 w-12 h-12 bg-amber-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-navy-900 font-display text-lg font-bold text-accent-400">
                           {index + 1}
                         </div>
                         <div>
-                          <h3 className="font-lora text-xl font-semibold mb-2">
+                          <h3 className="mb-2 font-display text-lg font-semibold text-navy-900">
                             {step.title}
                           </h3>
-                          <p className="text-gray-700">{step.description}</p>
+                          <p className="text-[15px] leading-relaxed text-ink-muted">{step.description}</p>
                         </div>
                       </div>
                     ))}
@@ -200,24 +168,22 @@ export default async function PracticeAreaPage({ params }) {
               {practiceArea.countyContent &&
                 practiceArea.countyContent.length > 0 && (
                   <div className="mt-8">
-                    <h2 className="font-lora text-3xl font-bold mb-6">
-                      County-Specific Information
-                    </h2>
+                    <h2 className="mb-6 font-display text-2xl font-bold text-navy-900 md:text-3xl">County-Specific Information</h2>
                     <div className="space-y-6">
                       {practiceArea.countyContent.map((item, index) => (
                         <div
                           key={index}
-                          className="border-l-4 border-amber-600 pl-6"
+                          className="border-l-[3px] border-accent-500 pl-6"
                         >
-                          <h3 className="font-lora text-2xl font-semibold mb-4">
+                          <h3 className="mb-4 font-display text-xl font-semibold text-navy-900">
                             {item.county.name}
                           </h3>
                           {item.localStats && (
-                            <div className="bg-blue-50 p-4 rounded mb-4">
-                              <p className="text-sm font-semibold text-blue-900">
+                            <div className="mb-4 rounded-lg bg-navy-50 p-4">
+                              <p className="text-xs font-bold uppercase tracking-wide text-navy-800">
                                 Local Statistics:
                               </p>
-                              <p className="text-gray-700">{item.localStats}</p>
+                              <p className="mt-1.5 text-[15px] text-ink-muted">{item.localStats}</p>
                             </div>
                           )}
                           <div className="prose max-w-none">
@@ -245,20 +211,18 @@ export default async function PracticeAreaPage({ params }) {
               {practiceArea.relatedAreas &&
                 practiceArea.relatedAreas.length > 0 && (
                   <div className="mt-12">
-                    <h2 className="font-lora text-3xl font-bold mb-6">
-                      Related Practice Areas
-                    </h2>
+                    <h2 className="mb-6 font-display text-2xl font-bold text-navy-900 md:text-3xl">Related Practice Areas</h2>
                     <div className="grid md:grid-cols-2 gap-6">
                       {practiceArea.relatedAreas.map((area) => (
                         <Link
                           key={area._id}
                           href={`/practice/${area.slug.current}`}
-                          className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition group"
+                          className="card group p-6"
                         >
-                          <h3 className="font-lora text-xl font-semibold mb-2 group-hover:text-amber-600 transition">
+                          <h3 className="mb-2 font-display text-lg font-semibold text-navy-900 transition-colors group-hover:text-accent-600">
                             {area.name}
                           </h3>
-                          <p className="text-gray-600 line-clamp-2">
+                          <p className="text-sm text-ink-muted line-clamp-2">
                             {area.excerpt}
                           </p>
                         </Link>
@@ -269,16 +233,14 @@ export default async function PracticeAreaPage({ params }) {
             </div>
 
             {/* Sidebar */}
-            <div className="w-full md:w-[30%] p-8">
-              <div className="w-full flex flex-col gap-5 md:sticky md:top-24">
-                <h2 className="font-lora text-2xl font-medium">
-                  Practice Areas
-                </h2>
+            <aside className="lg:col-span-4">
+              <div className="rounded-xl border border-surface-line bg-white p-6 lg:sticky lg:top-28">
+                <h2 className="font-display text-xl font-bold text-navy-900">Practice Areas</h2>
                 <PracticeAreaSidebar currentSlug={practiceId} />
               </div>
-            </div>
+            </aside>
           </div>
-        </Section2>
+        </Section1>
 
         {/* Tailored CTA Section - NEW COMPONENT */}
         <TailoredCTA ctaData={practiceArea.ctaSection} />
@@ -289,26 +251,26 @@ export default async function PracticeAreaPage({ params }) {
 
 // Sidebar Component
 async function PracticeAreaSidebar({ currentSlug }) {
-  const practiceAreas = await client.fetch(practiceAreasQuery);
+  const practiceAreas = filterRetiredAreas(await client.fetch(practiceAreasQuery));
 
   return (
-    <>
+    <div className="mt-5 space-y-4">
       {practiceAreas.map((area) => (
         <div className="w-full flex flex-col gap-4" key={area._id}>
-          <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
+          <hr className="h-px w-full border-0 bg-surface-line" />
           <Link
             href={`/practice/${area.slug.current}`}
-            className={`hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-base ${
+            className={`flex flex-row items-center gap-3 text-[15px] font-medium transition-colors ${
               area.slug.current === currentSlug
-                ? "text-amber-600 ml-2"
-                : ""
+                ? "text-accent-600"
+                : "text-ink hover:text-accent-600"
             }`}
           >
-            <FaArrowRightLong className="text-xs" />
+            <FaArrowRightLong className="text-[10px] text-accent-500" aria-hidden="true" />
             <span>{area.name}</span>
           </Link>
         </div>
       ))}
-    </>
+    </div>
   );
 }

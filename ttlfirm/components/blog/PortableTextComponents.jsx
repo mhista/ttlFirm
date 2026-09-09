@@ -18,7 +18,7 @@ const PortableTextComponents = {
             className="rounded-lg w-full"
           />
           {value.caption && (
-            <figcaption className="text-center text-sm text-gray-600 mt-2">
+            <figcaption className="text-center text-sm text-ink-muted mt-2">
               {value.caption}
             </figcaption>
           )}
@@ -28,7 +28,7 @@ const PortableTextComponents = {
     callout: ({ value }) => {
       const bgColors = {
         info: "bg-blue-50 border-blue-500",
-        warning: "bg-yellow-50 border-yellow-500",
+        warning: "bg-accent-300/25 border-accent-500",
         success: "bg-green-50 border-green-500",
         error: "bg-red-50 border-red-500",
       };
@@ -39,7 +39,7 @@ const PortableTextComponents = {
             bgColors[value.type] || bgColors.info
           }`}
         >
-          <p className="text-gray-800">{value.content}</p>
+          <p className="text-navy-900">{value.content}</p>
         </div>
       );
     },
@@ -52,7 +52,7 @@ const PortableTextComponents = {
           href={value.href}
           target={value.blank ? "_blank" : undefined}
           rel={rel}
-          className="text-amber-600 hover:text-amber-700 underline"
+          className="text-accent-500 hover:text-accent-600 underline"
         >
           {children}
         </Link>
@@ -61,19 +61,19 @@ const PortableTextComponents = {
   },
   block: {
     h1: ({ children }) => (
-      <h1 className="text-4xl font-lora font-bold mt-8 mb-4">{children}</h1>
+      <h1 className="text-4xl font-display font-bold mt-8 mb-4">{children}</h1>
     ),
     h2: ({ children }) => (
-      <h2 className="text-3xl font-lora font-bold mt-8 mb-4">{children}</h2>
+      <h2 className="text-3xl font-display font-bold mt-8 mb-4">{children}</h2>
     ),
     h3: ({ children }) => (
-      <h3 className="text-2xl font-lora font-bold mt-6 mb-3">{children}</h3>
+      <h3 className="text-2xl font-display font-bold mt-6 mb-3">{children}</h3>
     ),
     h4: ({ children }) => (
-      <h4 className="text-xl font-lora font-bold mt-6 mb-3">{children}</h4>
+      <h4 className="text-xl font-display font-bold mt-6 mb-3">{children}</h4>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-amber-600 pl-4 my-6 italic text-gray-700">
+      <blockquote className="border-l-4 border-accent-500 pl-4 my-6 italic text-ink-muted">
         {children}
       </blockquote>
     ),

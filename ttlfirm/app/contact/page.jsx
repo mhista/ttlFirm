@@ -36,7 +36,7 @@ export async function generateMetadata() {
   
   return {
     title: seo.metaTitle || "Contact Us | Free Consultation | Turuchi Law Firm NJ",
-    description: seo.metaDescription || `Get a free legal consultation. Call ${contact.phone || '732-210-6410'} or visit us at ${contact.address?.street || '111 Town Square Pl'}, ${contact.address?.city || 'Jersey City'}, NJ. Available for Personal Injury, Immigration & Workers' Comp cases.`,
+    description: seo.metaDescription || `Get a free legal consultation. Call ${contact.phone || '732-210-6410'} or visit us at ${contact.address?.street || '111 Town Square Pl'}, ${contact.address?.city || 'Jersey City'}, NJ. Available for personal injury and workers' compensation cases.`,
     keywords: seo.keywords || [
       "contact Turuchi Law Firm",
       "free legal consultation NJ",
@@ -97,17 +97,22 @@ const Contact = async () => {
       />
 
       <div className="relative">
-        <PageHeader 
-          text={pageHeader?.heading || "Contact"} 
+        <PageHeader
+          eyebrow="Free Case Review"
+          text={pageHeader?.heading || "Contact"}
           text2={pageHeader?.headingHighlight || "Us"}
+          description={
+            pageHeader?.description ||
+            "Tell us what happened and we'll explain where you stand — at no cost, and with no obligation to hire us."
+          }
+          image="/assets/images/bgg.jpg"
+          breadcrumbs={[{ label: "Contact" }]}
         />
         
         <Section2>
-          <ContactUs 
-            contact={siteSettings?.contact} 
-            social={siteSettings?.social}
+          <ContactUs
+            contact={siteSettings?.contact}
             content={contactPage?.mainContent}
-            formSettings={contactPage?.formSection}
           />
         </Section2>
         
@@ -115,7 +120,7 @@ const Contact = async () => {
         {contactPage?.officeHours?.enabled && (
           <Section2>
             <div className="w-full py-12 px-5 md:px-12">
-              <h2 className="font-lora text-3xl font-bold mb-6 text-center">
+              <h2 className="font-display text-3xl font-bold mb-6 text-center">
                 {contactPage.officeHours.heading}
               </h2>
               <div className="max-w-md mx-auto space-y-3">

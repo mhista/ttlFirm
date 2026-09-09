@@ -28,10 +28,10 @@ export default function BlogCard({ blog, compact = false }) {
           </div>
         )}
         <div className="p-4">
-          <h3 className="font-lora text-lg font-semibold mb-2 group-hover:text-amber-600 transition">
+          <h3 className="font-display text-lg font-semibold mb-2 group-hover:text-accent-600 transition">
             {blog.title}
           </h3>
-          <div className="flex items-center gap-2 text-sm text-gray-500">
+          <div className="flex items-center gap-2 text-sm text-ink-soft">
             <BiTime />
             <time dateTime={blog.publishedAt}>{publishedDate}</time>
           </div>
@@ -63,7 +63,7 @@ export default function BlogCard({ blog, compact = false }) {
               <Link
                 key={category.slug.current}
                 href={`/blog/category/${category.slug.current}`}
-                className="bg-amber-600 text-white px-3 py-1 text-xs uppercase tracking-wider rounded hover:bg-amber-700 transition"
+                className="bg-accent-500 text-white px-3 py-1 text-xs uppercase tracking-wider rounded hover:bg-accent-600 transition"
               >
                 {category.title}
               </Link>
@@ -75,16 +75,16 @@ export default function BlogCard({ blog, compact = false }) {
           href={`/blog/${blog.slug.current}`}
           className="group"
         >
-          <h2 className="text-2xl lg:text-3xl font-medium font-lora group-hover:text-amber-600 transition">
+          <h2 className="text-2xl lg:text-3xl font-medium font-display group-hover:text-accent-600 transition">
             {blog.title}
           </h2>
         </Link>
 
         {blog.excerpt && (
-          <p className="text-gray-700 line-clamp-3">{blog.excerpt}</p>
+          <p className="text-ink-muted line-clamp-3">{blog.excerpt}</p>
         )}
 
-        <div className="flex flex-col items-start w-full text-gray-600 text-sm">
+        <div className="flex flex-col items-start w-full text-ink-muted text-sm">
           {/* Author & Date */}
           <div className="flex items-center gap-2 mb-2">
             <BiTime />
@@ -96,7 +96,7 @@ export default function BlogCard({ blog, compact = false }) {
               <CiFileOn />
               <Link
                 href={`/author/${blog.author.slug.current}`}
-                className="hover:text-amber-600 transition"
+                className="hover:text-accent-600 transition"
               >
                 {blog.author.name}
               </Link>

@@ -61,11 +61,11 @@ export default async function AuthorPage({ params }) {
             )}
 
             <div className="flex-1">
-              <h1 className="font-lora text-4xl font-bold mb-2">
+              <h1 className="font-display text-4xl font-bold mb-2">
                 {author.name}
               </h1>
               {author.title && (
-                <p className="text-xl text-gray-600 mb-4">{author.title}</p>
+                <p className="text-xl text-ink-muted mb-4">{author.title}</p>
               )}
 
               {author.bio && (
@@ -77,13 +77,13 @@ export default async function AuthorPage({ params }) {
                 </div>
               )}
 
-              <div className="mt-6 flex flex-col gap-2 text-gray-600">
+              <div className="mt-6 flex flex-col gap-2 text-ink-muted">
                 {author.email && (
                   <div className="flex items-center gap-2">
                     <strong>Email:</strong>
                     <a
                       href={`mailto:${author.email}`}
-                      className="text-amber-600 hover:underline"
+                      className="text-accent-500 hover:underline"
                     >
                       {author.email}
                     </a>
@@ -94,7 +94,7 @@ export default async function AuthorPage({ params }) {
                     <strong>Phone:</strong>
                     <a
                       href={`tel:${author.phone}`}
-                      className="text-amber-600 hover:underline"
+                      className="text-accent-500 hover:underline"
                     >
                       {author.phone}
                     </a>
@@ -143,7 +143,7 @@ export default async function AuthorPage({ params }) {
         {/* Author's Posts */}
         {author.posts && author.posts.length > 0 && (
           <div>
-            <h2 className="font-lora text-3xl font-bold mb-6">
+            <h2 className="font-display text-3xl font-bold mb-6">
               Articles by {author.name}
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -154,17 +154,17 @@ export default async function AuthorPage({ params }) {
                   className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition group"
                 >
                   <div className="p-6">
-                    <h3 className="font-lora text-xl font-semibold mb-2 group-hover:text-amber-600 transition">
+                    <h3 className="font-display text-xl font-semibold mb-2 group-hover:text-accent-600 transition">
                       {post.title}
                     </h3>
                     {post.excerpt && (
-                      <p className="text-gray-600 text-sm line-clamp-2 mb-3">
+                      <p className="text-ink-muted text-sm line-clamp-2 mb-3">
                         {post.excerpt}
                       </p>
                     )}
                     <time
                       dateTime={post.publishedAt}
-                      className="text-xs text-gray-500"
+                      className="text-xs text-ink-soft"
                     >
                       {new Date(post.publishedAt).toLocaleDateString("en-US", {
                         year: "numeric",

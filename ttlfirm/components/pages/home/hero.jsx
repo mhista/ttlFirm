@@ -1,101 +1,140 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { urlFor } from "@/lib/sanity.client";
-import { useEffect } from "react";
-import AOS from "aos";
+import { FaCheck, FaPhone, FaArrowRightLong } from "react-icons/fa6";
+import { FIRM, telHref } from "@/lib/siteNav";
 
-const HomeHero = ({ content, height1 = "1200", height2 = "550", height3 }) => {
-  useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
-  }, []);
+const DEFAULT_BULLETS = [
+  "Free consultation, no obligation",
+  "No fee unless we recover for you",
+  "Former insurance defense attorney",
+];
 
-  // Use CMS content or fallbacks
-  const heading = content?.heading || "Trusted New Jersey Law firm delivering the best legal outcomes";
-  const headingHighlight = content?.headingHighlight || "New Jersey";
-  const description = content?.description || "We are a dedicated law firm in New Jersey committed to providing exceptional legal representation rooted in compassion, diligence, and integrity. Our expertise lies in personal injury law, where we relentlessly pursue justice and fair compensation for individuals who have suffered harm due to the negligence of others. Beyond personal injury, our firm offers comprehensive legal services in immigration law, workers' compensation, municipal court matters, and a broad spectrum of additional practice areas.";
-  const ctaText = content?.ctaText || "Schedule a free Consultation";
+/**
+ * Home hero.
+ *
+ * Left-aligned over the video, in the shape used by the reference sites:
+ * state eyebrow, large serif headline, checkmarked proof points, then a
+ * two-button action row where only ONE button carries the accent colour.
+ */
+const HomeHero = ({ content, stats }) => {
+  const eyebrow = content?.eyebrow || "New Jersey";
+  const heading = content?.heading || "Personal Injury & Workers' Compensation Lawyers";
+  const description =
+    content?.description ||
+    "When an accident or a workplace injury turns your life upside down, the insurance company already has lawyers working on its side. We make sure you have one working on yours — pursuing full compensation for your medical care, lost wages and recovery.";
+  const ctaText = content?.ctaText || "Get Your Free Case Review";
   const ctaLink = content?.ctaLink || "/contact";
-  const heroImage = content?.heroImage ? urlFor(content.heroImage).url() : "/assets/images/lawyer.jpg";
-  const heroImageAlt = content?.heroImage?.alt || "Attorney";
   const attorneyLinkText = content?.attorneyLinkText || "Turuchi S. Iheanachor, Esq.";
 
-  // Split heading to highlight specific text
-  const renderHeading = () => {
-    if (headingHighlight && heading.includes(headingHighlight)) {
-      const parts = heading.split(headingHighlight);
-      return (
-        <>
-          {parts[0]}
-          <span className="text-amber-600">{headingHighlight}</span>
-          {parts[1]}
-        </>
-      );
-    }
-    return heading;
-  };
+  const bullets =
+    content?.bullets && content.bullets.length > 0 ? content.bullets : DEFAULT_BULLETS;
+
+  const phone = content?.phone || FIRM.phoneDisplay;
+
+  const casesHandled = stats?.casesHandled ?? 500;
+  const yearsExperience = stats?.yearsExperience ?? 8;
+  const countiesServed = stats?.countiesServed ?? 7;
 
   return (
-    <div
-      className={`w-full relative h-[1250px] sm:h-[660px] md:h-[800px] lg:h-[930px] flex flex-col-reverse sm:flex-row-reverse items-start justify-center sm:items-center gap-7 md:gap-8 lg:gap-4 pt-20 sm:pt-[120px] md:pt-[100px] lg:pt-[120px] px-5 sm:pl-9 md:pl-0 lg:pl-9 md:px-5 lg:px-7`}
-    >
-      <div className="flex flex-col items-center justify-center w-full md:w-[full] md:pr-10 gap-5">
-        <Image
-          className="rounded z-40 opacity-80 object-cover"
-          src={heroImage}
-          width={470}
-          height={250}
-          alt={heroImageAlt}
-          data-aos="zoom-in"
-          priority
-        />
+    <div className="relative z-10 flex w-full flex-1 flex-col justify-end pb-0 pt-32 sm:pt-40 lg:pt-44">
+      <div className="container-x flex flex-1 items-center">
+        <div className="w-full max-w-2xl py-10 lg:max-w-3xl lg:py-16">
+          {/* Eyebrow */}
+          <div className="flex items-center gap-3 animate-fade-up">
+            <span className="h-px w-8 bg-accent-500" aria-hidden="true" />
+            <span className="font-sans text-xs font-bold uppercase tracking-[0.28em] text-accent-400 sm:text-sm">
+              {eyebrow}
+            </span>
+          </div>
 
-        <Link
-          href={"/profile"}
-          className="z-40 font-lora border p-2 text-xl sm:text-base text-white md:text-2xl hover:text-amber-600 transition"
-        >
-          {attorneyLinkText} <span className="text-xl">+</span>
-        </Link>
-        
-        <div className="block sm:hidden z-40">
-          <Link
-            href={ctaLink}
-            className="block sm:hidden btn text-xl"
-            data-aos="zoom-in"
+          {/* Headline */}
+          <h1
+            className="mt-5 font-display text-[2rem] font-bold leading-[1.08] text-white sm:text-5xl lg:text-[3.85rem] animate-fade-up"
+            style={{ animationDelay: "60ms" }}
           >
-            {ctaText}
+            {heading}
+          </h1>
+
+          {/* Description */}
+          <p
+            className="mt-6 max-w-xl text-[15px] leading-relaxed text-navy-100 sm:text-base lg:text-lg animate-fade-up"
+            style={{ animationDelay: "120ms" }}
+          >
+            {description}
+          </p>
+
+          {/* Proof points */}
+          <ul
+            className="mt-7 flex flex-col gap-3 animate-fade-up sm:mt-8"
+            style={{ animationDelay: "180ms" }}
+          >
+            {bullets.map((bullet) => (
+              <li key={bullet} className="flex items-start gap-3">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-500">
+                  <FaCheck className="text-[9px] text-navy-950" aria-hidden="true" />
+                </span>
+                <span className="text-sm font-medium text-white sm:text-[15px]">{bullet}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Actions */}
+          <div
+            className="mt-9 flex flex-col gap-3 animate-fade-up sm:flex-row sm:items-center sm:gap-4"
+            style={{ animationDelay: "240ms" }}
+          >
+            <Link href={ctaLink} className="btn-primary w-full sm:w-auto">
+              {ctaText}
+              <FaArrowRightLong className="text-xs" aria-hidden="true" />
+            </Link>
+            <a href={telHref(phone)} className="btn-outline w-full sm:w-auto">
+              <FaPhone className="text-xs" aria-hidden="true" />
+              {phone}
+            </a>
+          </div>
+
+          {/* Attorney byline */}
+          <Link
+            href="/profile"
+            className="mt-8 inline-flex items-center gap-2 border-b border-white/25 pb-1 font-display text-base italic text-white/90 transition-colors hover:border-accent-400 hover:text-accent-400 sm:text-lg animate-fade-up"
+            style={{ animationDelay: "300ms" }}
+          >
+            {attorneyLinkText}
+            <FaArrowRightLong className="text-[10px]" aria-hidden="true" />
           </Link>
         </div>
       </div>
-      
-      <div
-        className={`text-white flex flex-col items-start justify-center md:pl-8 w-full gap-5 z-40 md:pt-20 lg:mt-[-150px]`}
-      >
-        <h1
-          className="font-lora text-2xl sm:text-2xl md:text-4xl uppercase font-bold"
-          data-aos="fade-up"
-        >
-          {renderHeading()}
-        </h1>
-        
-        <p
-          className="text-base sm:text-sm w-6/6 sm:w-full lg:w-5/6 md:text-base lg:text-lg text-pretty text-justify"
-          data-aos="zoom-in-up"
-        >
-          {description}
-        </p>
 
-        <Link
-          href={ctaLink}
-          className="hidden w-full sm:block lg:w-4/6 btn"
-          data-aos="zoom-in"
-        >
-          {ctaText}
-        </Link>
+      {/* -------------------------------------------------------- Stats strip
+          Replaces the absolutely-positioned counter block that used to be
+          pinned with a stack of magic `top-[1230px]` values and drifted out
+          of place at almost every breakpoint. */}
+      <div className="relative z-10 mt-8 border-t border-white/10 bg-navy-950/70 backdrop-blur-md">
+        <div className="container-x grid grid-cols-2 divide-x divide-white/10 md:grid-cols-4">
+          <Stat value={`${casesHandled}+`} label="Legal cases handled" />
+          <Stat value={`${yearsExperience}`} label="Years of experience" />
+          <Stat value={`${countiesServed}`} label="NJ counties served" />
+          <Stat
+            value="$0"
+            label="Upfront cost to you"
+            className="col-span-2 border-t border-white/10 md:col-span-1 md:border-t-0"
+          />
+        </div>
       </div>
     </div>
   );
 };
+
+const Stat = ({ value, label, className = "" }) => (
+  <div className={`px-4 py-5 text-center md:py-6 ${className}`}>
+    <div className="font-display text-2xl font-bold text-accent-400 sm:text-3xl md:text-4xl">
+      {value}
+    </div>
+    <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-navy-200 sm:text-[11px]">
+      {label}
+    </div>
+  </div>
+);
 
 export default HomeHero;

@@ -23,10 +23,10 @@ const TailoredCTA = ({ ctaData }) => {
   if (!ctaData?.enabled) return null;
 
   return (
-    <div className="relative w-full py-16 md:py-24 px-5 md:px-12 overflow-hidden bg-[#1c314e]">
+    <div className="relative w-full py-16 md:py-24 px-5 md:px-12 overflow-hidden bg-[#0A2340]">
       {/* Background Decorations - Same as WhyChooseUs */}
-      <div className="absolute top-20 right-0 w-72 h-72 bg-amber-600/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 left-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-20 right-0 w-72 h-72 bg-accent-500/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 left-0 w-96 h-96 bg-navy-500/15 rounded-full blur-3xl"></div>
 
       <div className="relative max-w-5xl mx-auto">
         {/* Section Header */}
@@ -34,22 +34,22 @@ const TailoredCTA = ({ ctaData }) => {
           {/* Optional Section Label */}
           {ctaData.sectionLabel && (
             <div className="flex flex-row items-center justify-center gap-3 mb-4">
-              <hr className="bg-amber-600 h-[2px] w-14" />
-              <h3 className="text-amber-400 uppercase font-bold tracking-wider text-sm">
+              <hr className="bg-accent-500 h-[2px] w-14" />
+              <h3 className="text-accent-400 uppercase font-bold tracking-wider text-sm">
                 {ctaData.sectionLabel}
               </h3>
-              <hr className="bg-amber-600 h-[2px] w-14" />
+              <hr className="bg-accent-500 h-[2px] w-14" />
             </div>
           )}
 
           {/* Main Heading */}
-          <h2 className="font-lora text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
             {ctaData.heading}
           </h2>
 
           {/* Description - Can be long */}
           {ctaData.description && (
-            <p className="text-gray-200 text-base md:text-lg leading-relaxed max-w-4xl mx-auto">
+            <p className="lede-on-dark mx-auto max-w-4xl">
               {ctaData.description}
             </p>
           )}
@@ -68,7 +68,7 @@ const TailoredCTA = ({ ctaData }) => {
                 href={button.link || '/contact'}
                 className={`${
                   index === 0
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                    ? 'bg-accent-500 hover:bg-accent-400 text-navy-950'
                     : 'bg-white/10 hover:bg-white/20 text-white border-2 border-white/20'
                 } font-semibold px-8 py-4 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-block`}
               >

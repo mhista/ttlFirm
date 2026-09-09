@@ -1,173 +1,263 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { FaEnvelope, FaPhone, FaLocationDot } from "react-icons/fa6";
+import { FaEnvelope, FaPhone, FaLocationDot, FaArrowRightLong } from "react-icons/fa6";
 import { socialLinks } from "@components/common/mediaButtons";
 import { useSiteSettings } from "@/lib/siteSettingsContext";
+import { PRACTICE_AREAS, LEGAL_LINKS, FIRM, telHref } from "@/lib/siteNav";
 
-// Fallback contact details — used only when Sanity's Site Settings
-// document doesn't provide contact info yet.
-const defaultPhones = [{ number: "+1 732-210-6410", display: "+1 732-210-6410" }];
-const defaultAddresses = [
-  { text: "111 Town Square Pl, Jersey City, NJ 07310", mapsUrl: "https://maps.google.com/?q=111+Town+Square+Pl+Jersey+City+NJ+07310" },
-];
-const defaultEmail = "info@turuchilawfirm.com";
-
+/**
+ * Footer.
+ *
+ * Rebuilt from a fixed-height (`h-[1000px]`) block with absolutely positioned
+ * children — which overflowed on any phone whose content didn't happen to fit
+ * — into a plain responsive grid that sizes itself.
+ *
+ * Carries the Privacy Policy and Terms links on every page, which is a
+ * standing requirement of the RingCentral / TCR A2P registration.
+ */
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const year = new Date().getFullYear();
   const siteSettings = useSiteSettings();
   const contact = siteSettings?.contact || {};
 
-  // ✅ UPDATED: Uses slugs instead of numeric IDs
-  const footerLinks = [
-    { href: "/practice/personal-injury-lawyer-in-new-jersey", label: "Personal Injury" },
-    { href: "/practice/immigration-lawyer-in-new-jersey", label: "Immigration" },
-    { href: "/practice/new-jersey-workers-compensation-attorney", label: "Workers Compensation" },
-    { href: "/practice/municipal-court-lawyer-in-new-jersey", label: "Municipal Matters" },
-  ];
+  const phone = contact.phone || FIRM.phoneDisplay;
+  const email = contact.email || FIRM.email;
 
-  const menuLinks = [
-    { href: "/", label: "Home" },
-    { href: "/profile", label: "Attorney Profile" },
-    { href: "/about", label: "About" },
-  ];
-
-  // CMS-driven contact info (from Site Settings in Sanity) falls back to
-  // the hardcoded defaults above when Sanity hasn't been filled in yet.
-  const phones = contact.phone
-    ? [{ number: contact.phone, display: contact.phone }]
-    : defaultPhones;
-
-  const addresses = contact.address?.street
+  const addressLines = contact.address?.street
     ? [
-        {
-          text: [
-            contact.address.street,
-            contact.address.city,
-            [contact.address.state, contact.address.zipCode].filter(Boolean).join(" "),
-          ]
-            .filter(Boolean)
-            .join(", "),
-          mapsUrl: `https://maps.google.com/?q=${encodeURIComponent(
-            [contact.address.street, contact.address.city, contact.address.state, contact.address.zipCode]
-              .filter(Boolean)
-              .join(" ")
-          )}`,
-        },
-      ]
-    : defaultAddresses;
+        contact.address.street,
+        [
+          contact.address.city,
+          [contact.address.state, contact.address.zipCode].filter(Boolean).join(" "),
+        ]
+          .filter(Boolean)
+          .join(", "),
+      ].filter(Boolean)
+    : [FIRM.addressLine1, FIRM.addressLine2];
 
-  const email = contact.email || defaultEmail;
+  const mapsUrl = contact.address?.street
+    ? `https://maps.google.com/?q=${encodeURIComponent(
+        [
+          contact.address.street,
+          contact.address.city,
+          contact.address.state,
+          contact.address.zipCode,
+        ]
+          .filter(Boolean)
+          .join(" ")
+      )}`
+    : FIRM.mapsUrl;
+
+  const companyLinks = [
+    { href: "/", label: "Home" },
+    { href: "/practice", label: "Practice Areas" },
+    { href: "/profile", label: "Attorney Profile" },
+    { href: "/about", label: "About the Firm" },
+    { href: "/blog", label: "Legal Insights" },
+    { href: "/contact", label: "Contact" },
+  ];
 
   return (
-    <footer className="relative bottom-0 flex flex-col-reverse gap-5 sm:gap-3 w-full bg-[#1c314e] h-[1000px] sm:h-[400px] md:h-[350px] lg:h-[380px] m-0 p-0">
-      {/* footer details */}
-      <div className="absolute w-full flex flex-col-reverse sm:flex-row justify-around md:items-center bottom-[150px] sm:bottom-[120px] md:bottom-[100px] gap-5 sm:gap-4 pl-8 lg:pl-16">
-
-        {/* Logo & tagline */}
-        <div className="w-full flex flex-col gap-5 mb-5 sm:mb-0">
-          <Image
-            className="w-[150px] sm:w-[100px] lg:w-[150px]"
-            src="/assets/images/logo.png"
-            width={90}
-            height={90}
-            alt="Turuchi"
-          />
-          <p className="text-base sm:text-sm lg:text-base w-5/6 text-white">
-            We understand that every case is unique, and working with a trusted law firm in New Jersey provides the guidance and support you need to navigate it with confidence.
-          </p>
-        </div>
-
-        {/* Contact Information */}
-        <div className="flex text-white w-full flex-col md:mb-5 lg:mb-10 items-start md:items-center py-6 md:pb-0 lg:items-start gap-5">
-          <div className="flex flex-col items-start gap-5">
-            <h1 className="font-lora text-xl sm:text-sm lg:text-xl">CONTACT INFORMATION</h1>
-            <div className="flex flex-col gap-4 text-white">
-
-              {/* ✅ Multiple Phone Numbers */}
-              {phones.map((phone, i) => (
-                <Link
-                  key={i}
-                  href={`tel:${phone.number.replace(/\s/g, '')}`}
-                  className="flex items-center gap-2 hover:text-blue-200"
-                >
-                  <FaPhone />
-                  <span className="text-sm">{phone.display}</span>
-                </Link>
-              ))}
-
-              {/* Email */}
-              <Link
-                href={`mailto:${email}`}
-                className="flex hover:text-blue-200 items-center gap-2"
-              >
-                <FaEnvelope />
-                <span className="text-center mb-1 text-sm">{email}</span>
-              </Link>
-
-              {/* ✅ Multiple Addresses */}
-              {addresses.map((addr, i) => (
-                <Link
-                  key={i}
-                  href={addr.mapsUrl || ""}
-                  target={addr.mapsUrl ? "_blank" : undefined}
-                  rel="noopener noreferrer"
-                  className="flex hover:text-blue-200 justify-start items-start gap-2"
-                >
-                  <FaLocationDot className="mt-1 flex-shrink-0" />
-                  <span className="text-sm">{addr.text}</span>
-                </Link>
-              ))}
-
-            </div>
-
-            <div className="flex justify-between items-center gap-4 pr-4 text-lg">
-              {socialLinks.map((link, index) => (
-                <Link key={index} href={link.href}>
-                  {link.icon}
-                </Link>
-              ))}
-            </div>
+    <footer className="bg-navy-950 text-navy-100">
+      {/* ------------------------------------------------------------ CTA bar */}
+      <div className="border-b border-white/10 bg-navy-900">
+        <div className="container-x flex flex-col items-center gap-5 py-9 text-center md:flex-row md:justify-between md:text-left">
+          <div>
+            <h2 className="font-display text-2xl font-bold text-white md:text-[1.75rem]">
+              Injured in New Jersey? Let&rsquo;s talk today.
+            </h2>
+            <p className="mt-1.5 text-sm text-navy-200">
+              Free consultation. No fee unless we recover for you.
+            </p>
+          </div>
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <a href={telHref(phone)} className="btn-primary whitespace-nowrap">
+              <FaPhone className="text-xs" aria-hidden="true" /> {phone}
+            </a>
+            <Link href="/contact" className="btn-outline whitespace-nowrap">
+              Request a Case Review
+            </Link>
           </div>
         </div>
-
-        {/* Practice Areas */}
-        <div className="flex w-full flex-col gap-5 items-start justify-center text-white md:ml-4">
-          <h1 className="font-lora sm:text-sm text-xl">PRACTICE AREAS</h1>
-          <div className="flex flex-col items-start text-white gap-4 md:gap-6 font-semibold md:font-normal md:text-base lg:font-semibold">
-            {footerLinks.map((link, index) => (
-              <Link key={index} href={link.href} className="text-amber-600 hover:text-amber-400 transition-colors">
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <div className="hidden md:flex w-full flex-col gap-5 items-start justify-center text-white">
-          <h1 className="font-lora md:text-sm text-xl">NAVIGATION</h1>
-          <div className="flex flex-col items-start text-white gap-4 md:gap-6 font-semibold md:font-normal md:text-base lg:font-semibold">
-            {menuLinks.map((link, index) => (
-              <Link key={index} href={link.href} className="text-amber-600 hover:text-amber-400 transition-colors">
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
       </div>
 
-      {/* Bottom Bar */}
-      <div className="flex flex-col-reverse md:flex-row w-full bg-[#213147] px-7 gap-3 mt-5 sm:mt-0 md:px-11 lg:px-16 pb-8 justify-between">
-        <div>
-          <p className="text-white sm:text-base">
-            © {currentYear} Turuchi Law Firm. All rights reserved.
+      {/* ---------------------------------------------------------- Main grid */}
+      <div className="container-x grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+        {/* Brand */}
+        <div className="lg:col-span-4">
+          <Image
+            src="/assets/images/logo.png"
+            width={160}
+            height={80}
+            alt="The Turuchi Law Firm"
+            className="h-16 w-auto"
+          />
+          <p className="mt-5 max-w-sm text-sm leading-relaxed text-navy-200">
+            A New Jersey firm representing injured people and injured workers.
+            Every case is handled personally by an attorney who has sat on the
+            insurance company&rsquo;s side of the table and knows how they value a
+            claim.
+          </p>
+          <ul className="mt-6 flex items-center gap-2">
+            {socialLinks.map((link) => (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="flex h-10 w-10 items-center justify-center rounded-md border border-white/15 text-sm text-navy-200 transition-colors hover:border-accent-400 hover:bg-white/5 hover:text-accent-400"
+                >
+                  {link.icon}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Practice areas */}
+        <nav aria-labelledby="footer-practice" className="lg:col-span-3">
+          <h3 id="footer-practice" className="font-sans text-xs font-bold uppercase tracking-[0.18em] text-white">
+            Practice Areas
+          </h3>
+          <span className="mt-3 block h-px w-9 bg-accent-500" aria-hidden="true" />
+          <ul className="mt-5 space-y-3.5">
+            {PRACTICE_AREAS.map((area) => (
+              <li key={area.slug}>
+                <Link
+                  href={`/practice/${area.slug}`}
+                  className="group inline-flex items-center gap-2 text-sm text-navy-200 transition-colors hover:text-accent-400"
+                >
+                  <FaArrowRightLong
+                    className="text-[10px] text-accent-500 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                  {area.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Navigation */}
+        <nav aria-labelledby="footer-nav" className="lg:col-span-2">
+          <h3 id="footer-nav" className="font-sans text-xs font-bold uppercase tracking-[0.18em] text-white">
+            Explore
+          </h3>
+          <span className="mt-3 block h-px w-9 bg-accent-500" aria-hidden="true" />
+          <ul className="mt-5 space-y-3.5">
+            {companyLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-sm text-navy-200 transition-colors hover:text-accent-400"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Contact */}
+        <div className="lg:col-span-3">
+          <h3 className="font-sans text-xs font-bold uppercase tracking-[0.18em] text-white">
+            Contact
+          </h3>
+          <span className="mt-3 block h-px w-9 bg-accent-500" aria-hidden="true" />
+          <ul className="mt-5 space-y-4 text-sm">
+            <li>
+              <a
+                href={telHref(phone)}
+                className="flex items-start gap-3 text-navy-200 transition-colors hover:text-accent-400"
+              >
+                <FaPhone className="mt-1 shrink-0 text-xs text-accent-500" aria-hidden="true" />
+                <span>{phone}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={`mailto:${email}`}
+                className="flex items-start gap-3 break-all text-navy-200 transition-colors hover:text-accent-400"
+              >
+                <FaEnvelope className="mt-1 shrink-0 text-xs text-accent-500" aria-hidden="true" />
+                <span>{email}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 text-navy-200 transition-colors hover:text-accent-400"
+              >
+                <FaLocationDot className="mt-1 shrink-0 text-xs text-accent-500" aria-hidden="true" />
+                <span>
+                  {addressLines.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* ------------------------------------------------------- Legal notice */}
+      <div className="border-t border-white/10">
+        <div className="container-x py-8">
+          <p className="text-xs leading-relaxed text-navy-300/90">
+            <strong className="font-semibold text-navy-100">Attorney advertising.</strong>{" "}
+            The information on this website is for general informational purposes only and is not
+            legal advice. Viewing this site, submitting a form, or contacting the firm does not
+            create an attorney-client relationship. Prior results do not guarantee a similar
+            outcome. Read our{" "}
+            <Link href="/privacy-policy" className="text-accent-400 underline-offset-4 hover:underline">
+              Privacy Policy
+            </Link>{" "}
+            and{" "}
+            <Link href="/terms-and-conditions" className="text-accent-400 underline-offset-4 hover:underline">
+              Terms &amp; Conditions
+            </Link>
+            .
+          </p>
+          <p className="mt-3 text-xs leading-relaxed text-navy-300/90">
+            <strong className="font-semibold text-navy-100">SMS notice.</strong> Consent to receive
+            text messages from The Turuchi Law Firm is optional and is not a condition of purchasing
+            services, retaining the firm, or receiving legal services. Message and data rates may
+            apply and message frequency varies. Reply STOP to opt out or HELP for help. No mobile
+            opt-in or text message consent will be shared with third parties or affiliates for
+            marketing or promotional purposes.
           </p>
         </div>
-        <div className="lg:pr-5">
-          <p className="text-white sm:text-base">
+      </div>
+
+      {/* ----------------------------------------------------------- Colophon */}
+      <div className="border-t border-white/10 bg-navy-900">
+        <div className="container-x flex flex-col gap-3 py-6 text-xs text-navy-200 md:flex-row md:items-center md:justify-between">
+          <p>&copy; {year} The Turuchi Law Firm. All rights reserved.</p>
+
+          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            {LEGAL_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="transition-colors hover:text-accent-400">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <p>
             Built and managed by{" "}
-            <a href="https://www.kymaa.tech" className="text-blue-200">
+            <a
+              href="https://www.kymaa.tech"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent-400 underline-offset-4 hover:underline"
+            >
               Kymaa Digital Solutions
             </a>
           </p>

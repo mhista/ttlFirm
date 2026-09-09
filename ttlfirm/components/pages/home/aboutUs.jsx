@@ -1,53 +1,74 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { FaArrowRightLong } from "react-icons/fa6";
 
-const AboutUs = () => {
+/**
+ * Short "about the firm" block for the homepage / about page.
+ * Copy now describes the two practice areas the firm actually runs.
+ */
+const AboutUs = ({ content }) => {
+  const eyebrow = content?.sectionLabel || "Who We Are";
+  const heading = content?.heading || "A New Jersey firm built around injured clients";
+  const image = content?.image || "/assets/images/lawyer.jpg";
+
+  const paragraphs =
+    content?.paragraphs && content.paragraphs.length > 0
+      ? content.paragraphs
+      : [
+          "At The Turuchi Law Firm we represent people who have been hurt — in a crash, on someone else's property, or on the job — and who are now dealing with an insurance company that does this every day and does not have their interests at heart.",
+          "Our practice is deliberately focused. Personal injury and workers' compensation are what we do, which means your case is handled by an attorney who knows how these claims are valued, defended and settled, rather than one splitting attention across a dozen unrelated areas of law.",
+          "Attorney Turuchi Iheanachor previously worked on the insurance defence side. That experience shapes how every case here is built: for the number the carrier will actually pay, not the one it opens with.",
+        ];
+
   return (
-    <div className="relative section1 w-full flex flex-col md:flex-row justify-around items-center md:gap-10 lg:gap-5 py-16 px-8 md:px-0 lg:pl-24 mt-10 sm:mt-0">
-      <div className="flex w-full flex-col md:flex-row sm:items-center sm:justify-center relative  md:pl-7 pb-7 md:gap-7">
-        <Image
-          className="relative z-30  md:h-[300px] object-cover md:w-[300px] lg:h-[400px] lg:w-[400px] rounded-lg"
-          src="/assets/images/laws.jpg"
-          width={500}
-          height={600}
-          alt="law"
-          
-        />
-          <div className="hidden lg:block lg:absolute h-14 w-14 bg-amber-600 bottom-3 z-20 -left-3 md:left-3 opacity-25"></div>
-          
-        <div className="flex flex-col  gap-4 md:gap-3  w-full mt-10 sm:mt-0 md:pr-7 lg:mx-24" >
-          <div className="flex flex-col gap-5 sm:p-10 sm:pb-0 md:p-0">
-            <div className="flex flex-col gap-8">
-              <hr className="bg-amber-600 h-[2px] w-14" />
-              <h3 className="uppercase sp  inline font-semibold text-lg opacity-70 font-jost">
-                Who We Are
-              </h3>
-            </div>
-            <h1 className=" font-lora  text-4xl md:text-3xl">
-              Know about Turuchi Law Firm
-            </h1>
+    <div className="container-x section-y">
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        {/* Image */}
+        <div className="relative">
+          <div className="overflow-hidden rounded-xl">
+            <Image
+              src={image}
+              width={720}
+              height={840}
+              alt="Attorney Turuchi Iheanachor"
+              className="h-[380px] w-full object-cover object-top sm:h-[460px] lg:h-[560px]"
+            />
+          </div>
+          <div
+            className="pointer-events-none absolute -bottom-5 -right-4 hidden h-32 w-32 rounded-xl border-[6px] border-accent-500/25 lg:block"
+            aria-hidden="true"
+          />
+        </div>
 
-            <div className="flex flex-col gap-3 text-lg">
-              <p className="text-pretty text-gray-500 md:text-sm lg:text-base">
-                At Turuchi Law Firm, we are unwavering in our commitment to
-                providing exceptional legal representation rooted in compassion,
-                diligence, and integrity. Our expertise lies in personal injury
-                law, where we relentlessly pursue justice and fair compensation
-                for individuals who have suffered harm due to the negligence of
-                others. <br/>Beyond personal injury, our firm offers comprehensive legal
-                services in immigration law, workers' compensation, municipal ...
+        {/* Copy */}
+        <div>
+          <div className="flex items-center gap-3">
+            <span className="rule" aria-hidden="true" />
+            <span className="eyebrow">{eyebrow}</span>
+          </div>
+
+          <h2 className="h-section mt-5">{heading}</h2>
+
+          <div className="mt-6 space-y-4">
+            {paragraphs.map((text, i) => (
+              <p key={i} className="text-[15px] leading-relaxed text-ink-muted md:text-base">
+                {text}
               </p>
-            </div>
-            <Link
-          href=""
-          className="btn w-32 sm:w-36 text-center hover:text-black z-30"
-        >
-          READ MORE
-        </Link>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link href="/profile" className="btn-navy">
+              Meet the Attorney
+              <FaArrowRightLong className="text-xs" aria-hidden="true" />
+            </Link>
+            <Link href="/contact" className="btn-outline-dark">
+              Free Case Review
+            </Link>
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

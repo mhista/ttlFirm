@@ -1,131 +1,119 @@
 "use client";
-import Form from "@components/common/form";
 import Link from "next/link";
-import { FaEnvelope, FaPhone, FaLocationDot } from "react-icons/fa6";
-import { socialLinks2 } from "@components/common/mediaButttons2";
+import { FaEnvelope, FaPhone, FaLocationDot, FaClock } from "react-icons/fa6";
+import Form from "@components/common/form";
+import { socialLinks } from "@components/common/mediaButtons";
+import { FIRM, telHref } from "@/lib/siteNav";
 
-// Fallback contact details — used only when Sanity's Site Settings /
-// Contact Page documents don't provide contact info yet.
-const defaultPhones = [
-  { number: "+17322106410", display: "732-210-6410" },
-  { number: "+8482286402", display: "848-228-6402" },
-];
+/**
+ * Contact block: firm details on the left, lead form on the right.
+ * The form carries the optional SMS consent checkbox required by the A2P
+ * registration.
+ */
+const ContactUs = ({ contact, content }) => {
+  const phone = contact?.phone || FIRM.phoneDisplay;
+  const email = contact?.email || FIRM.email;
 
-const defaultAddresses = [
-  {
-    text: "111 Town Square Pl, Jersey City, NJ 07310",
-    mapsUrl: "https://maps.google.com/?q=111+Town+Square+Pl+Jersey+City+NJ+07310",
-  },
-  {
-    text: "30 Knightsbridge Road, Suite 525, Piscataway, New Jersey 08854",
-    mapsUrl: "https://maps.google.com/?q=30+Knightsbridge+Road+Suite+525+Piscataway+NJ+08854",
-  },
-];
-
-const defaultEmail = "info@turuchilawfirm.com";
-
-const ContactUs = ({ contact, social, content }) => {
-  // CMS-driven contact info (from siteSettingsQuery's `contact` field, or the
-  // contact page's `mainContent`) falls back to the hardcoded defaults above
-  // when Sanity hasn't been filled in yet.
-  const phones = contact?.phone
-    ? [{ number: contact.phone, display: contact.phone }]
-    : defaultPhones;
-
-  const addresses = contact?.address?.street
+  const addressText = contact?.address?.street
     ? [
-        {
-          text: [
-            contact.address.street,
-            contact.address.city,
-            [contact.address.state, contact.address.zipCode].filter(Boolean).join(" "),
-          ]
-            .filter(Boolean)
-            .join(", "),
-          mapsUrl: `https://maps.google.com/?q=${encodeURIComponent(
-            [contact.address.street, contact.address.city, contact.address.state, contact.address.zipCode]
-              .filter(Boolean)
-              .join(" ")
-          )}`,
-        },
+        contact.address.street,
+        contact.address.city,
+        [contact.address.state, contact.address.zipCode].filter(Boolean).join(" "),
       ]
-    : defaultAddresses;
+        .filter(Boolean)
+        .join(", ")
+    : `${FIRM.addressLine1}, ${FIRM.addressLine2}`;
 
-  const email = contact?.email || defaultEmail;
-  const heading = content?.heading || "Leave us your info and we will get back to you";
+  const mapsUrl = contact?.address?.street
+    ? `https://maps.google.com/?q=${encodeURIComponent(addressText)}`
+    : FIRM.mapsUrl;
+
+  const heading = content?.heading || "Tell us what happened";
   const description =
     content?.description ||
-    "Confide in a trusted law firm in New Jersey. We will review your situation and answer your questions. Then we'll provide legal options tailored to your needs.";
+    "Send a few details and we'll review your situation, answer your questions, and explain the options open to you — free, and with no obligation to hire us.";
+
+  const details = [
+    { icon: FaPhone, label: "Phone", value: phone, href: telHref(phone) },
+    { icon: FaEnvelope, label: "Email", value: email, href: `mailto:${email}` },
+    { icon: FaLocationDot, label: "Office", value: addressText, href: mapsUrl, external: true },
+    { icon: FaClock, label: "Hours", value: "Monday – Friday, 9:00 AM – 5:00 PM" },
+  ];
 
   return (
-    <div className="w-full py-7">
-      <div className="w-full hidden md:flex flex-col items-center justify-around gap-3 md:mt-7">
-        <h1 className="font-lora text-4xl font-medium">
-          {heading}
-        </h1>
-      </div>
-
-      <div className="w-full flex flex-col md:flex-row items-center justify-between px-5 md:px-10 gap-6 md:gap-8">
-        {/* Left: Contact Info */}
-        <div className="w-full flex flex-col sm:items-start gap-8 sm:p-10 md:p-0 md:pb-12">
-          <h1 className="font-serif text-5xl md:text-6xl opacity-90">
-            Consult a Reliable New Jersey Law Firm
-          </h1>
-          <p className="text-lg text-gray-800">
-            {description}
-          </p>
-
-          <div className="flex flex-col gap-4 text-black">
-            {/* Phone Numbers */}
-            {phones.map((phone, i) => (
-              <Link
-                key={i}
-                href={`tel:${phone.number}`}
-                className="flex items-center gap-2 hover:text-blue-700"
-              >
-                <FaPhone />
-                <span className="text-lg">{phone.display}</span>
-              </Link>
-            ))}
-
-            {/* Email */}
-            <Link
-              href={`mailto:${email}`}
-              className="flex hover:text-blue-700 items-center gap-2"
-            >
-              <FaEnvelope />
-              <span className="text-center mb-1 text-lg">{email}</span>
-            </Link>
-
-            {/* ✅ Multiple Addresses */}
-            {addresses.map((addr, i) => (
-              <Link
-                key={i}
-                href={addr.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex hover:text-blue-700 justify-start items-start gap-2"
-              >
-                <FaLocationDot className="mt-1 flex-shrink-0" />
-                <span className="text-lg">{addr.text}</span>
-              </Link>
-            ))}
+    <div className="container-x section-y">
+      <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        {/* Left: details */}
+        <div>
+          <div className="flex items-center gap-3">
+            <span className="rule" aria-hidden="true" />
+            <span className="eyebrow">Get in touch</span>
           </div>
 
-          <div className="flex items-start gap-4 pr-4 text-lg text-dark">
-            {socialLinks2.map((link, index) => (
-              <Link key={index} href={link.href}>
-                {link.icon}
-              </Link>
+          <h2 className="h-section mt-5">{heading}</h2>
+          <p className="lede mt-5 max-w-xl">{description}</p>
+
+          <ul className="mt-9 space-y-5">
+            {details.map(({ icon: Icon, label, value, href, external }) => {
+              const body = (
+                <>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-navy-50">
+                    <Icon className="text-sm text-navy-700" aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft">
+                      {label}
+                    </span>
+                    <span className="mt-0.5 block break-words text-[15px] font-medium text-navy-900">
+                      {value}
+                    </span>
+                  </span>
+                </>
+              );
+
+              return (
+                <li key={label}>
+                  {href ? (
+                    <a
+                      href={href}
+                      {...(external
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
+                      className="flex items-start gap-4 transition-opacity hover:opacity-70"
+                    >
+                      {body}
+                    </a>
+                  ) : (
+                    <div className="flex items-start gap-4">{body}</div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+
+          <ul className="mt-9 flex items-center gap-2.5">
+            {socialLinks.map((link) => (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="flex h-11 w-11 items-center justify-center rounded-lg border border-surface-line text-navy-700 transition-colors hover:border-navy-900 hover:bg-navy-900 hover:text-white"
+                >
+                  {link.icon}
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
 
-        {/* Right: Form */}
-        <div className="relative section1 w-full flex flex-col justify-around items-center gap-5 md:gap-10 z-30 md:py-20">
-          <div className="w-full flex flex-col md:flex-row flex-wrap lg:px-0 gap-12 items-center justify-center">
-            <Form />
-          </div>
+        {/* Right: form */}
+        <div className="rounded-xl border border-surface-line bg-white p-6 shadow-card md:p-8">
+          <Form
+            heading="Request a free case review"
+            subheading="We typically respond the same business day."
+          />
         </div>
       </div>
     </div>

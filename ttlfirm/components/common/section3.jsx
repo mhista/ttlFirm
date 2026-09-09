@@ -1,10 +1,7 @@
-const Section3 = ({children}) => {
-    return (
-      <div className="w-full relative flex justify-center items-center  bg-[#1c314e] text-black z-[60]">
-        {children}
-      </div>
-    );
-  };
-  
-  export default Section3;
-  
+// Dark surface — navy.
+const Section3 = ({ children, id, className = "" }) => (
+  <section id={id} className={`relative z-[1] w-full bg-navy-900 text-white ${className}`}>
+    {children}
+  </section>
+);
+export default Section3;

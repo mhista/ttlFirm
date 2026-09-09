@@ -22,7 +22,7 @@ const   Countdown = ({countToUse, subtitle, sign, timer}) => {
 
     return (
         <div className="flex flex-col items-center w-[50%] justify-center gap-4  text-black rounded-lg py-3 md:py-6" >
-        <h2 className="text-3xl lg:text-5xl font-serif font-medium text-[#1f385b]">{count}{sign}</h2>
+        <h2 className="text-3xl lg:text-5xl font-display font-medium text-[#0F3057]">{count}{sign}</h2>
         <h5 className="text-xs sm:text-sm lg:text-lg text-center text-gray-600 mr-2">{subtitle}</h5>
     </div>
 

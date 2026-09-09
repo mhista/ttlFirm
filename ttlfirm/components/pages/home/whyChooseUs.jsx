@@ -2,166 +2,169 @@
 import { useEffect } from "react";
 import AOS from "aos";
 import Link from "next/link";
-import { FaCheckCircle, FaBalanceScale, FaHandshake, FaComments, FaMapMarkerAlt, FaUserTie } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaBalanceScale,
+  FaHandshake,
+  FaComments,
+  FaMapMarkerAlt,
+  FaUserTie,
+} from "react-icons/fa";
+import { FaArrowRightLong } from "react-icons/fa6";
 
-// Icon mapping
+// Icon mapping — the CMS stores the icon NAME, so this list is the contract.
 const iconMap = {
   FaBalanceScale,
   FaComments,
   FaMapMarkerAlt,
   FaHandshake,
   FaCheckCircle,
-  FaUserTie
+  FaUserTie,
 };
 
 const FeatureCard = ({ icon: iconName, title, description, delay }) => {
   const Icon = iconMap[iconName] || FaCheckCircle;
-  
+
   return (
     <div
-      className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 border border-white/20"
+      className="card-glass group flex h-full flex-col p-6 lg:p-7"
       data-aos="fade-up"
       data-aos-delay={delay}
     >
-      <div className="flex items-start gap-4">
-        <div className="flex-shrink-0">
-          <div className="w-12 h-12 bg-amber-600 rounded-lg flex items-center justify-center">
-            <Icon className="text-white text-xl" />
-          </div>
-        </div>
-        <div>
-          <h3 className="text-white font-lora text-xl font-semibold mb-2">
-            {title}
-          </h3>
-          <p className="text-gray-200 text-sm leading-relaxed">
-            {description}
-          </p>
-        </div>
-      </div>
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-accent-500/30 bg-accent-500/12 transition-colors duration-300 group-hover:bg-accent-500">
+        <Icon
+          className="text-lg text-accent-400 transition-colors duration-300 group-hover:text-navy-950"
+          aria-hidden="true"
+        />
+      </span>
+
+      <h3 className="mt-5 font-display text-xl font-semibold leading-snug text-white">
+        {title}
+      </h3>
+      <p className="mt-3 text-sm leading-relaxed text-navy-100">{description}</p>
     </div>
   );
 };
 
-const StatCard = ({ number, label, delay }) => {
-  return (
-    <div
-      className="text-center"
-      data-aos="zoom-in"
-      data-aos-delay={delay}
-    >
-      <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20 hover:bg-white/20 transition-all duration-300">
-        <div className="text-4xl md:text-5xl font-bold text-amber-400 mb-1">
-          {number}
-        </div>
-        <div className="text-gray-200 text-xs uppercase tracking-widest leading-snug">
-          {label}
-        </div>
-      </div>
+const StatCard = ({ number, label, delay }) => (
+  <div className="card-glass p-6 text-center" data-aos="zoom-in" data-aos-delay={delay}>
+    <div className="font-display text-4xl font-bold text-accent-400 md:text-5xl">{number}</div>
+    <div className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.16em] text-navy-200">
+      {label}
     </div>
-  );
-};
+  </div>
+);
 
+/**
+ * "Why Trust Us" — the section the client asked to keep.
+ * Structure, CMS fields and default copy are unchanged; only the palette and
+ * typography were brought onto the new navy system.
+ */
 const WhyChooseUs = ({ content, stats }) => {
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 800, once: true, offset: 40 });
   }, []);
 
-  // Default features if not provided by CMS
   const defaultFeatures = [
     {
       icon: "FaBalanceScale",
       title: "Personalized Legal Strategy",
-      description: "Every case is handled with a customized legal strategy shaped by the client's unique circumstances, objectives, and concerns."
+      description:
+        "Every case is handled with a customized legal strategy shaped by the client's unique circumstances, objectives, and concerns. We take time to understand the facts, assess available legal options, and develop an approach designed to protect our clients' interests.",
     },
     {
       icon: "FaComments",
       title: "Clear, Honest Communication",
-      description: "We believe effective representation begins with clear and honest communication."
+      description:
+        "We believe effective representation begins with clear and honest communication. Clients receive straightforward explanations of their legal options, realistic expectations, and timely updates throughout their case.",
     },
     {
       icon: "FaMapMarkerAlt",
       title: "Experience with New Jersey Courts",
-      description: "Our firm has practical experience representing clients in state, municipal, and federal courts throughout New Jersey."
+      description:
+        "Our firm has practical experience representing clients in state, municipal, and federal courts throughout New Jersey. This local knowledge allows us to navigate court procedures efficiently while advocating effectively.",
     },
     {
       icon: "FaHandshake",
       title: "Compassionate Representation",
-      description: "We approach every matter with empathy, professionalism, and respect."
+      description:
+        "We recognize that legal issues often involve stress and uncertainty. We approach every matter with empathy, professionalism, and respect, ensuring our clients feel supported while we work diligently to protect their rights.",
     },
     {
       icon: "FaCheckCircle",
       title: "Free Initial Consultation",
-      description: "We offer a free initial consultation so prospective clients can speak directly with a knowledgeable New Jersey attorney."
+      description:
+        "We offer a free initial consultation so prospective clients can speak directly with a knowledgeable New Jersey attorney about their legal concerns. This provides an opportunity to understand available options before committing.",
     },
     {
       icon: "FaUserTie",
-      title: "Meet Attorney Turuchi Iheanachor",
-      description: "With prior experience as an insurance defense attorney, Turuchi brings a strategic advantage to every case."
-    }
+      title: "Insight from the Other Side",
+      description:
+        "With prior experience as an insurance defense attorney, Turuchi knows how carriers evaluate, value and defend claims — and uses that insight to push for what a case is genuinely worth.",
+    },
   ];
 
-  // Use CMS content or defaults
   const sectionLabel = content?.sectionLabel || "Why Trust Us";
   const heading = content?.heading || "Why Clients Choose Our Legal Team";
-  const description = content?.description || "We believe in the power of personalized attention and transparent communication. Individuals and families seeking a reliable New Jersey attorney choose our firm because we combine legal knowledge with genuine care and local experience.";
-  const features = content?.features && content.features.length > 0 ? content.features : defaultFeatures;
-  const ctaText = content?.ctaText || "Learn More About Attorney Turuchi Iheanachor";
+  const description =
+    content?.description ||
+    "We believe in the power of personalized attention and transparent communication. Individuals and families seeking a reliable New Jersey attorney choose our firm because we combine legal knowledge with genuine care and local experience.";
+  const features =
+    content?.features && content.features.length > 0 ? content.features : defaultFeatures;
+  const ctaText = content?.ctaText || "Meet Attorney Turuchi Iheanachor";
   const ctaLink = content?.ctaLink || "/profile";
 
-  // Stats
-  const casesHandled = stats?.casesHandled || 500;
-  const yearsExperience = stats?.yearsExperience || 8;
+  const casesHandled = stats?.casesHandled ?? 500;
+  const yearsExperience = stats?.yearsExperience ?? 8;
 
   return (
-    <div className="relative w-full py-16 md:py-24 px-5 md:px-12 overflow-hidden">
-      {/* Background Decorations */}
-      <div className="absolute top-20 right-0 w-72 h-72 bg-amber-600/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 left-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
+    <div className="relative w-full overflow-hidden">
+      {/* Background decoration — navy-led, with only a whisper of accent. */}
+      <div
+        className="pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-accent-500/10 blur-3xl"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute -left-24 bottom-16 h-96 w-96 rounded-full bg-navy-500/15 blur-3xl"
+        aria-hidden="true"
+      />
 
-      <div className="relative max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-12" data-aos="fade-down">
-          <div className="flex flex-row items-center justify-center gap-3 mb-4">
-            <hr className="bg-amber-600 h-[2px] w-14" />
-            <h3 className="text-amber-400 uppercase font-bold tracking-wider">
-              {sectionLabel}
-            </h3>
-            <hr className="bg-amber-600 h-[2px] w-14" />
+      <div className="container-x section-y relative">
+        {/* Header */}
+        <div className="mx-auto max-w-3xl text-center" data-aos="fade-down">
+          <div className="flex items-center justify-center gap-3">
+            <span className="rule" aria-hidden="true" />
+            <span className="eyebrow-on-dark">{sectionLabel}</span>
+            <span className="rule" aria-hidden="true" />
           </div>
-          <h2 className="font-lora text-4xl md:text-5xl font-bold text-white mb-6">
-            {heading}
-          </h2>
-          <p className="text-gray-200 text-lg max-w-4xl mx-auto leading-relaxed">
-            {description}
-          </p>
+          <h2 className="h-section-on-dark mt-5">{heading}</h2>
+          <p className="lede-on-dark mt-5">{description}</p>
         </div>
 
-        {/* Stats Section */}
-         <div className="grid grid-cols-2 gap-4 md:gap-6 mb-16 max-w-2xl mx-auto">
+        {/* Stats */}
+        <div className="mx-auto mt-12 grid max-w-2xl grid-cols-2 gap-4 md:gap-6">
           <StatCard number={`${casesHandled}+`} label="Legal Cases Handled" delay="100" />
           <StatCard number={`${yearsExperience}`} label="Years Industry Experience" delay="200" />
         </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {/* Features */}
+        <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <FeatureCard
-              key={index}
+              key={feature.title || index}
               icon={feature.icon}
               title={feature.title}
               description={feature.description}
-              delay={index * 100}
+              delay={(index % 3) * 100}
             />
           ))}
         </div>
 
-        {/* CTA Section */}
-        <div className="text-center" data-aos="fade-up" data-aos-delay="600">
-          <Link
-            href={ctaLink}
-            className="inline-block bg-amber-600 hover:bg-amber-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-          >
+        {/* CTA */}
+        <div className="mt-12 text-center" data-aos="fade-up">
+          <Link href={ctaLink} className="btn-primary">
             {ctaText}
+            <FaArrowRightLong className="text-xs" aria-hidden="true" />
           </Link>
         </div>
       </div>

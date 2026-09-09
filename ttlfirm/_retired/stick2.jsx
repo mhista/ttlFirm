@@ -81,12 +81,12 @@ const SinglePractice = () => {
             <div className="flex flex-col   gap-4  md:p-0 sm:mt-0 ">
               <div className="flex flex-col gap-5 sm:p-10 sm:pb-0 md:p-0">
                 {/* <div className="flex flex-col gap-8">
-                <hr className="bg-amber-600 h-[2px] w-14" />
-                <h3 className="uppercase sp  inline font-semibold text-lg opacity-70 font-jost">
+                <hr className="bg-accent-500 h-[2px] w-14" />
+                <h3 className="uppercase sp  inline font-semibold text-lg opacity-70 font-sans">
                   Who We Are
                 </h3>
               </div> */}
-                <h1 className=" font-lora  text-4xl">
+                <h1 className=" font-display  text-4xl">
                   {demoProducts[id - 1].name}
                 </h1>
 
@@ -126,11 +126,11 @@ const SinglePractice = () => {
           </div>
           <div className="w-full p-8  md:w-[30%]">
           <div className="w-full flex flex-col gap-5 md:mt-12">
-            <h1 className="font-lora text-2xl font-medium">Practice Areas</h1>
+            <h1 className="font-display text-2xl font-medium">Practice Areas</h1>
             {  demoProducts.map((item, index) => (<div className="w-full flex flex-col gap-4" key={index}>
-            <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
+            <hr className="w-full h-[1.5px] bg-accent-500 opacity-20" />
 
-            <Link   href={`/practice/${item.id}`} className={`hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row  transition-all duration-300 gap-3 font-josh items-center font-medium text-base`}>
+            <Link   href={`/practice/${item.id}`} className={`hover:ml-4 hover:text-accent-500 hover:opacity-80 flex flex-row  transition-all duration-300 gap-3 font-sans items-center font-medium text-base`}>
                 <FaArrowRightLong
                   className={` text-xs`}
                 />

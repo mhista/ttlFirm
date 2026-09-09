@@ -1,77 +1,188 @@
-@import url("https://fonts.googleapis.com/css?family=Lora%3Aregular%2C500%2C600%2C700%2Citalic%2C500italic%2C600italic%2C700italic%7CJost%3A100%2C200%2C300%2Cregular%2C500%2C600%2C700%2C800%2C900%2C100italic%2C200italic%2C300italic%2Citalic%2C500italic%2C600italic%2C700italic%2C800italic%2C900italic&subset=cyrillic%2Ccyrillic-ext%2Clatin%2Clatin-ext%2Cvietnamese&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-.main {
-  width: 100vw;
-  min-height: 100vh;
-  pointer-events: auto;
-  /* position: fixed; */
-  /* display: flex; */
-  /* justify-content: center; */
-  padding: 0px;
-  margin: 0px;
-}
-/* .section1:before {
-  content: "";
-  background-image: url("/assets/images/grid.svg");
-  z-index: 15;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left:0;
-  opacity: 0.4;
-  filter: invert(1);
-} */
-.section1:after {
-  content: "";
-  background-image: url("/assets/images/grid.svg");
-  z-index: 15;
-  position: absolute;
-  top: 0;
-  opacity: 0.4;
-  filter: invert(1);
+/* ==========================================================================
+   Turuchi Law Firm — design tokens
+   The font stylesheet is linked from app/layout.jsx; these two variables are
+   what tailwind.config.js resolves `font-display` / `font-sans` against.
+   ========================================================================== */
+
+:root {
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --navy-950: #061525;
+  --navy-900: #0a2340;
+  --navy-800: #0f3057;
+  --navy-600: #1c5389;
+  --accent-500: #d98324;
+  --accent-400: #e9a94a;
+
+  --header-h: 96px;
 }
 
-.gradient:before {
-  height: fit-content;
-  z-index: 1;
-  width: 100%;
-  max-width: 640px;
-  background-image: radial-gradient(
-      at 27% 37%,
-      hsla(215, 98%, 61%, 1) 0px,
-      transparent 0%
-    ),
-    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 1) 0px, transparent 50%),
-    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, transparent 50%),
-    radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, transparent 50%),
-    radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, transparent 50%),
-    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, transparent 50%),
-    radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, transparent 50%);
-  position: absolute;
-  content: "";
-  width: 100%;
-  height: 100%;
-  filter: blur(100px) saturate(150%);
-  top: 80px;
-  opacity: 0.15;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white text-ink font-sans antialiased;
+    /* Nothing may push the page sideways on a phone. */
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display text-navy-900;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  /* Anchor targets clear the sticky header instead of hiding under it. */
+  [id] { scroll-margin-top: calc(var(--header-h) + 16px); }
+
+  /* Visible keyboard focus everywhere — this site is a lead funnel and
+     must stay usable without a mouse. */
+  :focus-visible {
+    outline: 2px solid var(--accent-500);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  ::selection { background: var(--navy-800); color: #fff; }
 }
 
-.btn {
-  @apply bg-amber-600 text-[#1c314e] rounded-sm px-4 py-3 text-center uppercase font-jost text-sm tracking-wider font-semibold opacity-85 cursor-pointer transition-all  hover:bg-transparent hover:border hover:outline-none hover:border-yellow-900 hover:text-black;
-}
-.btn2{
-  @apply bg-white text-amber-600 rounded-sm px-4 py-3  font-lora text-xs tracking-wider font-semibold opacity-85 cursor-pointer transition-all  hover:bg-transparent hover:border hover:outline-none hover:border-white hover:text-white;
+@layer components {
+  /* ---------------------------------------------------------------- layout */
+  .container-x { @apply mx-auto w-full max-w-[1320px] px-5 sm:px-6 lg:px-10; }
+  .section-y   { @apply py-16 md:py-24; }
+
+  /* ---------------------------------------------------------------- buttons
+     Amber is reserved for ONE primary action per view. Everything else is
+     navy or an outline, which is what keeps the site from reading orange. */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-accent-500 px-6 py-3.5
+           font-sans text-sm font-semibold uppercase tracking-wider text-navy-950
+           transition-all duration-300 hover:bg-accent-400 hover:shadow-card-hover
+           active:translate-y-px min-h-[48px];
+  }
+  .btn-navy {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-navy-900 px-6 py-3.5
+           font-sans text-sm font-semibold uppercase tracking-wider text-white
+           transition-all duration-300 hover:bg-navy-800 hover:shadow-card-hover
+           active:translate-y-px min-h-[48px];
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-white/45
+           bg-white/5 px-6 py-3.5 font-sans text-sm font-semibold uppercase tracking-wider
+           text-white backdrop-blur-sm transition-all duration-300
+           hover:border-white hover:bg-white/15 active:translate-y-px min-h-[48px];
+  }
+  .btn-outline-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-navy-900/25
+           px-6 py-3.5 font-sans text-sm font-semibold uppercase tracking-wider text-navy-900
+           transition-all duration-300 hover:border-navy-900 hover:bg-navy-900 hover:text-white
+           active:translate-y-px min-h-[48px];
+  }
+
+  /* Legacy aliases — older components still say `btn` / `btn2`. They now
+     resolve to the new system rather than the old orange block. */
+  .btn  { @apply btn-primary; }
+  .btn2 { @apply btn-outline-dark bg-white; }
+
+  /* ------------------------------------------------------------- typography */
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-sans text-xs font-bold uppercase
+           tracking-[0.22em] text-accent-600;
+  }
+  .eyebrow-on-dark { @apply eyebrow text-accent-400; }
+  .rule { @apply h-px w-10 shrink-0 bg-accent-500; }
+
+  .h-section    { @apply font-display text-3xl font-bold leading-[1.15] md:text-[2.75rem] lg:text-5xl; }
+  .h-section-on-dark { @apply h-section text-white; }
+  .lede         { @apply text-base leading-relaxed text-ink-muted md:text-lg; }
+  .lede-on-dark { @apply text-base leading-relaxed text-navy-100 md:text-lg; }
+
+  .link-accent {
+    @apply font-medium text-accent-600 underline-offset-4 transition-colors hover:text-accent-700 hover:underline;
+  }
+
+  /* ------------------------------------------------------------------ cards */
+  .card {
+    @apply rounded-xl border border-surface-line bg-white shadow-card transition-all duration-300
+           hover:-translate-y-1 hover:shadow-card-hover;
+  }
+  .card-glass {
+    @apply rounded-xl border border-white/15 bg-white/[.07] backdrop-blur-sm transition-all
+           duration-300 hover:border-white/30 hover:bg-white/[.12];
+  }
+
+  /* ------------------------------------------------------------------- nav */
+  .dropdown {
+    @apply absolute right-0 top-full z-[100] mt-3 flex w-full min-w-[280px] flex-col
+           items-start justify-start gap-5 rounded-xl border border-white/10
+           bg-navy-950/95 p-6 backdrop-blur-md;
+  }
+
+  /* -------------------------------------------------------- legal documents
+     Used by /privacy-policy and /terms-and-conditions. */
+  .legal-doc { @apply max-w-prose2 font-sans text-[15px] leading-[1.75] text-ink-muted; }
+  .legal-doc h2 {
+    @apply mb-4 mt-12 scroll-mt-32 font-display text-2xl font-bold text-navy-900 first:mt-0 md:text-3xl;
+  }
+  .legal-doc h3 {
+    @apply mb-3 mt-9 scroll-mt-32 font-sans text-base font-bold uppercase tracking-wide text-navy-800;
+  }
+  .legal-doc p  { @apply mb-4; }
+  .legal-doc ul { @apply mb-5 space-y-2 pl-0; }
+  .legal-doc li { @apply relative pl-6; }
+  .legal-doc li::before {
+    content: '';
+    @apply absolute left-0 top-[0.65em] h-1.5 w-1.5 rounded-full bg-accent-500;
+  }
+  .legal-doc a       { @apply link-accent; }
+  .legal-doc strong  { @apply font-semibold text-navy-900; }
+  .legal-doc .callout {
+    @apply my-7 rounded-lg border-l-[3px] border-accent-500 bg-navy-50 px-5 py-4 text-[15px] text-navy-900;
+  }
+
+  /* ------------------------------------------------------------ form fields */
+  .field {
+    @apply w-full rounded-md border border-surface-line bg-white px-4 py-3.5 text-[15px]
+           text-ink placeholder:text-ink-soft transition-colors
+           focus:border-navy-600 focus:outline-none focus:ring-2 focus:ring-navy-600/20;
+  }
+  .field-label { @apply mb-1.5 block font-sans text-xs font-semibold uppercase tracking-wide text-navy-800; }
 }
 
-.cursor_pointer{
-    @apply cursor-pointer;
+/* ------------------------------------------------------- motion & utilities */
+.hero-scrim {
+  background: linear-gradient(
+    100deg,
+    rgba(6, 21, 37, 0.94) 0%,
+    rgba(10, 35, 64, 0.86) 42%,
+    rgba(10, 35, 64, 0.55) 72%,
+    rgba(10, 35, 64, 0.42) 100%
+  );
+}
+.hero-scrim-mobile {
+  background: linear-gradient(180deg, rgba(6, 21, 37, 0.62) 0%, rgba(6, 21, 37, 0.8) 55%, rgba(6, 21, 37, 0.9) 100%);
 }
 
-.dropdown {
-  @apply absolute right-0 top-full mt-3 w-full p-5 rounded-lg bg-[#1c314e] opacity-95  flex flex-col justify-start items-start z-[100] ;
+/* Legacy: `.main` used to be 100vw, which caused horizontal scroll whenever a
+   vertical scrollbar was present. */
+.main { width: 100%; min-height: 100vh; margin: 0; padding: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
