@@ -142,7 +142,7 @@ const Profile = async () => {
           <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
             {/* Portrait + contact card */}
             {attorney?.profileImage && (
-              <div className="lg:col-span-4">
+              <div className="lg:col-span-4" data-aos="fade-right">
                 <div className="lg:sticky lg:top-28">
                   <ImageSection
                     image={urlFor(attorney.profileImage).width(720).url()}

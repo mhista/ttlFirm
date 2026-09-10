@@ -25,7 +25,7 @@ export default async function BlogSection({ content } = {}) {
   return (
     <div className="relative w-full flex flex-col items-center gap-8 py-16 px-5 md:px-12">
       {/* Section Header */}
-      <div className="flex flex-col items-center gap-3 text-center">
+      <div className="flex flex-col items-center gap-3 text-center" data-aos="fade-down">
         <div className="flex flex-row items-center gap-3">
           <hr className="bg-accent-500 h-[2px] w-14" />
           <h3 className="eyebrow">
@@ -41,11 +41,13 @@ export default async function BlogSection({ content } = {}) {
 
       {/* Blog Cards */}
       <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
-        {blogs.map((blog) => (
+        {blogs.map((blog, i) => (
           <Link
             key={blog._id}
             href={`/blog/${blog.slug.current}`}
             className="card group flex flex-col overflow-hidden"
+            data-aos="fade-up"
+            data-aos-delay={(i % 3) * 100}
           >
             {/* Blog Image */}
             {blog.mainImage && (

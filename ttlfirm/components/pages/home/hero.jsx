@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FaCheck, FaPhone, FaArrowRightLong } from "react-icons/fa6";
 import { FIRM, telHref } from "@/lib/siteNav";
+import CountUp from "@components/common/countUp";
 import { FilmCard, WatchFilmButton } from "@components/common/filmPlayer";
 
 const DEFAULT_BULLETS = [
@@ -14,17 +15,30 @@ const DEFAULT_BULLETS = [
 /**
  * Home hero.
  *
- * Two-column at `lg`: copy on the left, the firm's portrait film in a framed
- * player on the right. Below `lg` the film is the full-bleed background
- * (see heroMedia.jsx) and the card is hidden — the "Watch our film" control in
- * the action row is how the film is opened at every size.
+ * The layout follows what is behind it (see heroMedia.jsx):
+ *
+ *  - background is the LANDSCAPE FILM — one column. She is already moving
+ *    behind the copy at full bleed, so a second, portrait player of the same
+ *    footage beside it would be the same person twice. The copy gets the left
+ *    of the frame and the footage keeps the right.
+ *  - background is a STILL — two columns, with the framed film player on the
+ *    right. Nothing is moving otherwise, and the card is what gives the fold
+ *    some life.
+ *
+ * Either way "Watch our film" sits in the action row, so the film is one press
+ * away at every size.
  */
-const HomeHero = ({ content, stats, statsSection, film }) => {
+const HomeHero = ({ content, stats, statsSection, film, showFilmCard = true }) => {
   const eyebrow = content?.eyebrow || "New Jersey";
-  const heading = content?.heading || "Personal Injury & Workers' Compensation Lawyers";
+  // The firm's own wording, trimmed. A hero over moving footage has to be read
+  // in two seconds from a phone, so the heading loses "Trusted New Jersey Law
+  // firm" (the eyebrow above it already says New Jersey) and the description
+  // keeps her three words — compassion, diligence, integrity — and drops the
+  // practice areas the firm no longer runs.
+  const heading = content?.heading || "Delivering our absolute best for your legal outcome.";
   const description =
     content?.description ||
-    "When an accident or a workplace injury turns your life upside down, the insurance company already has lawyers working on its side. We make sure you have one working on yours — pursuing full compensation for your medical care, lost wages and recovery.";
+    "A dedicated New Jersey firm, built on compassion, diligence and integrity — relentlessly pursuing fair compensation for people harmed by someone else's negligence.";
   const ctaText = content?.ctaText || "Get Your Free Case Review";
   const ctaLink = content?.ctaLink || "/contact";
   const attorneyLinkText = content?.attorneyLinkText || "Turuchi S. Iheanachor, Esq.";
@@ -54,7 +68,7 @@ const HomeHero = ({ content, stats, statsSection, film }) => {
       <div className="container-x flex flex-1 items-center">
         <div className="grid w-full items-center gap-10 py-8 lg:grid-cols-12 lg:gap-12 lg:py-12">
           {/* ------------------------------------------------------- copy */}
-          <div className="lg:col-span-7">
+          <div className={showFilmCard ? "lg:col-span-7" : "lg:col-span-8 xl:col-span-7"}>
             <div className="flex items-center gap-3 animate-fade-up">
               <span className="h-px w-8 bg-accent-500" aria-hidden="true" />
               <span className="font-sans text-xs font-bold uppercase tracking-[0.28em] text-accent-400 sm:text-sm">
@@ -63,14 +77,14 @@ const HomeHero = ({ content, stats, statsSection, film }) => {
             </div>
 
             <h1
-              className="mt-4 font-display text-[2rem] font-bold leading-[1.08] text-white sm:text-[2.75rem] lg:text-[3.4rem] xl:text-[3.75rem] animate-fade-up"
+              className="mt-4 max-w-[20ch] font-display text-[2rem] font-bold leading-[1.06] text-white drop-shadow-[0_2px_18px_rgba(6,21,37,0.55)] sm:text-[2.6rem] lg:text-[3.1rem] xl:text-[3.4rem] animate-fade-up"
               style={{ animationDelay: "60ms" }}
             >
               {heading}
             </h1>
 
             <p
-              className="mt-5 max-w-xl text-[15px] leading-relaxed text-navy-100 sm:text-base lg:text-lg animate-fade-up"
+              className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-navy-50 drop-shadow-[0_1px_12px_rgba(6,21,37,0.6)] sm:text-base lg:text-[17px] animate-fade-up"
               style={{ animationDelay: "120ms" }}
             >
               {description}
@@ -121,12 +135,18 @@ const HomeHero = ({ content, stats, statsSection, film }) => {
           </div>
 
           {/* ------------------------------------------- framed film player */}
-          <div
-            className="hidden lg:col-span-5 lg:block animate-fade-up"
-            style={{ animationDelay: "200ms" }}
-          >
-            <FilmCard film={film} label={watchFilmLabel} />
-          </div>
+          {/* The background loop is silent and has no controls, so this is
+              where a visitor who wants the actual film goes. Switchable off in
+              the Studio — "Watch our film" stays in the action row above
+              either way, so nothing is lost by hiding it. */}
+          {showFilmCard && (
+            <div
+              className="hidden lg:col-span-5 lg:block animate-fade-up"
+              style={{ animationDelay: "200ms" }}
+            >
+              <FilmCard film={film} label={watchFilmLabel} />
+            </div>
+          )}
         </div>
       </div>
 
@@ -156,11 +176,14 @@ const HomeHero = ({ content, stats, statsSection, film }) => {
   );
 };
 
+/* The figures count up when the strip scrolls into view — see countUp.jsx.
+   Anything non-numeric in the value ("$0", "24/7") passes straight through. */
 const Stat = ({ value, label, className = "" }) => (
   <div className={`px-3 py-5 text-center md:py-6 ${className}`}>
-    <div className="font-display text-2xl font-bold text-accent-400 sm:text-3xl md:text-4xl">
-      {value}
-    </div>
+    <CountUp
+      value={value}
+      className="block font-display text-2xl font-bold text-accent-400 sm:text-3xl md:text-4xl"
+    />
     <div className="mt-1 text-[10px] font-semibold uppercase leading-tight tracking-[0.12em] text-navy-200 sm:text-[11px]">
       {label}
     </div>

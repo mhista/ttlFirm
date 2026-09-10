@@ -692,6 +692,7 @@ export const siteSettingsQuery = `
       smsNotice
     },
     smsConsent {
+      summaryText,
       consentText,
       helperText,
       formDisclaimer
@@ -757,9 +758,17 @@ export const homePageQuery = `
     heroMedia {
       backgroundVideo { asset->{ _id, url } },
       poster { asset->{ _id, url } },
+      desktopBackground,
+      desktopVideo { asset->{ _id, url } },
+      desktopPoster { asset->{ _id, url } },
+      desktopVideoStart,
+      desktopVideoEnd,
+      desktopImages[] { asset->{ _id, url } },
+      desktopImageSeconds,
       desktopBackdrop { asset->{ _id, url } },
       fullFilm { asset->{ _id, url } },
-      filmPoster { asset->{ _id, url } }
+      filmPoster { asset->{ _id, url } },
+      showFilmCard
     },
     statsSection {
       enabled,

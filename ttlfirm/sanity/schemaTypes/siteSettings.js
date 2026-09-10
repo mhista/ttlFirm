@@ -187,10 +187,21 @@ export default {
         'Appears beside the phone field on every form. It must stay optional and unchecked — changing either fails the carrier review.',
       fields: [
         {
+          name: 'summaryText',
+          title: 'Short Line (always visible)',
+          type: 'text',
+          rows: 4,
+          description:
+            'The sentence shown next to the checkbox. Keep every required piece in it: the firm name, that consent is not a condition of service, that message and data rates may apply, that frequency varies, and STOP / HELP. The longer wording below sits behind "Full SMS terms".',
+          initialValue:
+            'I agree to receive SMS from The Turuchi Law Firm at the number above. Consent is not a condition of service. Message and data rates may apply and message frequency varies. Reply STOP to opt out or HELP for help.',
+        },
+        {
           name: 'consentText',
-          title: 'Consent Wording',
+          title: 'Full Consent Wording',
           type: 'text',
           rows: 6,
+          description: 'Shown when someone opens "Full SMS terms".',
           initialValue:
             'I consent to receive conversational, transactional, informational and promotional SMS messages from The Turuchi Law Firm at the number provided. Consent is not a condition of purchasing services, retaining the firm, or receiving legal services. Message and data rates may apply and message frequency varies. Reply STOP to opt out or HELP for help.',
         },

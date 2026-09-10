@@ -46,7 +46,7 @@ const PracticeArea = ({ practiceAreas = [], content, heading, description, eyebr
   return (
     <div className="container-x section-y">
       {/* Header */}
-      <div className="mx-auto max-w-3xl text-center">
+      <div className="mx-auto max-w-3xl text-center" data-aos="fade-down">
         <div className="flex items-center justify-center gap-3">
           <span className="rule" aria-hidden="true" />
           <span className="eyebrow">{label || "What We Do"}</span>
@@ -61,9 +61,10 @@ const PracticeArea = ({ practiceAreas = [], content, heading, description, eyebr
 
       {/* Cards */}
       <div className="mt-12 grid gap-7 md:mt-14 md:grid-cols-2 lg:gap-8">
-        {cards.map((card) => (
+        {cards.map((card, i) => (
           <ModernPracticeCard
             key={card.key}
+            delay={(i % 2) * 100}
             image1={card.image}
             title={card.title}
             slug={card.slug}
@@ -74,7 +75,7 @@ const PracticeArea = ({ practiceAreas = [], content, heading, description, eyebr
       </div>
 
       {/* CTA */}
-      <div className="mt-12 flex flex-col items-center gap-4 text-center">
+      <div className="mt-12 flex flex-col items-center gap-4 text-center" data-aos="fade-up">
         {footnote && <p className="text-sm text-ink-muted">{footnote}</p>}
         <Link href={ctaLink} className="btn-navy">
           {ctaText}

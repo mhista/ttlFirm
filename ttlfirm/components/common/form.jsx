@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { FaCircleCheck, FaCircleExclamation, FaXmark, FaSpinner } from "react-icons/fa6";
 import SmsConsent from "@components/common/smsConsent";
 import { useSiteSettings } from "@/lib/siteSettingsContext";
@@ -18,7 +18,22 @@ const COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes, matching the message shown.
  *  - Adds the required, optional, unchecked SMS consent checkbox.
  *  - Real labels instead of duplicated `id="name"` on every input.
  */
-const Form = ({ tone = "light", heading, subheading, submitLabel, source = "Website contact form" }) => {
+const Form = ({
+  tone = "light",
+  heading,
+  subheading,
+  submitLabel,
+  source = "Website contact form",
+  /**
+   * "compact" is for the landing pages, where the form shares the fold with
+   * the headline and every pixel of height is a pixel of persuasion lost:
+   * tighter rows, a three-line message box instead of five, and a smaller
+   * disclaimer. The fields themselves are identical — nothing is removed,
+   * because a shorter form that drops the phone number is not a shorter form,
+   * it is a worse lead.
+   */
+  density = "comfortable",
+}) => {
   const siteSettings = useSiteSettings();
   const disclaimer =
     siteSettings?.smsConsent?.formDisclaimer ||
@@ -32,6 +47,13 @@ const Form = ({ tone = "light", heading, subheading, submitLabel, source = "Webs
   const [cooldownUntil, setCooldownUntil] = useState(0);
 
   const isDark = tone === "dark";
+  const isCompact = density === "compact";
+
+  // A landing page renders this component twice — once in the hero and once in
+  // the closing section — so the field ids have to be unique per instance or
+  // every label points at the first form's inputs.
+  const uid = useId();
+  const fieldId = (name) => `${uid}-${name}`;
 
   useEffect(() => {
     try {
@@ -121,31 +143,48 @@ const Form = ({ tone = "light", heading, subheading, submitLabel, source = "Webs
     }
   };
 
-  const labelClass = isDark
-    ? "mb-1.5 block font-sans text-xs font-semibold uppercase tracking-wide text-navy-100"
-    : "field-label";
-  const inputClass = isDark
-    ? "w-full rounded-md border border-white/15 bg-white/5 px-4 py-3.5 text-[15px] text-white placeholder:text-navy-200/70 transition-colors focus:border-accent-400 focus:outline-none focus:ring-2 focus:ring-accent-400/25"
-    : "field";
+  const labelClass = [
+    isDark
+      ? "block font-sans text-xs font-semibold uppercase tracking-wide text-navy-100"
+      : "field-label",
+    isCompact ? "mb-1" : "mb-1.5",
+  ].join(" ");
+
+  const inputClass = [
+    isDark
+      ? "w-full rounded-md border border-white/15 bg-white/5 px-4 text-[15px] text-white placeholder:text-navy-200/70 transition-colors focus:border-accent-400 focus:outline-none focus:ring-2 focus:ring-accent-400/25"
+      : "field",
+    isCompact ? "py-2.5" : "py-3.5",
+  ].join(" ");
 
   return (
     <div className="w-full">
       {heading && (
-        <h3 className={`font-display text-2xl font-bold ${isDark ? "text-white" : "text-navy-900"}`}>
+        <h3
+          className={`font-display font-bold ${isCompact ? "text-xl" : "text-2xl"} ${
+            isDark ? "text-white" : "text-navy-900"
+          }`}
+        >
           {heading}
         </h3>
       )}
       {subheading && (
-        <p className={`mt-2 text-sm ${isDark ? "text-navy-100" : "text-ink-muted"}`}>{subheading}</p>
+        <p
+          className={`mt-1.5 ${isCompact ? "text-[13px]" : "text-sm"} ${
+            isDark ? "text-navy-100" : "text-ink-muted"
+          }`}
+        >
+          {subheading}
+        </p>
       )}
 
-      <form onSubmit={handleSubmit} className={`flex w-full flex-col gap-5 ${heading ? "mt-6" : ""}`} noValidate={false}>
+      <form onSubmit={handleSubmit} className={`flex w-full flex-col ${isCompact ? "gap-3.5" : "gap-5"} ${heading ? (isCompact ? "mt-4" : "mt-6") : ""}`} noValidate={false}>
         <div>
-          <label htmlFor="lead-name" className={labelClass}>
+          <label htmlFor={fieldId("name")} className={labelClass}>
             Full name
           </label>
           <input
-            id="lead-name"
+            id={fieldId("name")}
             name="name"
             type="text"
             autoComplete="name"
@@ -157,13 +196,13 @@ const Form = ({ tone = "light", heading, subheading, submitLabel, source = "Webs
           />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className={`grid sm:grid-cols-2 ${isCompact ? "gap-3.5" : "gap-5"}`}>
           <div>
-            <label htmlFor="lead-phone" className={labelClass}>
+            <label htmlFor={fieldId("phone")} className={labelClass}>
               Mobile number
             </label>
             <input
-              id="lead-phone"
+              id={fieldId("phone")}
               name="phone"
               type="tel"
               inputMode="tel"
@@ -176,11 +215,11 @@ const Form = ({ tone = "light", heading, subheading, submitLabel, source = "Webs
             />
           </div>
           <div>
-            <label htmlFor="lead-email" className={labelClass}>
+            <label htmlFor={fieldId("email")} className={labelClass}>
               Email address
             </label>
             <input
-              id="lead-email"
+              id={fieldId("email")}
               name="email"
               type="email"
               autoComplete="email"
@@ -195,16 +234,21 @@ const Form = ({ tone = "light", heading, subheading, submitLabel, source = "Webs
 
         {/* SMS consent sits directly beneath the phone field, per the
             carrier registration requirements. */}
-        <SmsConsent checked={smsConsent} onChange={setSmsConsent} tone={tone} />
+        <SmsConsent
+          id={fieldId("sms-consent")}
+          checked={smsConsent}
+          onChange={setSmsConsent}
+          tone={tone}
+        />
 
         <div>
-          <label htmlFor="lead-message" className={labelClass}>
+          <label htmlFor={fieldId("message")} className={labelClass}>
             How can we help?
           </label>
           <textarea
-            id="lead-message"
+            id={fieldId("message")}
             name="message"
-            rows={5}
+            rows={isCompact ? 3 : 5}
             required
             placeholder="Briefly describe what happened and when."
             value={formData.message}
@@ -223,7 +267,11 @@ const Form = ({ tone = "light", heading, subheading, submitLabel, source = "Webs
           )}
         </button>
 
-        <p className={`text-[11px] leading-relaxed ${isDark ? "text-navy-200" : "text-ink-soft"}`}>
+        <p
+          className={`leading-relaxed ${isCompact ? "text-[10.5px]" : "text-[11px]"} ${
+            isDark ? "text-navy-200" : "text-ink-soft"
+          }`}
+        >
           {disclaimer}
         </p>
       </form>

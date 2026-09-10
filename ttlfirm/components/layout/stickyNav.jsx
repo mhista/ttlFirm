@@ -127,20 +127,23 @@ const StickyNav = () => {
         <div
           className={[
             "flex items-center justify-between gap-4 transition-all duration-300",
-            docked ? "h-[68px]" : "h-[76px] lg:h-[92px]",
+            docked ? "h-[76px]" : "h-[88px] lg:h-[108px]",
           ].join(" ")}
         >
           {/* ----------------------------------------------------------- Logo */}
           <Link href="/" className="flex shrink-0 items-center" aria-label="Turuchi Law Firm — home">
+            {/* The source is 556x448 — the intrinsic size has to match it or
+                Next serves an asset sized for the wrong aspect and the mark
+                renders soft. Height is set in CSS; width follows. */}
             <Image
               src="/assets/images/logo.png"
-              width={140}
-              height={70}
+              width={556}
+              height={448}
               priority
               alt="The Turuchi Law Firm"
               className={[
                 "w-auto transition-all duration-300",
-                docked ? "h-11 md:h-12" : "h-12 md:h-14 lg:h-16",
+                docked ? "h-14 md:h-[60px]" : "h-[60px] md:h-[68px] lg:h-[80px]",
               ].join(" ")}
             />
           </Link>
@@ -270,10 +273,10 @@ const StickyNav = () => {
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <Image
                 src="/assets/images/logo.png"
-                width={110}
-                height={55}
+                width={556}
+                height={448}
                 alt="Turuchi Law Firm"
-                className="h-11 w-auto"
+                className="h-14 w-auto"
               />
               <button
                 type="button"

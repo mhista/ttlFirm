@@ -1,32 +1,26 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import NumbersContainer from "@components/common/numbersContainer";
+import CountUp from "@components/common/countUp";
 
-const   Countdown = ({countToUse, subtitle, sign, timer}) => {
-    const [count, setCount] = useState(1); // Start from 1
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCount((prevCount) => {
-                if (prevCount < countToUse) {
-                    return prevCount + 1; // Increment by 1
-                } else {
-                    clearInterval(interval); // Stop the countdown at 500
-                    return prevCount;
-                }
-            });
-        }, timer); // Adjust speed (10ms per increment)
-
-        return () => clearInterval(interval); // Cleanup on unmount
-    }, []);
-
-    return (
-        <div className="flex flex-col items-center w-[50%] justify-center gap-4  text-black rounded-lg py-3 md:py-6" >
-        <h2 className="text-3xl lg:text-5xl font-display font-medium text-[#0F3057]">{count}{sign}</h2>
-        <h5 className="text-xs sm:text-sm lg:text-lg text-center text-gray-600 mr-2">{subtitle}</h5>
-    </div>
-
-    );
-};
+/**
+ * Legacy wrapper.
+ *
+ * The old <Countdown countToUse={500} sign="+" subtitle="…" timer={10} /> API
+ * is kept so nothing that still imports it breaks, but the counting itself now
+ * comes from <CountUp>, and the styling matches the rest of the design system
+ * instead of the old hard-coded #0F3057 / w-[50%].
+ *
+ * New code should use <CountUp value="500+" /> directly.
+ */
+const Countdown = ({ countToUse, subtitle, sign = "", timer }) => (
+  <div className="flex flex-col items-center justify-center gap-2 px-3 py-5 text-center md:py-6">
+    <CountUp
+      value={`${countToUse}${sign}`}
+      className="font-display text-3xl font-bold text-navy-900 lg:text-5xl"
+    />
+    <span className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-muted sm:text-sm">
+      {subtitle}
+    </span>
+  </div>
+);
 
 export default Countdown;

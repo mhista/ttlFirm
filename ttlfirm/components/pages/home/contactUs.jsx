@@ -55,7 +55,7 @@ const ContactUs = ({ contact, content }) => {
     <div className="container-x section-y">
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Left: details */}
-        <div>
+        <div data-aos="fade-right">
           <div className="flex items-center gap-3">
             <span className="rule" aria-hidden="true" />
             <span className="eyebrow">{eyebrow}</span>
@@ -120,7 +120,10 @@ const ContactUs = ({ contact, content }) => {
         </div>
 
         {/* Right: form */}
-        <div className="rounded-xl border border-surface-line bg-white p-6 shadow-card md:p-8">
+        <div
+          className="rounded-xl border border-surface-line bg-white p-6 shadow-card md:p-8"
+          data-aos="fade-left"
+        >
           <Form heading={formHeading} subheading={formSubheading} />
         </div>
       </div>

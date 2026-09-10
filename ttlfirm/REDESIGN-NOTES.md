@@ -59,47 +59,105 @@ every page rendered at ~1560px on phones. There's a comment in the file warning 
 
 ## 4. Hero video
 
-The firm's own film is now in place. **It is portrait — 576 × 1024, 9:16, 62 seconds**, shot on a
-phone and delivered over WhatsApp (which recompressed it and left a rotation flag rather than
-rotating the pixels). That constraint drives the whole hero layout.
+There are now TWO masters of the same shoot, because a phone and a desktop want opposite crops:
 
-### Files — `public/assets/videos/`
-
-| File | What it is |
+| | |
 |---|---|
-| `hero-loop.mp4` | 0–28s, silent, 2.4 MB. Background loop. Trimmed before the dark stretch at ~30s and cross-faded at both ends so the wrap is invisible |
-| `hero-poster.jpg` | First frame of the loop — shown until the video can play |
+| `hero-loop.mp4` | **Portrait 576 × 1024**, silent, 28s, 2.4 MB. Phones and tablets. |
+| `hero-loop-wide.mp4` | **Landscape 704 × 464**, silent, 12.6s, 1.4 MB. Desktop. |
+| `hero-poster.jpg` / `hero-poster-wide.jpg` | First frame of each, shown until the video can play |
+| `hero-backdrop-wide.jpg` | Wide still of the attorney — the desktop background when the video is switched off |
 | `turuchi-law-firm-film.mp4` | The full 62s film with audio, 8.5 MB. Plays in the modal |
 | `film-poster.jpg` | Poster for the modal |
-| `hero-backdrop.jpg` | A wide, softly blurred courthouse still from the same footage — the desktop hero ground |
 
 All encodes bake the rotation into the pixels (`rotate=0` metadata) rather than relying on the
-rotation flag, because some browsers and CDNs ignore it and would play the film sideways.
+rotation flag, because some browsers and CDNs ignore it and would play the film sideways. Both of
+her exports arrived over WhatsApp with `rotation=-90` set.
+
+### The landscape cut
+
+The wide file she sent is 704 × 464 — under 720p, and WhatsApp squeezed it to 885 kbps. It is
+usable full-bleed under a scrim, and it is what is shipped, but **the original export is almost
+certainly 1080p and would be a visible improvement**. Ask for it as a file, not through WhatsApp.
+
+The loop is three calm, wide takes dissolved together — 15–19.5s, 24–29.8s and 54–58.5s of the
+source — and then the tail is dissolved back over the head so the loop point is invisible. The
+aerial shot at 20–23s has the firm's logo burned into it and the close-ups at 30–34s are very
+dark; neither belongs behind a headline.
 
 ### How it's used
 
-- **Below `lg`** — the film is the full-bleed background. A phone viewport is itself portrait, so
-  9:16 fills it with almost no crop.
-- **At `lg` and up** — cropping 9:16 into a ~2:1 hero would show a narrow horizontal band across
-  the middle of the frame, so instead the background is `hero-backdrop.jpg` under a heavy navy
-  scrim, and the film plays in a framed vertical player beside the copy (`FilmCard`).
-- **Everywhere** — the `WatchFilmButton` in the hero action row opens the full film with sound and
-  native controls in a modal (`components/common/filmPlayer.jsx`). The card and the button share
-  one modal through `FilmProvider`, mounted in `app/layout.jsx`.
+- **Below `lg`** — the portrait loop is the full-bleed background. A phone viewport is itself
+  portrait, so 9:16 fills it with almost no crop.
+- **At `lg` and up** — the landscape loop is the full-bleed background, at full opacity with no
+  blur, under `.hero-scrim-film`. That scrim is deliberately light — two stacked gradients that
+  keep the left third dark enough for a white headline while the right side opens up and lets the
+  footage through. A hero video you cannot see is not a hero video.
+- **Either way** — the `WatchFilmButton` in the hero action row opens the full film with sound and
+  native controls in a modal (`components/common/filmPlayer.jsx`).
 
-`heroMedia.jsx` skips the video entirely for `prefers-reduced-motion`, `saveData` and 2G, and falls
-back to the poster if autoplay is refused. That matters — a personal-injury site gets heavy mobile
-traffic on cellular.
+The framed vertical player (`FilmCard`) stays on the right of the desktop hero whichever
+background is running. The loop behind it is silent and has no controls, so the card is where a
+visitor who wants the actual film — with sound — goes.
 
-### If she supplies landscape footage
+There is a second entry point further down: `FilmTile` in `filmPlayer.jsx` drops into the "Why
+Trust Us" grid. That grid is three across and the Studio decides how many features there are, so
+whenever the count doesn't divide by three there was a hole in the last row; the tile fills it, in
+the same glass frame as its neighbours. With a count that already fills the row it stays out
+rather than opening a new hole. It is an image and a button, not a player — a second autoplaying
+video that far down the page would cost phone bandwidth for something few people reach.
 
-Drop it in as `hero-loop.mp4` (silent, trimmed) plus a matching `hero-poster.jpg`, and the desktop
-hero can go full-bleed. Specs to give her:
+### Looping an arbitrary upload
+
+The file shipped with the site was cut to loop seamlessly. Anything uploaded through the Studio
+will not have been — it will be the whole film, cutting hard back to frame one every pass, very
+likely with a title card or a dark stretch in it. `ambientVideo.jsx` handles that in the browser,
+so nobody has to re-encode anything:
+
+- **Two video elements share the source.** As the visible one nears the end of the clip, the other
+  is seeked back to the start, started, and cross-faded in over 0.9s. The jump-cut becomes a
+  dissolve. The second element only decodes during the handover.
+- **Start at / Stop at (seconds)** play only a chosen stretch. Fifteen good seconds of a
+  two-minute film can be used without touching the file.
+
+Both are automatic for an uploaded video and off for the shipped one, which does not need them.
+
+### Switching desktop to photographs
+
+**Homepage → Hero Video & Images → Desktop Hero Background** chooses between the wide loop and
+photographs. Phones always play the portrait loop, whichever is chosen.
+
+**Desktop Photos** is a list. One photo is a still hero; several cross-fade on a timer
+(`imageLoop.jsx`, **Seconds per photo**, default 6). Every image is in the DOM from the start and
+switched by opacity — swapping a `src` makes the browser fetch mid-fade and the first cycle
+flashes white on a slow connection. Only the first is eager; the timer stops while the tab is
+hidden; `prefers-reduced-motion` gets the first photo and no timer.
+
+This is the escape hatch for whenever the wide footage on hand is the wrong shape or too soft for
+full bleed: three or four good stills still give a hero with movement in it. Three frames from the
+same shoot ship as the default, so switching it on looks finished before anyone uploads anything.
+
+### The framed player
+
+**Homepage → Hero Video & Images → Show the film player beside the hero copy** switches the
+portrait card on the right of the desktop hero on and off. "Watch our film" stays in the action
+row under the copy either way, so the film is never more than one press away.
+
+The card is **paused by default** — it is an `<img>` of the poster with a play control over it, so
+the film is never downloaded by someone who does not ask for it. Pressing it opens the modal with
+sound, and **the background loop stops while the film is playing**: two clips of the same person
+moving at once, one of them with sound, is confusing, and it is wasted decoding besides.
+`FilmProvider` publishes `isOpen` for this, and `HeroMedia` passes it to `AmbientVideo` as
+`paused`.
+
+### If she supplies better landscape footage
+
+Upload it to **Homepage → Hero Video & Images → Background Loop — desktop**. Specs to give her:
 
 - Landscape 16:9, **1920 × 1080 minimum**, MP4 / H.264, 24 or 30 fps
 - 15–30 seconds for the loop; send the long cut separately for the modal
 - No text or logo burned in — the site puts its own headline over it
-- Slow, steady shots; bright and evenly lit (it sits under a dark navy scrim)
+- Slow, steady shots; bright and evenly lit
 - **Keep the left third of the frame clear** — headline and buttons live there
 - Send as a file via Drive / WeTransfer, **not over WhatsApp**, which recompresses and rotates
 
@@ -199,6 +257,25 @@ contact form and inside the Text Us widget, directly beneath the phone field.
 2. It is **unchecked by default**
 3. The consent text keeps the disclosures and the Privacy Policy link
 
+### Why it is an accordion
+
+The full approved paragraph plus the helper text ran to about ten lines on a phone, which pushed
+the submit button off the bottom of the screen and made the form read as paperwork. The block is
+now split:
+
+- A **short line beside the checkbox**, always visible, carrying every element a reviewer looks
+  for: the firm name, that consent is not a condition of service, that message and data rates may
+  apply, that frequency varies, and STOP / HELP. The Privacy Policy and Terms links sit on the
+  line under it, also always visible.
+- The **full approved wording plus the third-party statement** behind a "Full SMS terms"
+  disclosure. It is rendered at all times and only collapsed by height, so it is in the page
+  source and in the accessibility tree whether or not anyone opens it. It carries `inert` while
+  collapsed so its links are not focus traps.
+
+Every disclosure is therefore present at the point of opt-in, which is what the rule requires —
+nothing is loaded on demand or hidden behind a page change. Both strings are editable in
+**Site Settings → SMS & Widget** (*Short Line* and *Full Consent Wording*).
+
 `app/api/email/route.js` now records the consent as evidence in the notification email: the exact
 consent language, a UTC timestamp, which form it came from, the IP address and the user agent.
 The subject line is prefixed `[SMS OPT-IN]` when consent was given, and the body says
@@ -220,6 +297,49 @@ never covers policy text a carrier reviewer is reading. Dismissal is remembered 
 **It currently posts to `/api/email`**, so no enquiry is lost while A2P is pending. Once
 RingCentral is approved, change the single `fetch` target in `submit()` — nothing else needs to
 move.
+
+---
+
+## 8b. Motion
+
+The pages sat completely still, and it was not deliberate. Markup all over the project still
+carried `data-aos="fade-up"` attributes, and `whyChooseUs.jsx` and `TailoredCTA.jsx` were both
+calling `AOS.init()` — but nobody had ever imported `aos/dist/aos.css`, and AOS's transforms live
+in that stylesheet. Every one of those attributes was inert.
+
+Rather than wire the library back up (it ships its own CSS, re-measures on every resize and
+animates by mutating inline styles, all of which fights the App Router), motion is now two small
+files sharing one set of CSS rules:
+
+| | |
+|---|---|
+| `components/common/reveal.jsx` | `<Reveal>` / `useInView()` — for React components |
+| `components/common/motion.jsx` | one document-wide observer that drives `data-aos` attributes, so the existing markup animates unchanged |
+| `components/common/countUp.jsx` | the counting statistics |
+
+`aos` is off the dependency list.
+
+**The rules.** 14px of travel over 0.6s, once, on the way down only. Anything larger on a law firm
+site reads as a template rather than as craft, and anything that re-animates on the way back up
+reads as a bug. Supported: `fade`, `fade-up`, `fade-down`, `fade-left`, `fade-right`, `zoom-in`,
+plus `data-aos-delay` for staggering a row.
+
+**Nothing is ever hidden without JavaScript.** All the hiding rules are scoped to `.js-motion`, a
+class an inline script in `app/layout.jsx` sets before the body is parsed. No JS — a crawler, a
+blocked bundle, an old browser — means the class is absent and the page simply does not animate.
+`prefers-reduced-motion` shows the finished state immediately. There is also a 1.2s failsafe in
+`motion.jsx` that reveals anything still hidden but on screen. Content that sells legal services
+must never depend on an animation completing.
+
+**Counting statistics.** The homepage hero strip, the "Why Trust Us" stat cards and the landing
+page trust bar count up when they scroll into view. `countUp.jsx` takes the finished string the CMS
+holds — `500+`, `$0`, `24/7` — and animates only the first run of digits, so an editor never has to
+think about prefixes and suffixes. It renders the *final* figure on the server and drops to zero in
+a layout effect, before paint: if the bundle never runs, the visitor sees `500+`, not `0+`.
+
+The old `countdown.jsx` counted with `setInterval` from 1 at a fixed 10ms step, which meant 500
+cases took five seconds and the number was still climbing long after most people had scrolled past.
+It is kept as a thin wrapper on the new component so nothing that imports it breaks.
 
 ---
 

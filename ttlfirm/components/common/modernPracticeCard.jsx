@@ -8,9 +8,13 @@ import { FaArrowRightLong, FaCheck } from "react-icons/fa6";
  * Reworked for a two-column layout — the firm now has two practice areas, so
  * a four-across grid of near-empty cards no longer makes sense.
  */
-const ModernPracticeCard = ({ image1, title, subtitle, slug, subAreas = [] }) => {
+const ModernPracticeCard = ({ image1, title, subtitle, slug, subAreas = [], delay = 0 }) => {
   return (
-    <article className="group card flex flex-col overflow-hidden">
+    <article
+      className="group card flex flex-col overflow-hidden"
+      data-aos="fade-up"
+      data-aos-delay={delay}
+    >
       {/* Image */}
       <div className="relative h-[220px] overflow-hidden sm:h-[260px]">
         <Image

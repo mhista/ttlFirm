@@ -111,24 +111,87 @@ export default {
       fields: [
         {
           name: 'backgroundVideo',
-          title: 'Background Loop',
+          title: 'Background Loop — phones (portrait)',
           type: 'file',
           options: { accept: 'video/mp4' },
           description:
-            'Short silent MP4 that loops behind the hero. 15–30 seconds. Landscape 1920x1080 is ideal; a portrait video is used full-screen on phones and in the framed player on desktop.',
+            'Short silent MP4 that loops behind the hero on phones and tablets. Portrait 9:16, 15–30 seconds.',
         },
         {
           name: 'poster',
-          title: 'Video Poster',
+          title: 'Video Poster — phones',
           type: 'image',
           description: 'Still shown while the video loads, and instead of it on slow connections.',
         },
         {
-          name: 'desktopBackdrop',
-          title: 'Desktop Backdrop',
-          type: 'image',
+          name: 'desktopBackground',
+          title: 'Desktop Hero Background',
+          type: 'string',
+          options: {
+            layout: 'radio',
+            list: [
+              { title: 'Play the wide video', value: 'video' },
+              { title: 'Show a wide photo instead', value: 'image' },
+            ],
+          },
+          initialValue: 'video',
           description:
-            'Wide still sitting behind the hero on desktop. Only used when the background loop is portrait.',
+            'Phones always play the portrait loop. This only changes what desktop shows — switch to the photo whenever the wide footage on hand is not the right shape or is too low-resolution for a full-width hero.',
+        },
+        {
+          name: 'desktopVideo',
+          title: 'Background Loop — desktop (landscape)',
+          type: 'file',
+          options: { accept: 'video/mp4' },
+          description:
+            'Landscape 16:9, 1920x1080 or better, silent, 15–30 seconds. Keep the left third of the frame clear — the headline sits there.',
+        },
+        {
+          name: 'desktopPoster',
+          title: 'Video Poster — desktop',
+          type: 'image',
+          description: 'Wide still shown while the desktop loop loads.',
+        },
+        {
+          name: 'desktopVideoStart',
+          title: 'Start at (seconds)',
+          type: 'number',
+          validation: (Rule) => Rule.min(0),
+          description:
+            'Only for a video uploaded above. Play from this point instead of the beginning — useful for skipping a title card or a dark opening. Leave empty to start at 0.',
+        },
+        {
+          name: 'desktopVideoEnd',
+          title: 'Stop at (seconds)',
+          type: 'number',
+          validation: (Rule) => Rule.min(1),
+          description:
+            'Play up to this point, then loop back to the start. Leave empty to use the whole file. A full film does not need to be re-cut to be used here — pick fifteen good seconds and set them.',
+        },
+        {
+          name: 'desktopImages',
+          title: 'Desktop Photos',
+          type: 'array',
+          of: [{ type: 'image', options: { hotspot: true } }],
+          validation: (Rule) => Rule.max(6),
+          description:
+            'Used when "Show a wide photo instead" is selected above. Add ONE photo for a still hero, or several and they cross-fade in a loop. Landscape, 1920px wide or better. Pictures of the attorney work best — keep her right of centre so the headline has clean space on the left.',
+        },
+        {
+          name: 'desktopImageSeconds',
+          title: 'Seconds per photo',
+          type: 'number',
+          initialValue: 6,
+          validation: (Rule) => Rule.min(3).max(20),
+          description: 'Only matters when there is more than one photo above. 6 is a good default.',
+        },
+        {
+          name: 'desktopBackdrop',
+          title: 'Desktop Photo (single — older field)',
+          type: 'image',
+          hidden: ({ parent }) => Boolean(parent?.desktopImages?.length),
+          description:
+            'Kept so nothing already set here is lost. Add photos to "Desktop Photos" above instead — as soon as that list has anything in it, this is ignored and hidden.',
         },
         {
           name: 'fullFilm',
@@ -138,6 +201,14 @@ export default {
           description: 'Opens when a visitor presses "Watch our film". Can be any length.',
         },
         { name: 'filmPoster', title: 'Film Poster', type: 'image' },
+        {
+          name: 'showFilmCard',
+          title: 'Show the film player beside the hero copy (desktop)',
+          type: 'boolean',
+          initialValue: true,
+          description:
+            'The framed vertical player on the right of the hero. Switch it off for a plain full-width hero — "Watch our film" stays in the buttons underneath the copy either way, so the film is still one press away.',
+        },
       ],
     },
 

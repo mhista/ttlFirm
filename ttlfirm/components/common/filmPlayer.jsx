@@ -1,5 +1,13 @@
 "use client";
-import { useEffect, useRef, useState, createContext, useContext, useCallback } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  createContext,
+  useContext,
+  useCallback,
+} from "react";
 import { createPortal } from "react-dom";
 import { FaPlay, FaXmark } from "react-icons/fa6";
 
@@ -7,14 +15,13 @@ import { FaPlay, FaXmark } from "react-icons/fa6";
 // Images) is passed down as props and wins over these.
 const DEFAULT_FILM = "/assets/videos/turuchi-law-firm-film.mp4";
 const DEFAULT_FILM_POSTER = "/assets/videos/film-poster.jpg";
-const DEFAULT_LOOP = "/assets/videos/hero-loop.mp4";
 const DEFAULT_LOOP_POSTER = "/assets/videos/hero-poster.jpg";
 
 /* ------------------------------------------------------------------ context
    Lets the hero's "Watch our film" button and the framed card open the same
    modal, each supplying its own source. */
 const FilmContext = createContext(null);
-export const useFilm = () => useContext(FilmContext) || { open: () => {} };
+export const useFilm = () => useContext(FilmContext) || { open: () => {}, isOpen: false };
 
 export const FilmProvider = ({ children }) => {
   const [source, setSource] = useState(null);
@@ -26,10 +33,17 @@ export const FilmProvider = ({ children }) => {
     });
   }, []);
 
+  const close = useCallback(() => setSource(null), []);
+
+  // `isOpen` is published so the hero can stop its background loop while the
+  // film is playing. Two videos of the same person moving at once, one of them
+  // with sound, is confusing — and it is wasted decoding besides.
+  const value = useMemo(() => ({ open, close, isOpen: Boolean(source) }), [open, close, source]);
+
   return (
-    <FilmContext.Provider value={{ open }}>
+    <FilmContext.Provider value={value}>
       {children}
-      <FilmModal source={source} onClose={() => setSource(null)} />
+      <FilmModal source={source} onClose={close} />
     </FilmContext.Provider>
   );
 };
@@ -128,29 +142,22 @@ export const WatchFilmButton = ({ className = "", label = "Watch our film", film
    a portrait frame rather than being cropped to a strip inside a wide hero. */
 export const FilmCard = ({ film, label = "Watch our film" }) => {
   const { open } = useFilm();
-  const videoRef = useRef(null);
 
-  const loopSrc = film?.loop || DEFAULT_LOOP;
   const loopPoster = film?.loopPoster || DEFAULT_LOOP_POSTER;
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    videoRef.current?.play().catch(() => {});
-  }, []);
 
   return (
     <div className="relative mx-auto w-full max-w-[330px]">
       <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-navy-950 shadow-widget">
-        <video
-          ref={videoRef}
-          src={loopSrc}
-          poster={loopPoster}
-          muted
-          loop
-          playsInline
-          preload="metadata"
+        {/* Paused by default, on purpose. With the wide loop already running
+            behind the copy, a second silent clip of the same person playing
+            beside it read as two videos competing. This is the still — press
+            it and the film opens with sound, and the background stops. It is
+            an <img> rather than a paused <video> so the file is never
+            downloaded by someone who does not ask for it. */}
+        <img
+          src={loopPoster}
+          alt=""
           aria-hidden="true"
-          tabIndex={-1}
           className="aspect-[9/16] w-full object-cover"
         />
 
@@ -180,6 +187,63 @@ export const FilmCard = ({ film, label = "Watch our film" }) => {
         aria-hidden="true"
       />
     </div>
+  );
+};
+
+/* ------------------------------------------------------------------ the tile
+   A grid-cell-shaped version of the card, for dropping into a row of feature
+   cards. "Why Trust Us" runs five features in a three-across grid, which left
+   an empty sixth cell; this fills it with the one thing a visitor might
+   actually want next, in the same glass frame as its neighbours.
+
+   Deliberately an image and a button, not a player: this sits well down the
+   page, and a second autoplaying video below the hero would cost bandwidth on
+   a phone for something almost nobody scrolls to with the sound on. */
+export const FilmTile = ({
+  film,
+  label = "Watch our film",
+  heading = "See the firm for yourself",
+  description = "Two minutes with Turuchi, outside the courthouse where she works.",
+  delay,
+}) => {
+  const { open } = useFilm();
+  const poster = film?.poster || DEFAULT_FILM_POSTER;
+
+  return (
+    <button
+      type="button"
+      onClick={() => open(film)}
+      data-aos="fade-up"
+      data-aos-delay={delay}
+      aria-label={`${label} — ${heading}`}
+      className="card-glass group relative flex h-full min-h-[248px] flex-col overflow-hidden p-6 text-left lg:p-7"
+    >
+      <img
+        src={poster}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full scale-105 object-cover opacity-30 transition-transform duration-700 group-hover:scale-110"
+      />
+      <span
+        className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/80 to-navy-900/40"
+        aria-hidden="true"
+      />
+
+      <span className="relative flex h-11 w-11 items-center justify-center rounded-lg border border-accent-500/30 bg-accent-500/12 transition-colors duration-300 group-hover:bg-accent-500">
+        <span className="absolute inset-0 rounded-lg bg-white/15 animate-pulse-ring" aria-hidden="true" />
+        <FaPlay className="relative ml-0.5 text-sm text-accent-400 transition-colors duration-300 group-hover:text-navy-950" aria-hidden="true" />
+      </span>
+
+      <span className="relative mt-5 block font-display text-xl font-semibold leading-snug text-white">
+        {heading}
+      </span>
+      <span className="relative mt-3 block text-sm leading-relaxed text-navy-100">
+        {description}
+      </span>
+      <span className="relative mt-auto pt-5 block font-sans text-[11px] font-bold uppercase tracking-[0.16em] text-accent-400">
+        {label}
+      </span>
+    </button>
   );
 };
 

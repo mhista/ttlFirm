@@ -124,7 +124,7 @@ const AboutUs = async () => {
         <div className="container-x section-y">
           <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
             {whoWeAre?.mainImage && (
-              <div className="lg:col-span-5">
+              <div className="lg:col-span-5" data-aos="fade-right">
                 <div className="lg:sticky lg:top-28">
                   <ImageSection
                     image={urlFor(whoWeAre.mainImage).width(900).url()}

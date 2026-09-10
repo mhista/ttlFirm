@@ -1,6 +1,4 @@
 "use client";
-import { useEffect } from "react";
-import AOS from "aos";
 import Link from "next/link";
 
 /**
@@ -16,10 +14,6 @@ import Link from "next/link";
  * @param {Array} ctaData.buttons - Array of button objects with text and link
  */
 const TailoredCTA = ({ ctaData }) => {
-  useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
-  }, []);
-
   if (!ctaData?.enabled) return null;
 
   return (

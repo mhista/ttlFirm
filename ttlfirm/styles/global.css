@@ -21,7 +21,7 @@
   --accent-500: #d98324;
   --accent-400: #e9a94a;
 
-  --header-h: 96px;
+  --header-h: 112px;
 }
 
 @layer base {
@@ -161,15 +161,43 @@
 }
 
 /* ------------------------------------------------------- motion & utilities */
-/* Desktop hero ground: the copy sits on the left, the framed film player on
-   the right, so this stays deep on the left and opens slightly to the right. */
+/* Desktop hero ground.
+
+   `.hero-scrim-film` is for a hero whose background IS the subject — the
+   attorney and the courthouse. It is deliberately light: two stacked
+   gradients rather than one flat wash, so the left third stays dark enough to
+   carry a white headline while the right side opens up and lets the footage
+   through. The vertical pass darkens only the top (under the navigation) and
+   the bottom (behind the stats strip), which is where contrast is actually
+   needed.
+
+   `.hero-scrim-desktop` is the older, much heavier wash, kept for any hero
+   whose background is only texture.  */
+.hero-scrim-film {
+  background:
+    linear-gradient(
+      100deg,
+      rgba(6, 21, 37, 0.9) 0%,
+      rgba(8, 28, 52, 0.74) 32%,
+      rgba(10, 35, 64, 0.46) 62%,
+      rgba(12, 42, 76, 0.3) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(6, 21, 37, 0.6) 0%,
+      rgba(6, 21, 37, 0.12) 22%,
+      rgba(6, 21, 37, 0.12) 58%,
+      rgba(6, 21, 37, 0.82) 100%
+    );
+}
+
 .hero-scrim-desktop {
   background: linear-gradient(
     100deg,
-    rgba(6, 21, 37, 0.97) 0%,
-    rgba(10, 35, 64, 0.93) 45%,
-    rgba(10, 35, 64, 0.86) 75%,
-    rgba(15, 48, 87, 0.82) 100%
+    rgba(6, 21, 37, 0.96) 0%,
+    rgba(10, 35, 64, 0.9) 45%,
+    rgba(10, 35, 64, 0.8) 75%,
+    rgba(15, 48, 87, 0.72) 100%
   );
 }
 .hero-scrim-mobile {
@@ -180,6 +208,60 @@
    vertical scrollbar was present. */
 .main { width: 100%; min-height: 100vh; margin: 0; padding: 0; }
 
+/* ---------------------------------------------------------------- reveals
+   Scroll-in motion, from two sources that share one set of rules:
+
+     <Reveal>              components/common/reveal.jsx   (React)
+     data-aos="fade-up"    components/common/motion.jsx   (attribute)
+
+   Deliberately small: 14px of travel over 0.6s, once, on the way down only.
+   Anything larger on a law firm site reads as a template rather than as craft,
+   and anything that re-animates on the way back up reads as a bug.
+
+   Everything is scoped to `.js-motion`, a class an inline script in
+   app/layout.jsx sets before the body is parsed. If JavaScript never runs —
+   a crawler, a blocked bundle, an old browser — the class is absent, nothing
+   is ever hidden, and the page simply does not animate. Content that sells
+   legal services must never depend on an animation completing. */
+.js-motion .reveal,
+.js-motion [data-aos] {
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.js-motion .reveal            { transform: translate3d(0, 14px, 0); }
+.js-motion .reveal-fade       { transform: none; }
+.js-motion .reveal-left       { transform: translate3d(-18px, 0, 0); }
+.js-motion .reveal-right      { transform: translate3d(18px, 0, 0); }
+.js-motion .reveal-scale      { transform: scale(0.97); }
+
+/* AOS-compatible names, so the markup already in the project animates. */
+.js-motion [data-aos="fade-up"]    { transform: translate3d(0, 14px, 0); }
+.js-motion [data-aos="fade-down"]  { transform: translate3d(0, -14px, 0); }
+.js-motion [data-aos="fade-right"] { transform: translate3d(-18px, 0, 0); }
+.js-motion [data-aos="fade-left"]  { transform: translate3d(18px, 0, 0); }
+.js-motion [data-aos="zoom-in"]    { transform: scale(0.97); }
+.js-motion [data-aos="fade"]       { transform: none; }
+
+.js-motion .reveal.is-in,
+.js-motion [data-aos].aos-in {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Underline that draws in on hover — used on inline links in body copy. */
+.link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-draw:hover { background-size: 100% 1px; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
@@ -187,4 +269,6 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  /* Show the finished state straight away rather than snapping to it. */
+  .reveal, [data-aos] { opacity: 1 !important; transform: none !important; }
 }

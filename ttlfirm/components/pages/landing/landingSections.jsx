@@ -22,6 +22,9 @@ import {
 } from "react-icons/fa";
 
 import Form from "@components/common/form";
+import Reveal from "@components/common/reveal";
+import CountUp from "@components/common/countUp";
+import AmbientVideo from "@components/common/ambientVideo";
 import { telHref } from "@/lib/siteNav";
 
 const iconMap = {
@@ -36,39 +39,32 @@ const iconMap = {
 /* --------------------------------------------------------------------- hero */
 export const LpHero = ({ data, phone }) => {
   const bg = data.backgroundImage?.asset?.url;
-  const bgVideo = data.backgroundVideo?.asset?.url;
+  // Falls back to the firm's own footage, so a landing page has motion behind
+  // it the moment it is created — the portrait cut on phones, the landscape cut
+  // on desktop, same as the homepage. Uploading a Background Video in the
+  // Studio overrides both.
+  const uploaded = data.backgroundVideo?.asset?.url;
+  const mobileVideo = uploaded || "/assets/videos/hero-loop.mp4";
+  const desktopVideo = uploaded || "/assets/videos/hero-loop-wide.mp4";
+  const poster = bg || "/assets/videos/hero-poster.jpg";
+  const desktopPoster = bg || "/assets/videos/hero-poster-wide.jpg";
 
   return (
     <section className="relative isolate overflow-hidden bg-navy-950">
-      {bg && (
-        <img
-          src={bg}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 h-full w-full object-cover object-center opacity-35"
-        />
-      )}
-      {/* Optional and off by default. Ad traffic is overwhelmingly mobile on
-          cellular, so this only loads when someone has explicitly chosen it,
-          and never for reduced-motion or save-data visitors. */}
-      {bgVideo && (
-        <video
-          src={bgVideo}
-          poster={bg}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="none"
-          aria-hidden="true"
-          tabIndex={-1}
-          className="absolute inset-0 -z-10 h-full w-full object-cover object-center opacity-35 motion-reduce:hidden"
-        />
-      )}
-      <div className="absolute inset-0 -z-10 hero-scrim-desktop" aria-hidden="true" />
+      {/* AmbientVideo handles the reduced-motion, Save Data and 2G opt-outs —
+          ad traffic is mostly mobile on cellular and a background flourish must
+          never cost someone a megabyte they did not agree to. */}
+      <div className="absolute inset-0 -z-10 lg:hidden">
+        <AmbientVideo src={mobileVideo} poster={poster} eager stillClassName="opacity-45" />
+      </div>
+      <div className="absolute inset-0 -z-10 hidden lg:block">
+        <AmbientVideo src={desktopVideo} poster={desktopPoster} eager />
+      </div>
+      <div className="absolute inset-0 -z-10 hero-scrim-mobile lg:hidden" aria-hidden="true" />
+      <div className="absolute inset-0 -z-10 hidden hero-scrim-film lg:block" aria-hidden="true" />
 
       <div className="container-x grid gap-10 py-14 md:py-20 lg:grid-cols-12 lg:gap-14">
-        <div className={data.showForm === false ? "lg:col-span-12" : "lg:col-span-7"}>
+        <Reveal className={data.showForm === false ? "lg:col-span-12" : "lg:col-span-7"}>
           {data.eyebrow && (
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-accent-500" aria-hidden="true" />
@@ -113,19 +109,20 @@ export const LpHero = ({ data, phone }) => {
               {phone}
             </a>
           </div>
-        </div>
+        </Reveal>
 
         {data.showForm !== false && (
-          <div className="lg:col-span-5" id="lead-form">
-            <div className="rounded-xl border border-surface-line bg-white p-6 shadow-widget md:p-7">
+          <Reveal className="lg:col-span-5" delay={120} id="lead-form">
+            <div className="rounded-xl border border-surface-line bg-white p-5 shadow-widget md:p-6">
               <Form
+                density="compact"
                 heading={data.formHeading || "Free case review"}
                 subheading={data.formSubheading}
                 submitLabel="Get My Free Case Review"
                 source={`Landing page — ${data.heading || "hero"}`}
               />
             </div>
-          </div>
+          </Reveal>
         )}
       </div>
     </section>
@@ -141,8 +138,9 @@ export const LpTrustBar = ({ data }) => {
     <section className="border-y border-white/10 bg-navy-900">
       <div className="container-x grid grid-cols-2 md:grid-cols-4">
         {items.slice(0, 4).map((item, i) => (
-          <div
+          <Reveal
             key={`${item.label}-${i}`}
+            delay={i * 70}
             className={[
               "px-3 py-5 text-center md:py-6",
               i % 2 === 0 ? "border-r border-white/10" : "",
@@ -152,13 +150,14 @@ export const LpTrustBar = ({ data }) => {
               .filter(Boolean)
               .join(" ")}
           >
-            <div className="font-display text-2xl font-bold text-accent-400 sm:text-3xl">
-              {item.value}
-            </div>
+            <CountUp
+              value={item.value}
+              className="block font-display text-2xl font-bold text-accent-400 sm:text-3xl"
+            />
             <div className="mt-1 text-[10px] font-semibold uppercase leading-tight tracking-[0.12em] text-navy-200 sm:text-[11px]">
               {item.label}
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -169,7 +168,7 @@ export const LpTrustBar = ({ data }) => {
 export const LpProofPoints = ({ data }) => (
   <section className="bg-white">
     <div className="container-x section-y">
-      <div className="mx-auto max-w-3xl text-center">
+      <Reveal className="mx-auto max-w-3xl text-center">
         {data.eyebrow && (
           <div className="flex items-center justify-center gap-3">
             <span className="rule" aria-hidden="true" />
@@ -179,14 +178,14 @@ export const LpProofPoints = ({ data }) => (
         )}
         {data.heading && <h2 className="h-section mt-5">{data.heading}</h2>}
         {data.description && <p className="lede mt-5">{data.description}</p>}
-      </div>
+      </Reveal>
 
       {data.items?.length > 0 && (
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {data.items.map((item, i) => {
             const Icon = iconMap[item.icon] || FaCheckCircle;
             return (
-              <div key={item.title || i} className="card p-6 lg:p-7">
+              <Reveal key={item.title || i} delay={(i % 3) * 90} className="card p-6 lg:p-7">
                 <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-accent-500/12">
                   <Icon className="text-lg text-accent-600" aria-hidden="true" />
                 </span>
@@ -194,7 +193,7 @@ export const LpProofPoints = ({ data }) => (
                   {item.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-ink-muted">{item.description}</p>
-              </div>
+              </Reveal>
             );
           })}
         </div>
@@ -207,7 +206,7 @@ export const LpProofPoints = ({ data }) => (
 export const LpSteps = ({ data }) => (
   <section className="bg-surface-alt">
     <div className="container-x section-y">
-      <div className="mx-auto max-w-3xl text-center">
+      <Reveal className="mx-auto max-w-3xl text-center">
         {data.eyebrow && (
           <div className="flex items-center justify-center gap-3">
             <span className="rule" aria-hidden="true" />
@@ -216,12 +215,17 @@ export const LpSteps = ({ data }) => (
           </div>
         )}
         {data.heading && <h2 className="h-section mt-5">{data.heading}</h2>}
-      </div>
+      </Reveal>
 
       {data.steps?.length > 0 && (
         <ol className="mt-12 grid gap-6 md:grid-cols-3">
           {data.steps.map((step, i) => (
-            <li key={step.title || i} className="rounded-xl border border-surface-line bg-white p-6">
+            <Reveal
+              as="li"
+              key={step.title || i}
+              delay={i * 90}
+              className="rounded-xl border border-surface-line bg-white p-6"
+            >
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-navy-900 font-display text-lg font-bold text-accent-400">
                 {i + 1}
               </span>
@@ -229,7 +233,7 @@ export const LpSteps = ({ data }) => (
                 {step.title}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-ink-muted">{step.description}</p>
-            </li>
+            </Reveal>
           ))}
         </ol>
       )}
@@ -245,7 +249,7 @@ export const LpTestimonials = ({ data }) => {
   return (
     <section className="bg-white">
       <div className="container-x section-y">
-        <div className="mx-auto max-w-3xl text-center">
+        <Reveal className="mx-auto max-w-3xl text-center">
           {data.eyebrow && (
             <div className="flex items-center justify-center gap-3">
               <span className="rule" aria-hidden="true" />
@@ -254,11 +258,16 @@ export const LpTestimonials = ({ data }) => {
             </div>
           )}
           {data.heading && <h2 className="h-section mt-5">{data.heading}</h2>}
-        </div>
+        </Reveal>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((t) => (
-            <figure key={t._id} className="flex flex-col rounded-xl border border-surface-line bg-white p-7 shadow-card">
+          {items.map((t, i) => (
+            <Reveal
+              as="figure"
+              key={t._id}
+              delay={(i % 3) * 90}
+              className="flex flex-col rounded-xl border border-surface-line bg-white p-7 shadow-card"
+            >
               <FaQuoteLeft className="text-2xl text-accent-500/35" aria-hidden="true" />
               <blockquote className="mt-5 flex-1">
                 <p className="text-[15px] leading-relaxed text-ink-muted">{t.testimonial}</p>
@@ -276,7 +285,7 @@ export const LpTestimonials = ({ data }) => {
                 <p className="mt-3 text-center font-sans text-sm font-bold text-navy-900">{t.name}</p>
                 {t.role && <p className="text-center text-xs text-ink-soft">{t.role}</p>}
               </figcaption>
-            </figure>
+            </Reveal>
           ))}
         </div>
 
@@ -303,7 +312,7 @@ export const LpVideo = ({ data, phone }) => {
       <div className="container-x section-y">
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
           {/* Copy */}
-          <div className="lg:col-span-6">
+          <Reveal className="lg:col-span-6">
             {data.eyebrow && (
               <div className="flex items-center gap-3">
                 <span className="rule" aria-hidden="true" />
@@ -332,10 +341,10 @@ export const LpVideo = ({ data, phone }) => {
                 <FaArrowRightLong className="text-xs" aria-hidden="true" />
               </a>
             )}
-          </div>
+          </Reveal>
 
           {/* Player */}
-          <div className="lg:col-span-6">
+          <Reveal className="lg:col-span-6" delay={120}>
             <div
               className={`relative mx-auto overflow-hidden rounded-2xl border border-white/15 bg-navy-950 shadow-widget ${
                 portrait ? "max-w-[330px]" : "max-w-full"
@@ -377,7 +386,7 @@ export const LpVideo = ({ data, phone }) => {
                 </button>
               )}
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -393,7 +402,7 @@ export const LpFaq = ({ data }) => {
   return (
     <section className="bg-surface-alt">
       <div className="container-x section-y">
-        <div className="mx-auto max-w-3xl">
+        <Reveal className="mx-auto max-w-3xl">
           <h2 className="h-section text-center">{data.heading || "Common questions"}</h2>
 
           <div className="mt-10 divide-y divide-surface-line border-y border-surface-line">
@@ -439,7 +448,7 @@ export const LpFaq = ({ data }) => {
               );
             })}
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -449,7 +458,7 @@ export const LpFaq = ({ data }) => {
 export const LpRichText = ({ data }) => (
   <section className="bg-white">
     <div className="container-x section-y">
-      <div className="mx-auto max-w-prose2">
+      <Reveal className="mx-auto max-w-prose2">
         {data.eyebrow && (
           <div className="flex items-center gap-3">
             <span className="rule" aria-hidden="true" />
@@ -460,7 +469,7 @@ export const LpRichText = ({ data }) => (
         <div className="legal-doc mt-6 max-w-none">
           {data.body?.length > 0 && <PortableText value={data.body} />}
         </div>
-      </div>
+      </Reveal>
     </div>
   </section>
 );
@@ -468,7 +477,7 @@ export const LpRichText = ({ data }) => (
 /* --------------------------------------------------------------------- CTA */
 export const LpCta = ({ data, phone }) => (
   <section className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800">
-    <div className="container-x section-y text-center">
+    <Reveal className="container-x section-y text-center">
       <h2 className="h-section-on-dark mx-auto max-w-3xl">{data.heading}</h2>
       {data.description && <p className="lede-on-dark mx-auto mt-5 max-w-2xl">{data.description}</p>}
 
@@ -486,7 +495,7 @@ export const LpCta = ({ data, phone }) => (
           </a>
         )}
       </div>
-    </div>
+    </Reveal>
   </section>
 );
 
@@ -494,7 +503,7 @@ export const LpCta = ({ data, phone }) => (
 export const LpForm = ({ data }) => (
   <section className="bg-surface-alt" id="lead-form">
     <div className="container-x section-y">
-      <div className="mx-auto max-w-2xl text-center">
+      <Reveal className="mx-auto max-w-2xl text-center">
         {data.eyebrow && (
           <div className="flex items-center justify-center gap-3">
             <span className="rule" aria-hidden="true" />
@@ -504,16 +513,19 @@ export const LpForm = ({ data }) => (
         )}
         {data.heading && <h2 className="h-section mt-5">{data.heading}</h2>}
         {data.description && <p className="lede mt-5">{data.description}</p>}
-      </div>
+      </Reveal>
 
-      <div className="mx-auto mt-10 max-w-2xl rounded-xl border border-surface-line bg-white p-6 shadow-card md:p-8">
+      <Reveal
+        delay={100}
+        className="mx-auto mt-10 max-w-2xl rounded-xl border border-surface-line bg-white p-6 shadow-card md:p-8"
+      >
         <Form
           heading={data.formHeading || "Request a free case review"}
           subheading={data.formSubheading}
           submitLabel="Get My Free Case Review"
           source={`Landing page — ${data.heading || "form section"}`}
         />
-      </div>
+      </Reveal>
     </div>
   </section>
 );

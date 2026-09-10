@@ -55,10 +55,18 @@ const LegalBody = ({ intro, callout, sections = [] }) => (
       </div>
     )}
 
-    {sections.map((section, i) => (
-      <div key={section.anchor || i}>
+    {sections.map((section, i) => {
+      // The query flattens `anchor` to a string, but accept the raw slug object
+      // too — an unflattened one would otherwise render id="[object Object]"
+      // on every heading and silently break the contents rail.
+      const anchor =
+        (typeof section.anchor === "string" ? section.anchor : section.anchor?.current) ||
+        `section-${i + 1}`;
+
+      return (
+      <div key={anchor}>
         {section.partLabel && <h3>{section.partLabel}</h3>}
-        <h2 id={section.anchor || `section-${i + 1}`}>{section.heading}</h2>
+        <h2 id={anchor}>{section.heading}</h2>
         <LegalRichText value={section.body} />
         {section.callout?.length > 0 && (
           <div className="callout">
@@ -66,7 +74,8 @@ const LegalBody = ({ intro, callout, sections = [] }) => (
           </div>
         )}
       </div>
-    ))}
+      );
+    })}
   </>
 );
 

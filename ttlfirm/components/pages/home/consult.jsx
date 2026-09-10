@@ -66,7 +66,7 @@ const Consultation = ({ content, contact, stats }) => {
 
       {/* Contact cards */}
       <div className="mt-12 grid gap-5 md:grid-cols-3">
-        {cards.map(({ icon: Icon, title, body, href, note }) => {
+        {cards.map(({ icon: Icon, title, body, href, note }, i) => {
           const isInternal = href.startsWith("/");
           const Wrapper = isInternal ? Link : "a";
           return (
@@ -74,6 +74,8 @@ const Consultation = ({ content, contact, stats }) => {
               key={title}
               href={href}
               className="card-glass group flex flex-col items-center p-7 text-center"
+              data-aos="fade-up"
+              data-aos-delay={i * 100}
             >
               <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-500/15 transition-all duration-300 group-hover:scale-105 group-hover:bg-accent-500">
                 <Icon

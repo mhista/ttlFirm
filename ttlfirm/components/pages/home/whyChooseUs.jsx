@@ -1,6 +1,4 @@
 "use client";
-import { useEffect } from "react";
-import AOS from "aos";
 import Link from "next/link";
 import {
   FaCheckCircle,
@@ -11,6 +9,8 @@ import {
   FaUserTie,
 } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
+import CountUp from "@components/common/countUp";
+import { FilmTile } from "@components/common/filmPlayer";
 
 // Icon mapping — the CMS stores the icon NAME, so this list is the contract.
 const iconMap = {
@@ -48,7 +48,10 @@ const FeatureCard = ({ icon: iconName, title, description, delay }) => {
 
 const StatCard = ({ number, label, delay }) => (
   <div className="card-glass p-6 text-center" data-aos="zoom-in" data-aos-delay={delay}>
-    <div className="font-display text-4xl font-bold text-accent-400 md:text-5xl">{number}</div>
+    <CountUp
+      value={number}
+      className="block font-display text-4xl font-bold text-accent-400 md:text-5xl"
+    />
     <div className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.16em] text-navy-200">
       {label}
     </div>
@@ -60,11 +63,10 @@ const StatCard = ({ number, label, delay }) => (
  * Structure, CMS fields and default copy are unchanged; only the palette and
  * typography were brought onto the new navy system.
  */
-const WhyChooseUs = ({ content, stats }) => {
-  useEffect(() => {
-    AOS.init({ duration: 800, once: true, offset: 40 });
-  }, []);
-
+// The data-aos attributes in this file are driven by components/common/motion.jsx.
+// The AOS library used to be initialised here, but its stylesheet was never
+// imported, so nothing on this section ever actually moved.
+const WhyChooseUs = ({ content, stats, film }) => {
   const defaultFeatures = [
     {
       icon: "FaBalanceScale",
@@ -117,6 +119,13 @@ const WhyChooseUs = ({ content, stats }) => {
   const casesHandled = stats?.casesHandled ?? 500;
   const yearsExperience = stats?.yearsExperience ?? 8;
 
+  // The grid is three across at `lg`. Whenever the feature count doesn't
+  // divide by three there is a hole in the last row, and the film tile goes in
+  // it. With a count that already fills the row it would open a new hole, so
+  // it stays out. The Studio decides how many features there are, so this has
+  // to be worked out rather than hard-coded.
+  const showFilmTile = features.length % 3 !== 0;
+
   return (
     <div className="relative w-full overflow-hidden">
       {/* Background decoration — navy-led, with only a whisper of accent. */}
@@ -147,7 +156,7 @@ const WhyChooseUs = ({ content, stats }) => {
           <StatCard number={`${yearsExperience}`} label="Years Industry Experience" delay="200" />
         </div>
 
-        {/* Features */}
+        {/* Features, plus the film tile when there's a hole to fill. */}
         <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <FeatureCard
@@ -158,6 +167,7 @@ const WhyChooseUs = ({ content, stats }) => {
               delay={(index % 3) * 100}
             />
           ))}
+          {showFilmTile && <FilmTile film={film} delay={(features.length % 3) * 100} />}
         </div>
 
         {/* CTA */}

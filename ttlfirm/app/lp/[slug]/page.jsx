@@ -100,14 +100,16 @@ const LandingPage = async ({ params }) => {
       {/* Minimal header: logo and one phone number. No menu — nothing to
           click except the action this page exists for. */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-navy-950">
-        <div className="container-x flex h-[68px] items-center justify-between gap-4">
+        <div className="container-x flex h-[80px] items-center justify-between gap-4 md:h-[92px]">
           <Link href="/" aria-label="Turuchi Law Firm">
+            {/* Intrinsic size matches the source (556x448) so Next serves an
+                asset for the right aspect; the height is set in CSS. */}
             <Image
               src="/assets/images/logo.png"
-              width={130}
-              height={65}
+              width={556}
+              height={448}
               alt="The Turuchi Law Firm"
-              className="h-11 w-auto"
+              className="h-14 w-auto md:h-[68px]"
               priority
             />
           </Link>

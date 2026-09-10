@@ -29,7 +29,12 @@ const PageHeader = ({
       <Nav />
       <StickyNav />
 
-      <div className="container-x pb-12 pt-32 sm:pb-14 sm:pt-40 lg:pb-16 lg:pt-48">
+      {/* Above the fold, so the observer fires on the first frame and this
+          reads as an entrance rather than as a scroll reveal. */}
+      <div
+        className="container-x pb-12 pt-32 sm:pb-14 sm:pt-40 lg:pb-16 lg:pt-48"
+        data-aos="fade-up"
+      >
         {eyebrow && (
           <div className="mb-4 flex items-center gap-3">
             <span className="h-px w-8 bg-accent-500" aria-hidden="true" />

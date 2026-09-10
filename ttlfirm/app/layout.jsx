@@ -2,6 +2,7 @@ import "@styles/global.css";
 import SiteChrome from "@components/layout/siteChrome";
 import Tracking from "@components/common/tracking";
 import { FilmProvider } from "@components/common/filmPlayer";
+import MotionRoot from "@components/common/motion";
 import { client } from "@/lib/sanity.client";
 import { siteSettingsQuery } from "@/lib/sanity.queries";
 import { SiteSettingsProvider } from "@/lib/siteSettingsContext";
@@ -90,8 +91,26 @@ const Rootlayout = async ({ children }) => {
   }
 
   return (
-    <html lang="en">
+    // suppressHydrationWarning is for THIS element only, and it is here because
+    // the inline script below adds `js-motion` to <html> before React hydrates.
+    // The server never renders that class — deliberately, so a page without
+    // JavaScript is never left with hidden sections — which React otherwise
+    // reports as an attribute mismatch. It does not suppress anything inside
+    // the tree.
+    <html lang="en" suppressHydrationWarning>
       <body className="bg-white">
+        {/* Runs before any of the markup below is parsed, so the scroll-reveal
+            styles only ever apply on a page where JavaScript is actually
+            running. Without this gate a blocked or failed bundle would leave
+            every animated section permanently invisible; with it, the worst
+            case is a page that simply does not animate. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js-motion')",
+          }}
+        />
+        <MotionRoot />
+
         <SiteSettingsProvider value={siteSettings}>
           {/* Keyboard and screen-reader users land here first. */}
           <a

@@ -64,7 +64,7 @@ const TestimonialCarousel = ({ testimonials = [], content }) => {
       </div>
 
       {/* Carousel */}
-      <div className="relative mt-12">
+      <div className="relative mt-12" data-aos="fade-up">
         <swiper-container ref={swiperRef} init="false" class="pb-12">
           {testimonials.map((t) => (
             <swiper-slide key={t._id} class="h-auto">

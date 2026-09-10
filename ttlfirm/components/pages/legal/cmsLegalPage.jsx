@@ -17,7 +17,9 @@ const CmsLegalPage = ({ doc, fallbackImage = "/assets/images/laws.jpg", breadcru
   const railSections = (doc?.sections || [])
     .filter((s) => s?.heading)
     .map((s, i) => ({
-      id: s.anchor || `section-${i + 1}`,
+      // Matches the fallback in legalBody.jsx — keep the two in step.
+      id:
+        (typeof s.anchor === "string" ? s.anchor : s.anchor?.current) || `section-${i + 1}`,
       label: s.heading,
     }));
 

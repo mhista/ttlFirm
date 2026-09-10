@@ -25,7 +25,7 @@ const AboutUs = ({ content }) => {
     <div className="container-x section-y">
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         {/* Image */}
-        <div className="relative">
+        <div className="relative" data-aos="fade-right">
           <div className="overflow-hidden rounded-xl">
             <Image
               src={image}

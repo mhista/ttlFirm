@@ -155,10 +155,29 @@ const Home = async () => {
 
   // Hero media: whatever the Studio holds wins; otherwise the files shipped
   // with the site are used.
+  // Phones get the portrait loop, desktop the landscape one. `desktopBackground`
+  // in the Studio switches desktop between the wide loop and a wide still —
+  // useful whenever the footage on hand isn't the right shape for full bleed.
   const videoSrc = heroMedia.backgroundVideo?.asset?.url || "/assets/videos/hero-loop.mp4";
   const posterSrc = heroMedia.poster?.asset?.url || "/assets/videos/hero-poster.jpg";
-  const backdropSrc =
-    heroMedia.desktopBackdrop?.asset?.url || "/assets/videos/hero-backdrop.jpg";
+  const desktopMode = heroMedia.desktopBackground === "image" ? "image" : "video";
+  // An uploaded video is an arbitrary file — the whole film, most likely — so
+  // it gets the cross-faded loop and the optional in/out points. The file
+  // shipped with the site was already cut to loop seamlessly and does not.
+  const uploadedDesktopVideo = heroMedia.desktopVideo?.asset?.url;
+  const desktopVideoSrc = uploadedDesktopVideo || "/assets/videos/hero-loop-wide.mp4";
+  const desktopVideoSmoothLoop = Boolean(uploadedDesktopVideo);
+  const desktopPosterSrc =
+    heroMedia.desktopPoster?.asset?.url || "/assets/videos/hero-poster-wide.jpg";
+  // "Desktop Photos" is a list, so one photo is a still hero and several
+  // cross-fade. The older single-image field is still read, so nothing set
+  // before this existed is lost.
+  const desktopImages = (heroMedia.desktopImages || [])
+    .map((img) => img?.asset?.url)
+    .filter(Boolean);
+  if (!desktopImages.length && heroMedia.desktopBackdrop?.asset?.url) {
+    desktopImages.push(heroMedia.desktopBackdrop.asset.url);
+  }
   const filmSrc = heroMedia.fullFilm?.asset?.url || "/assets/videos/turuchi-law-firm-film.mp4";
   const filmPoster = heroMedia.filmPoster?.asset?.url || "/assets/videos/film-poster.jpg";
 
@@ -175,7 +194,11 @@ const Home = async () => {
     ),
     whyChooseUs: on("whyChooseUsSection") && (
       <Section3 key="whyChooseUs">
-        <WhyChooseUs content={homePage?.whyChooseUsSection} stats={stats} />
+        <WhyChooseUs
+          content={homePage?.whyChooseUsSection}
+          stats={stats}
+          film={{ src: filmSrc, poster: filmPoster, loop: videoSrc, loopPoster: posterSrc }}
+        />
       </Section3>
     ),
     consultation: on("consultationSection") && (
@@ -213,11 +236,23 @@ const Home = async () => {
         }}
       />
 
-      <Header videoSrc={videoSrc} posterSrc={posterSrc} backdropSrc={backdropSrc}>
+      <Header
+        videoSrc={videoSrc}
+        posterSrc={posterSrc}
+        desktopMode={desktopMode}
+        desktopVideoSrc={desktopVideoSrc}
+        desktopVideoSmoothLoop={desktopVideoSmoothLoop}
+        desktopVideoStart={heroMedia.desktopVideoStart}
+        desktopVideoEnd={heroMedia.desktopVideoEnd}
+        desktopPosterSrc={desktopPosterSrc}
+        desktopImages={desktopImages}
+        desktopImageSeconds={heroMedia.desktopImageSeconds}
+      >
         <HomeHero
           content={{ ...hero, phone: contact.phone || FIRM.phoneDisplay }}
           stats={stats}
           statsSection={homePage?.statsSection}
+          showFilmCard={heroMedia.showFilmCard !== false}
           film={{ src: filmSrc, poster: filmPoster, loop: videoSrc, loopPoster: posterSrc }}
         />
       </Header>
