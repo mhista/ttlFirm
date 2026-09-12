@@ -1,5 +1,5 @@
 // Single source of truth for navigation, practice areas and legal links.
-// The firm now practises in TWO areas only — personal injury and workers'
+// The firm now practices in TWO areas only — personal injury and workers'
 // compensation. Immigration and municipal court were retired in the 2026
 // rebuild; do not reintroduce them here.
 
@@ -20,7 +20,7 @@ export const PRACTICE_AREAS = [
   },
 ];
 
-// Slugs the firm no longer practises. Sanity may still hold these documents
+// Slugs the firm no longer practices. Sanity may still hold these documents
 // until they are unpublished in the Studio, so every list of practice areas
 // is filtered through `filterRetiredAreas` before it renders.
 export const RETIRED_PRACTICE_SLUGS = [
@@ -76,6 +76,71 @@ export const FIRM = {
   addressLine2: "Jersey City, NJ 07310",
   mapsUrl:
     "https://maps.google.com/?q=111+Town+Square+Pl+Jersey+City+NJ+07310",
+};
+
+/**
+ * The offices, as shipped. Anything in Site Settings → Contact replaces this
+ * entirely — it is only here so a fresh install is never address-less.
+ */
+export const FIRM_OFFICES = [
+  {
+    label: "Jersey City",
+    note: "By appointment only",
+    street: "111 Town Square Pl, Ste 1238 #492165",
+    city: "Jersey City",
+    state: "NJ",
+    zipCode: "07310",
+    country: "US",
+  },
+  {
+    label: "Piscataway",
+    street: "30 Knightsbridge Road, Suite 525",
+    city: "Piscataway",
+    state: "NJ",
+    zipCode: "08854",
+    country: "US",
+  },
+];
+
+const mapsLink = (o) =>
+  `https://maps.google.com/?q=${encodeURIComponent(
+    [o.street, o.city, o.state, o.zipCode].filter(Boolean).join(" ")
+  )}`;
+
+/**
+ * One place that turns whatever the CMS holds into offices the UI can render.
+ *
+ * The firm has more than one address, and the footer, the contact page and the
+ * schema.org markup all need the same list in the same order — so they all ask
+ * this rather than each re-deriving it from `contact.address`. `lines` is what
+ * you print; `postal` is what goes into structured data.
+ *
+ * The primary address stays first: it is the one on the letterhead, and search
+ * engines treat the first PostalAddress as the main location.
+ */
+export const getOffices = (contact) => {
+  const primary = contact?.address?.street ? { ...contact.address } : null;
+  const extra = (contact?.additionalOffices || []).filter((o) => o?.street);
+
+  const offices = primary || extra.length ? [primary, ...extra].filter(Boolean) : FIRM_OFFICES;
+
+  return offices.map((o) => ({
+    label: o.label || o.city || "",
+    note: o.note || "",
+    lines: [
+      o.street,
+      [o.city, [o.state, o.zipCode].filter(Boolean).join(" ")].filter(Boolean).join(", "),
+    ].filter(Boolean),
+    mapsUrl: mapsLink(o),
+    postal: {
+      "@type": "PostalAddress",
+      streetAddress: o.street,
+      addressLocality: o.city,
+      addressRegion: o.state,
+      postalCode: o.zipCode,
+      addressCountry: o.country || "US",
+    },
+  }));
 };
 
 /** Turns whatever the CMS holds into a `tel:` safe string. */

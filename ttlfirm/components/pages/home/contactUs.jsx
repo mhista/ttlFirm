@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import { FaEnvelope, FaPhone, FaLocationDot, FaClock } from "react-icons/fa6";
+import { FaEnvelope, FaPhone, FaLocationDot, FaClock, FaWhatsapp } from "react-icons/fa6";
 import Form from "@components/common/form";
 import { buildSocialLinks } from "@components/common/mediaButtons";
 import { useSiteSettings } from "@/lib/siteSettingsContext";
-import { FIRM, telHref } from "@/lib/siteNav";
+import { FIRM, telHref, getOffices } from "@/lib/siteNav";
 
 /**
  * Contact block: firm details on the left, lead form on the right.
@@ -17,26 +17,15 @@ const ContactUs = ({ contact, content }) => {
   const phone = contact?.phone || FIRM.phoneDisplay;
   const email = contact?.email || FIRM.email;
 
-  const addressText = contact?.address?.street
-    ? [
-        contact.address.street,
-        contact.address.city,
-        [contact.address.state, contact.address.zipCode].filter(Boolean).join(" "),
-      ]
-        .filter(Boolean)
-        .join(", ")
-    : `${FIRM.addressLine1}, ${FIRM.addressLine2}`;
-
-  const mapsUrl = contact?.address?.street
-    ? `https://maps.google.com/?q=${encodeURIComponent(addressText)}`
-    : FIRM.mapsUrl;
+  const offices = getOffices(contact);
+  const whatsapp = contact?.whatsapp?.trim();
 
   const heading = content?.heading || "Tell us what happened";
   const eyebrow = content?.sectionLabel || "Get in touch";
   const hoursLabel =
     content?.hoursLabel ||
     siteSettings?.businessHours?.weekdaysDisplay ||
-    "Monday – Friday, 9:00 AM – 5:00 PM";
+    "Open 24 hours, 7 days a week";
   const formHeading = content?.formHeading || "Request a free case review";
   const formSubheading =
     content?.formSubheading || "We typically respond the same business day.";
@@ -44,10 +33,29 @@ const ContactUs = ({ contact, content }) => {
     content?.description ||
     "Send a few details and we'll review your situation, answer your questions, and explain the options open to you — free, and with no obligation to hire us.";
 
+  // One row per office, so a second address is a row rather than a rewrite.
   const details = [
     { icon: FaPhone, label: "Phone", value: phone, href: telHref(phone) },
     { icon: FaEnvelope, label: "Email", value: email, href: `mailto:${email}` },
-    { icon: FaLocationDot, label: "Office", value: addressText, href: mapsUrl, external: true },
+    ...(whatsapp
+      ? [
+          {
+            icon: FaWhatsapp,
+            label: "WhatsApp",
+            value: whatsapp,
+            // wa.me wants digits only, no plus and no spaces.
+            href: `https://wa.me/${whatsapp.replace(/[^\d]/g, "")}`,
+            external: true,
+          },
+        ]
+      : []),
+    ...offices.map((office, i) => ({
+      icon: FaLocationDot,
+      label: offices.length > 1 ? office.label || `Office ${i + 1}` : "Office",
+      value: [office.lines.join(", "), office.note].filter(Boolean).join(" — "),
+      href: office.mapsUrl,
+      external: true,
+    })),
     { icon: FaClock, label: "Hours", value: hoursLabel },
   ];
 

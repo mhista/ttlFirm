@@ -7,7 +7,7 @@ import {
   homePageQuery,
   siteSettingsQuery,
 } from "@/lib/sanity.queries";
-import { filterRetiredAreas, FIRM } from "@/lib/siteNav";
+import { filterRetiredAreas, FIRM, getOffices } from "@/lib/siteNav";
 
 import Section1 from "@components/common/section1";
 import Section2 from "@components/common/section2";
@@ -17,6 +17,8 @@ import Header from "@components/layout/header";
 import HomeHero from "@components/pages/home/hero";
 import PracticeArea from "@components/pages/home/practiceAreas";
 import WhyChooseUs from "@components/pages/home/whyChooseUs";
+import FilmSection from "@components/pages/home/filmSection";
+import AccidentTypes from "@components/pages/home/accidentTypes";
 import Consultation from "@components/pages/home/consult";
 import TestimonialCarousel from "@components/pages/home/testimonial";
 import BlogSection from "@components/pages/home/blogSection";
@@ -87,7 +89,7 @@ export async function generateMetadata() {
 
 function buildOrganizationSchema(siteSettings) {
   const contact = siteSettings?.contact || {};
-  const address = contact.address || {};
+  const offices = getOffices(contact);
 
   return {
     "@context": "https://schema.org",
@@ -100,14 +102,9 @@ function buildOrganizationSchema(siteSettings) {
     description:
       siteSettings?.description ||
       "New Jersey law firm focused on personal injury and workers' compensation representation.",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: address.street || "111 Town Square Pl, Ste 1238 #492165",
-      addressLocality: address.city || "Jersey City",
-      addressRegion: address.state || "NJ",
-      postalCode: address.zipCode || "07310",
-      addressCountry: address.country || "US",
-    },
+    // schema.org takes an array once there is more than one location, and
+    // reads the first as primary.
+    address: offices.length === 1 ? offices[0].postal : offices.map((o) => o.postal),
     geo: { "@type": "GeoCoordinates", latitude: "40.7178", longitude: "-74.0431" },
     areaServed: [{ "@type": "State", name: "New Jersey" }],
     priceRange: "$$",
@@ -132,6 +129,8 @@ function buildOrganizationSchema(siteSettings) {
 // Default order, used when nothing is set in the Studio.
 const DEFAULT_ORDER = [
   "practiceAreas",
+  "accidentTypes",
+  "film",
   "whyChooseUs",
   "consultation",
   "testimonials",
@@ -191,6 +190,19 @@ const Home = async () => {
       <Section1 key="practiceAreas">
         <PracticeArea practiceAreas={practiceAreas} content={homePage?.practiceAreasSection} />
       </Section1>
+    ),
+    accidentTypes: on("accidentTypesSection") && (
+      <Section1 key="accidentTypes">
+        <AccidentTypes content={homePage?.accidentTypesSection} />
+      </Section1>
+    ),
+    film: on("filmSection") && (
+      <Section2 key="film">
+        <FilmSection
+          content={homePage?.filmSection}
+          film={{ src: filmSrc, poster: filmPoster, loop: videoSrc, loopPoster: posterSrc }}
+        />
+      </Section2>
     ),
     whyChooseUs: on("whyChooseUsSection") && (
       <Section3 key="whyChooseUs">
@@ -252,7 +264,6 @@ const Home = async () => {
           content={{ ...hero, phone: contact.phone || FIRM.phoneDisplay }}
           stats={stats}
           statsSection={homePage?.statsSection}
-          showFilmCard={heroMedia.showFilmCard !== false}
           film={{ src: filmSrc, poster: filmPoster, loop: videoSrc, loopPoster: posterSrc }}
         />
       </Header>

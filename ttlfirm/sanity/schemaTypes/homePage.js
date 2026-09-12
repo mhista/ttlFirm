@@ -3,7 +3,7 @@
 // Homepage content management.
 //
 // Every string, image, video, stat and CTA the homepage renders is a field
-// here. Colours, fonts and spacing stay in code on purpose — the palette is
+// here. Colors, fonts and spacing stay in code on purpose — the palette is
 // part of the brand, not content.
 // ===========================================
 
@@ -175,7 +175,7 @@ export default {
           of: [{ type: 'image', options: { hotspot: true } }],
           validation: (Rule) => Rule.max(6),
           description:
-            'Used when "Show a wide photo instead" is selected above. Add ONE photo for a still hero, or several and they cross-fade in a loop. Landscape, 1920px wide or better. Pictures of the attorney work best — keep her right of centre so the headline has clean space on the left.',
+            'Used when "Show a wide photo instead" is selected above. Add ONE photo for a still hero, or several and they cross-fade in a loop. Landscape, 1920px wide or better. Pictures of the attorney work best — keep her right of center so the headline has clean space on the left.',
         },
         {
           name: 'desktopImageSeconds',
@@ -201,14 +201,7 @@ export default {
           description: 'Opens when a visitor presses "Watch our film". Can be any length.',
         },
         { name: 'filmPoster', title: 'Film Poster', type: 'image' },
-        {
-          name: 'showFilmCard',
-          title: 'Show the film player beside the hero copy (desktop)',
-          type: 'boolean',
-          initialValue: true,
-          description:
-            'The framed vertical player on the right of the hero. Switch it off for a plain full-width hero — "Watch our film" stays in the buttons underneath the copy either way, so the film is still one press away.',
-        },
+
       ],
     },
 
@@ -223,6 +216,15 @@ export default {
       fields: [
         { name: 'enabled', title: 'Show Stats Strip', type: 'boolean', initialValue: true },
         {
+          name: 'disclaimer',
+          title: 'Results Disclaimer',
+          type: 'string',
+          initialValue:
+            'Prior results do not guarantee a similar outcome. Every case turns on its own facts.',
+          description:
+            'Sits under the figures. New Jersey requires a claim about past recoveries to be qualified where it is made — leave this in place.',
+        },
+        {
           name: 'stats',
           title: 'Stats',
           type: 'array',
@@ -231,7 +233,7 @@ export default {
             {
               type: 'object',
               fields: [
-                { name: 'value', title: 'Value', type: 'string', description: 'e.g. 500+, 8, $0' },
+                { name: 'value', title: 'Value', type: 'string', description: 'e.g. 700+, Millions, $0' },
                 { name: 'label', title: 'Label', type: 'string' },
               ],
               preview: { select: { title: 'value', subtitle: 'label' } },
@@ -391,6 +393,103 @@ export default {
     },
 
     // -------------------------------------------------------- SECTION ORDER
+    // ------------------------------------------------- ACCIDENT TYPES
+    {
+      name: 'accidentTypesSection',
+      title: 'Accidents We Handle',
+      type: 'object',
+      group: 'sections',
+      description:
+        'The breakdown of accident types. Someone hit by a bus searches for "bus accident", not for "personal injury" — this is the section that answers them, and every line in it is a phrase people actually type into Google.',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        { name: 'enabled', title: 'Show Section', type: 'boolean', initialValue: true },
+        { name: 'sectionLabel', title: 'Small Label', type: 'string' },
+        { name: 'heading', title: 'Heading', type: 'string' },
+        { name: 'description', title: 'Description', type: 'text', rows: 3 },
+        {
+          name: 'groups',
+          title: 'Groups',
+          type: 'array',
+          description: 'Leave empty to use the built-in lists.',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                { name: 'title', title: 'Group Title', type: 'string' },
+                {
+                  name: 'icon',
+                  title: 'Icon',
+                  type: 'string',
+                  options: {
+                    list: [
+                      { title: 'Car crash', value: 'FaCarBurst' },
+                      { title: 'Person falling', value: 'FaPersonFalling' },
+                      { title: 'Hard hat', value: 'FaHelmetSafety' },
+                      { title: 'Medical', value: 'FaBriefcaseMedical' },
+                      { title: 'Scales', value: 'FaScaleBalanced' },
+                      { title: 'Damaged building', value: 'FaHouseChimneyCrack' },
+                    ],
+                  },
+                },
+                {
+                  name: 'items',
+                  title: 'Accident Types',
+                  type: 'array',
+                  of: [{ type: 'string' }],
+                },
+                {
+                  name: 'href',
+                  title: 'Link',
+                  type: 'string',
+                  description: 'Where "More on …" goes. Leave empty to hide that link.',
+                },
+              ],
+              preview: { select: { title: 'title' } },
+            },
+          ],
+        },
+        { name: 'ctaText', title: 'Button Text', type: 'string' },
+        { name: 'ctaLink', title: 'Button Link', type: 'string' },
+      ],
+    },
+
+    // ------------------------------------------------------- FILM SECTION
+    {
+      name: 'filmSection',
+      title: 'Our Film',
+      type: 'object',
+      group: 'sections',
+      description:
+        'The firm\'s film, in a band of its own. It used to sit inside the hero; it was moved out because on desktop the hero now plays the wide loop full bleed behind the headline.',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        { name: 'enabled', title: 'Show Section', type: 'boolean', initialValue: true },
+        { name: 'sectionLabel', title: 'Small Label', type: 'string' },
+        { name: 'heading', title: 'Heading', type: 'string' },
+        { name: 'description', title: 'Description', type: 'text', rows: 4 },
+        {
+          name: 'portrait',
+          title: 'Attorney Photo',
+          type: 'image',
+          options: { hotspot: true },
+          description:
+            'Upright, roughly 4:5, 720px wide or better. It becomes the frame the film plays in.',
+        },
+        { name: 'portraitName', title: 'Name Shown On Photo', type: 'string' },
+        { name: 'portraitRole', title: 'Title Shown On Photo', type: 'string' },
+        {
+          name: 'bullets',
+          title: 'Bullets',
+          type: 'array',
+          of: [{ type: 'string' }],
+          validation: (Rule) => Rule.max(4),
+        },
+        { name: 'ctaText', title: 'Button Text', type: 'string' },
+        { name: 'ctaLink', title: 'Button Link', type: 'string' },
+      ],
+    },
+
     {
       name: 'sectionOrder',
       title: 'Section Order',
@@ -404,6 +503,8 @@ export default {
           options: {
             list: [
               { title: 'Practice Areas', value: 'practiceAreas' },
+              { title: 'Accidents We Handle', value: 'accidentTypes' },
+              { title: 'Our Film', value: 'film' },
               { title: 'Why Trust Us', value: 'whyChooseUs' },
               { title: 'Consultation Band', value: 'consultation' },
               { title: 'Testimonials', value: 'testimonials' },

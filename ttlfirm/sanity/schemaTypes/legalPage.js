@@ -41,7 +41,7 @@ export default {
           name: 'headingHighlight',
           title: 'Highlighted Word',
           type: 'string',
-          description: 'Shown in the accent colour after the heading.',
+          description: 'Shown in the accent color after the heading.',
         },
         { name: 'description', title: 'Standfirst', type: 'text', rows: 2 },
         { name: 'backgroundImage', title: 'Background Image', type: 'image', options: { hotspot: true } },

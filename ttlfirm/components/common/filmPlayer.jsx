@@ -190,11 +190,91 @@ export const FilmCard = ({ film, label = "Watch our film" }) => {
   );
 };
 
+/* ------------------------------------------------------------- the portrait
+   Her studio photograph with the film behind it.
+
+   The client asked for her picture on both the homepage and the landing pages.
+   Rather than adding a photo next to a player — two pictures of the same
+   person, side by side — the photograph IS the player: a 4:5 portrait with the
+   play control in the corner. You see her face first, which is the point of a
+   "meet your attorney" block, and the film is one press away.
+
+   4:5 rather than 9:16 because a studio headshot is framed for print, and
+   cropping it to a phone-video shape cuts the shoulders off. */
+export const PortraitPlayer = ({
+  film,
+  src,
+  alt = "",
+  name,
+  role,
+  label = "Watch our film",
+}) => {
+  const { open } = useFilm();
+  if (!src) return null;
+
+  return (
+    <figure className="relative mx-auto w-full max-w-[380px]">
+      <div className="relative overflow-hidden rounded-2xl border border-surface-line bg-navy-950 shadow-card">
+        <img src={src} alt={alt || name || ""} className="aspect-[4/5] w-full object-cover" />
+
+        {/* Reads as part of the photograph rather than a badge stuck on it. */}
+        <span
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-navy-950/85 to-transparent"
+          aria-hidden="true"
+        />
+
+        {/* Top right, not bottom right: the name and title sit along the
+            bottom edge, and at this width they wrap into it. */}
+        <button
+          type="button"
+          onClick={() => open(film)}
+          aria-label={label}
+          className="group absolute right-4 top-4 flex items-center gap-2.5 rounded-full bg-navy-950/70 py-2 pl-2 pr-4 backdrop-blur-sm transition-colors hover:bg-accent-500"
+        >
+          <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition-colors group-hover:bg-navy-950/20">
+            <span
+              className="absolute inset-0 rounded-full bg-white/20 animate-pulse-ring"
+              aria-hidden="true"
+            />
+            <FaPlay
+              className="relative ml-0.5 text-[11px] text-white transition-colors group-hover:text-navy-950"
+              aria-hidden="true"
+            />
+          </span>
+          <span className="font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-colors group-hover:text-navy-950">
+            {label}
+          </span>
+        </button>
+
+        {(name || role) && (
+          <figcaption className="pointer-events-none absolute inset-x-5 bottom-5">
+            {name && (
+              <span className="block font-display text-[17px] font-semibold leading-tight text-white">
+                {name}
+              </span>
+            )}
+            {role && (
+              <span className="mt-0.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-accent-400">
+                {role}
+              </span>
+            )}
+          </figcaption>
+        )}
+      </div>
+
+      <div
+        className="pointer-events-none absolute -bottom-4 -right-4 -z-10 h-28 w-28 rounded-2xl border-[6px] border-accent-500/30"
+        aria-hidden="true"
+      />
+    </figure>
+  );
+};
+
 /* ------------------------------------------------------------------ the tile
    A grid-cell-shaped version of the card, for dropping into a row of feature
    cards. "Why Trust Us" runs five features in a three-across grid, which left
    an empty sixth cell; this fills it with the one thing a visitor might
-   actually want next, in the same glass frame as its neighbours.
+   actually want next, in the same glass frame as its neighbors.
 
    Deliberately an image and a button, not a player: this sits well down the
    page, and a second autoplaying video below the hero would cost bandwidth on

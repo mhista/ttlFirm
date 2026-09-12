@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FaCheck, FaPhone, FaArrowRightLong } from "react-icons/fa6";
 import { FIRM, telHref } from "@/lib/siteNav";
 import CountUp from "@components/common/countUp";
-import { FilmCard, WatchFilmButton } from "@components/common/filmPlayer";
+import { WatchFilmButton } from "@components/common/filmPlayer";
 
 const DEFAULT_BULLETS = [
   "Free consultation, no obligation",
@@ -13,22 +13,17 @@ const DEFAULT_BULLETS = [
 ];
 
 /**
- * Home hero.
+ * Home hero. One column of copy over full-bleed background media.
  *
- * The layout follows what is behind it (see heroMedia.jsx):
- *
- *  - background is the LANDSCAPE FILM — one column. She is already moving
- *    behind the copy at full bleed, so a second, portrait player of the same
- *    footage beside it would be the same person twice. The copy gets the left
- *    of the frame and the footage keeps the right.
- *  - background is a STILL — two columns, with the framed film player on the
- *    right. Nothing is moving otherwise, and the card is what gives the fold
- *    some life.
- *
- * Either way "Watch our film" sits in the action row, so the film is one press
- * away at every size.
+ * The framed film player used to sit to the right of this copy. The client's
+ * note was that on desktop it landed in an awkward spot, and she was right —
+ * with the landscape loop playing full bleed behind the headline, a portrait
+ * player of the same person on top of it was two videos competing on the one
+ * screen that has to do the most work. The film now has a section of its own
+ * further down the page (filmSection.jsx). "Watch our film" stays in the
+ * action row here, so it is still one press away from the fold.
  */
-const HomeHero = ({ content, stats, statsSection, film, showFilmCard = true }) => {
+const HomeHero = ({ content, stats, statsSection, film }) => {
   const eyebrow = content?.eyebrow || "New Jersey";
   // The firm's own wording, trimmed. A hero over moving footage has to be read
   // in two seconds from a phone, so the heading loses "Trusted New Jersey Law
@@ -56,19 +51,23 @@ const HomeHero = ({ content, stats, statsSection, film, showFilmCard = true }) =
     statsSection?.stats?.length > 0
       ? statsSection.stats.filter((s) => s?.value || s?.label).slice(0, 4)
       : [
-          { value: `${stats?.casesHandled ?? 500}+`, label: "Legal cases handled" },
-          { value: `${stats?.yearsExperience ?? 8}`, label: "Years of experience" },
+          { value: `${stats?.casesHandled ?? 700}+`, label: "Cases handled" },
+          // Her words. Not a number, so the counter passes it straight through.
+          { value: stats?.recoveredLabel || "Millions", label: "Recovered for clients" },
           { value: `${stats?.countiesServed ?? 7}`, label: "NJ counties served" },
           { value: "$0", label: "Upfront cost to you" },
         ];
   const showStats = statsSection?.enabled !== false && statItems.length > 0;
+  const resultsDisclaimer =
+    statsSection?.disclaimer ||
+    "Prior results do not guarantee a similar outcome. Every case turns on its own facts.";
 
   return (
     <div className="relative z-10 flex w-full flex-1 flex-col justify-end pt-24 sm:pt-28 lg:pt-32">
       <div className="container-x flex flex-1 items-center">
         <div className="grid w-full items-center gap-10 py-8 lg:grid-cols-12 lg:gap-12 lg:py-12">
           {/* ------------------------------------------------------- copy */}
-          <div className={showFilmCard ? "lg:col-span-7" : "lg:col-span-8 xl:col-span-7"}>
+          <div className="lg:col-span-8 xl:col-span-7">
             <div className="flex items-center gap-3 animate-fade-up">
               <span className="h-px w-8 bg-accent-500" aria-hidden="true" />
               <span className="font-sans text-xs font-bold uppercase tracking-[0.28em] text-accent-400 sm:text-sm">
@@ -135,18 +134,6 @@ const HomeHero = ({ content, stats, statsSection, film, showFilmCard = true }) =
           </div>
 
           {/* ------------------------------------------- framed film player */}
-          {/* The background loop is silent and has no controls, so this is
-              where a visitor who wants the actual film goes. Switchable off in
-              the Studio — "Watch our film" stays in the action row above
-              either way, so nothing is lost by hiding it. */}
-          {showFilmCard && (
-            <div
-              className="hidden lg:col-span-5 lg:block animate-fade-up"
-              style={{ animationDelay: "200ms" }}
-            >
-              <FilmCard film={film} label={watchFilmLabel} />
-            </div>
-          )}
         </div>
       </div>
 
@@ -170,6 +157,15 @@ const HomeHero = ({ content, stats, statsSection, film, showFilmCard = true }) =
               />
             ))}
           </div>
+
+          {/* A figure about past recoveries is a results claim, and New Jersey
+              requires it to be qualified where it is made — not only in the
+              footer. Editable, but do not remove it. */}
+          {resultsDisclaimer && (
+            <p className="container-x pb-4 text-center text-[10px] leading-relaxed text-navy-300/80">
+              {resultsDisclaimer}
+            </p>
+          )}
         </div>
       )}
     </div>

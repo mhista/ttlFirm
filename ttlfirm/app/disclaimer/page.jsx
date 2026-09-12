@@ -58,7 +58,7 @@ const DisclaimerFallback = () => (
         <p>
           This website may be considered attorney advertising in some jurisdictions. It is intended
           to provide general information about The Turuchi Law Firm and the areas in which the Firm
-          practises.
+          practices.
         </p>
 
         <h2 id="no-legal-advice">No Legal Advice</h2>
@@ -89,8 +89,8 @@ const DisclaimerFallback = () => (
 
         <h2 id="jurisdiction">Jurisdiction</h2>
         <p>
-          The Firm is licensed to practise in the State of New Jersey. Nothing on this website is an
-          offer to represent you in a jurisdiction where the Firm is not licensed to practise.
+          The Firm is licensed to practice in the State of New Jersey. Nothing on this website is an
+          offer to represent you in a jurisdiction where the Firm is not licensed to practice.
         </p>
 
         <h2 id="contact">Contact</h2>

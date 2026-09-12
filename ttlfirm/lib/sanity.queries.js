@@ -646,14 +646,30 @@ export const siteSettingsQuery = `
     description,
     contact {
       phone,
+      whatsapp,
       email,
+      leadEmail,
       address {
+        note,
+        street,
+        city,
+        state,
+        zipCode,
+        country
+      },
+      additionalOffices[] {
+        label,
+        note,
         street,
         city,
         state,
         zipCode,
         country
       }
+    },
+    leadForm {
+      caseTypes,
+      languages
     },
     businessHours {
       weekdays,
@@ -714,6 +730,7 @@ export const siteSettingsQuery = `
     },
     stats {
       casesHandled,
+      recoveredLabel,
       yearsExperience,
       countiesServed,
       clientSatisfaction
@@ -767,11 +784,32 @@ export const homePageQuery = `
       desktopImageSeconds,
       desktopBackdrop { asset->{ _id, url } },
       fullFilm { asset->{ _id, url } },
-      filmPoster { asset->{ _id, url } },
-      showFilmCard
+      filmPoster { asset->{ _id, url } }
+    },
+    accidentTypesSection {
+      enabled,
+      sectionLabel,
+      heading,
+      description,
+      groups[] { title, icon, items, href },
+      ctaText,
+      ctaLink
+    },
+    filmSection {
+      enabled,
+      sectionLabel,
+      heading,
+      description,
+      portrait { asset->{ _id, url } },
+      portraitName,
+      portraitRole,
+      bullets,
+      ctaText,
+      ctaLink
     },
     statsSection {
       enabled,
+      disclaimer,
       stats[] { value, label },
       stat1Label,
       stat2Label
@@ -1071,6 +1109,9 @@ const landingSectionProjection = `
   backgroundVideo { asset->{ _id, url } },
   video { asset->{ _id, url } },
   poster { asset->{ _id, url } },
+  attorneyPhoto { asset->{ _id, url } },
+  attorneyName,
+  attorneyRole,
   orientation,
   autoplay,
   items[] { value, label, icon, title, description, question, answer },

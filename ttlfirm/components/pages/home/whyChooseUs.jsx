@@ -116,8 +116,11 @@ const WhyChooseUs = ({ content, stats, film }) => {
   const ctaText = content?.ctaText || "Meet Attorney Turuchi Iheanachor";
   const ctaLink = content?.ctaLink || "/profile";
 
-  const casesHandled = stats?.casesHandled ?? 500;
-  const yearsExperience = stats?.yearsExperience ?? 8;
+  const casesHandled = stats?.casesHandled ?? 700;
+  const recoveredLabel = stats?.recoveredLabel || "Millions";
+  const resultsDisclaimer =
+    content?.disclaimer ||
+    "Prior results do not guarantee a similar outcome. Every case turns on its own facts.";
 
   // The grid is three across at `lg`. Whenever the feature count doesn't
   // divide by three there is a hole in the last row, and the film tile goes in
@@ -152,9 +155,12 @@ const WhyChooseUs = ({ content, stats, film }) => {
 
         {/* Stats */}
         <div className="mx-auto mt-12 grid max-w-2xl grid-cols-2 gap-4 md:gap-6">
-          <StatCard number={`${casesHandled}+`} label="Legal Cases Handled" delay="100" />
-          <StatCard number={`${yearsExperience}`} label="Years Industry Experience" delay="200" />
+          <StatCard number={`${casesHandled}+`} label="Cases Handled" delay="100" />
+          <StatCard number={recoveredLabel} label="Recovered for Clients" delay="200" />
         </div>
+        <p className="mx-auto mt-4 max-w-2xl text-center text-[10px] leading-relaxed text-navy-300/80">
+          {resultsDisclaimer}
+        </p>
 
         {/* Features, plus the film tile when there's a hole to fill. */}
         <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">

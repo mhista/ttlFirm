@@ -24,7 +24,7 @@ import { useEffect } from "react";
  * needing a refresh call at each site.
  *
  * React components can use <Reveal> (components/common/reveal.jsx) instead;
- * the two share the same timing and the same reduced-motion behaviour.
+ * the two share the same timing and the same reduced-motion behavior.
  */
 const MotionRoot = () => {
   useEffect(() => {

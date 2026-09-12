@@ -18,7 +18,7 @@ const AboutUs = ({ content }) => {
       : [
           "At The Turuchi Law Firm we represent people who have been hurt — in a crash, on someone else's property, or on the job — and who are now dealing with an insurance company that does this every day and does not have their interests at heart.",
           "Our practice is deliberately focused. Personal injury and workers' compensation are what we do, which means your case is handled by an attorney who knows how these claims are valued, defended and settled, rather than one splitting attention across a dozen unrelated areas of law.",
-          "Attorney Turuchi Iheanachor previously worked on the insurance defence side. That experience shapes how every case here is built: for the number the carrier will actually pay, not the one it opens with.",
+          "Attorney Turuchi Iheanachor previously worked on the insurance defense side. That experience shapes how every case here is built: for the number the carrier will actually pay, not the one it opens with.",
         ];
 
   return (

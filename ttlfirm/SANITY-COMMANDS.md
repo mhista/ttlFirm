@@ -1,0 +1,127 @@
+# Pushing the September review to Sanity
+
+Everything below is **content**, which lives in Sanity, not in the code. Changing
+the defaults in the repo does nothing to a site whose documents already hold the
+old values — that's why the live site still says "500+", still shows the old
+hero paragraph, and still has one address.
+
+Run these from the project root (`ttlfirm/`). Three steps, about five minutes.
+
+---
+
+## 1. A write token, once
+
+The script needs permission to change documents.
+
+1. Go to **sanity.io/manage** → the `5lgtr8bc` project → **API** → **Tokens**
+2. **Add API token** → name it anything → permission **Editor** → Save
+3. Copy the token (it's shown once)
+
+Then, in the same terminal you're about to run the command in:
+
+```bat
+:: Windows (Command Prompt)
+set SANITY_WRITE_TOKEN=sk...
+```
+
+```powershell
+# Windows (PowerShell)
+$env:SANITY_WRITE_TOKEN="sk..."
+```
+
+```bash
+# macOS / Linux
+export SANITY_WRITE_TOKEN=sk...
+```
+
+The token stays in that terminal window only. Don't commit it.
+
+---
+
+## 2. Site Settings and the homepage hero
+
+```bash
+node scripts/apply-client-updates.mjs
+```
+
+That's a **preview** — it prints every field it would change, what's there now,
+what it would become, and which of her notes it came from. Nothing is written.
+
+When it looks right:
+
+```bash
+node scripts/apply-client-updates.mjs --apply
+```
+
+It patches named fields only, so anything she has edited in the Studio in the
+meantime survives. Running it twice is harmless — the second run reports
+everything as already done.
+
+What it sets:
+
+| Field | To | From her review |
+|---|---|---|
+| Where Enquiries Are Sent | info@turuchilawfirm.com | "route the text as an email to info@" |
+| Main Address → Note | By appointment only | "in front of this Jersey City address" |
+| Other Offices | 30 Knightsbridge Road, Suite 525, Piscataway, NJ 08854 | "please include my other address" |
+| Hours | Open 24 hours, 7 days a week | "my hours are 24/7" |
+| Cases Handled | 700 | "I've handled way more than that now" |
+| Amount Recovered | Millions | "remove the 8 years, write Millions Recovered" |
+| Hero heading + description | The shortened version | the hero copy she was shown |
+
+---
+
+## 3. The landing pages
+
+Their copy is in Sanity too, and it still carries "call centre", "insurance
+defence" and "spent years". Regenerate the import file and replace the two
+documents:
+
+```bash
+node scripts/seed-content.mjs
+cd sanity
+npx sanity dataset import ../seed/landing-pages.ndjson production --replace
+```
+
+`--replace` updates the existing documents rather than creating duplicates —
+they use fixed IDs.
+
+While you're there, the legal pages get the same treatment (the disclaimer page
+had "practise" on it twice):
+
+```bash
+npx sanity dataset import ../seed/legal-pages.ndjson production --replace
+```
+
+---
+
+## 4. If the Studio is deployed
+
+New fields were added — Other Offices, the WhatsApp number, the lead email, the
+accident-type lists, the attorney photo, the film section. A locally-run Studio
+(`npx sanity dev`) picks those up on its own. A **hosted** Studio at
+`*.sanity.studio` is running an older schema until you push it:
+
+```bash
+cd sanity
+npx sanity deploy
+```
+
+If you skip this and someone opens the hosted Studio, the new fields simply
+won't be there.
+
+---
+
+## Still needs doing by hand
+
+- **The WhatsApp number** — Site Settings → Contact → WhatsApp Number. The link
+  appears on the contact page the moment it's filled in, and nowhere until then.
+- **The Google reviews** — waiting on her.
+
+## Checking it worked
+
+```bash
+node scripts/doctor.mjs
+```
+
+Reads the live dataset and reports what's actually there. Read-only.

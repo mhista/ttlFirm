@@ -368,7 +368,7 @@ const disclaimer = {
   ],
   sections: [
     section("Attorney Advertising", blocks(
-      p("This website may be considered attorney advertising in some jurisdictions. It is intended to provide general information about The Turuchi Law Firm and the areas in which the Firm practises.")
+      p("This website may be considered attorney advertising in some jurisdictions. It is intended to provide general information about The Turuchi Law Firm and the areas in which the Firm practices.")
     ), { anchor: "attorney-advertising" }),
     section("No Legal Advice", blocks(
       p("Nothing on this website is legal advice, and no page, article, or blog post here is a substitute for advice from a licensed attorney about your specific situation. Law changes, and outcomes turn on facts that a website cannot know. Do not act, or delay acting, based on anything you read here.")
@@ -380,7 +380,7 @@ const disclaimer = {
       p("Prior results do not guarantee or predict a similar outcome in any future matter. Case descriptions, results, and client testimonials reflect the particular facts of those matters. They are not a guarantee, warranty, or prediction about your matter.")
     ), { anchor: "prior-results" }),
     section("Jurisdiction", blocks(
-      p("The Firm is licensed to practise in the State of New Jersey. Nothing on this website is an offer to represent you in a jurisdiction where the Firm is not licensed to practise.")
+      p("The Firm is licensed to practice in the State of New Jersey. Nothing on this website is an offer to represent you in a jurisdiction where the Firm is not licensed to practice.")
     ), { anchor: "jurisdiction" }),
   ],
   seo: {
@@ -442,7 +442,7 @@ const carAccident = {
           icon: "FaUserTie",
           title: "We know how they value your claim",
           description:
-            "Attorney Turuchi Iheanachor previously worked on the insurance defence side. That means we know how carriers assess injuries, what they discount, and where their real settlement authority sits.",
+            "Attorney Turuchi Iheanachor previously worked on the insurance defense side. That means we know how carriers assess injuries, what they discount, and where their real settlement authority sits.",
         }),
         item({
           icon: "FaBalanceScale",
@@ -454,7 +454,7 @@ const carAccident = {
           icon: "FaComments",
           title: "You stop taking their calls",
           description:
-            "Once we're on the file, the adjuster deals with us. No recorded statements, no pressure to accept a quick cheque while you're still being treated.",
+            "Once we're on the file, the adjuster deals with us. No recorded statements, no pressure to accept a quick check while you're still being treated.",
         }),
         item({
           icon: "FaMapMarkerAlt",
@@ -481,10 +481,10 @@ const carAccident = {
       eyebrow: "Meet your attorney",
       heading: "The person who will actually handle your case",
       description:
-        "Not a call centre and not a case manager you never chose. Turuchi Iheanachor reviews your case, and Turuchi Iheanachor handles it — with the advantage of having spent years on the insurance defence side, seeing exactly how these claims get valued and defended.",
+        "Not a call center and not a case manager you never chose. Turuchi Iheanachor reviews your case, and Turuchi Iheanachor handles it — with the advantage of having worked in insurance defense, seeing exactly how these claims get valued and defended.",
       bullets: [
         "One attorney from first call to settlement",
-        "Former insurance defence — we know their playbook",
+        "Former insurance defense — we know their playbook",
         "Straight answers, not sales talk",
       ],
       orientation: "portrait",
@@ -654,7 +654,7 @@ const workInjury = {
         "Workers' compensation runs on decisions made by an insurance carrier — what treatment is authorised, when you are fit to return, what your injury is worth. Turuchi Iheanachor challenges those decisions, with the perspective of an attorney who used to make them from the other side.",
       bullets: [
         "One attorney from first call to award",
-        "Former insurance defence — we know their playbook",
+        "Former insurance defense — we know their playbook",
         "We take denials to a judge when we need to",
       ],
       orientation: "portrait",

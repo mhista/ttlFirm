@@ -29,18 +29,93 @@ export default {
       group: 'contact',
       fields: [
         { name: 'phone', title: 'Phone Number', type: 'string', validation: (R) => R.required() },
+        {
+          name: 'whatsapp',
+          title: 'WhatsApp Number',
+          type: 'string',
+          description:
+            'Digits and country code, e.g. +1 732 210 6410. Leave empty and no WhatsApp link is shown anywhere.',
+        },
         { name: 'email', title: 'Email Address', type: 'string', validation: (R) => R.required().email() },
         {
+          name: 'leadEmail',
+          title: 'Where Enquiries Are Sent',
+          type: 'string',
+          validation: (R) => R.email(),
+          description:
+            'Every contact form and every message from the "Text us!" widget arrives here as an email. Leave empty and it uses the address configured on the server.',
+        },
+        {
           name: 'address',
-          title: 'Physical Address',
+          title: 'Main Address',
           type: 'object',
+          description: 'The first one shown, and the one search engines treat as the main location.',
           fields: [
+            {
+              name: 'note',
+              title: 'Note',
+              type: 'string',
+              description: 'A short line under the address — "By appointment only".',
+            },
             { name: 'street', title: 'Street Address', type: 'string' },
             { name: 'city', title: 'City', type: 'string' },
             { name: 'state', title: 'State', type: 'string' },
             { name: 'zipCode', title: 'ZIP Code', type: 'string' },
             { name: 'country', title: 'Country', type: 'string', initialValue: 'US' },
           ],
+        },
+        {
+          name: 'additionalOffices',
+          title: 'Other Offices',
+          type: 'array',
+          description:
+            'Shown after the main address in the footer and on the contact page, and added to the structured data Google reads.',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                {
+                  name: 'label',
+                  title: 'Name',
+                  type: 'string',
+                  description: 'What to call it on the site — "Piscataway", "Second Office".',
+                },
+                { name: 'note', title: 'Note', type: 'string' },
+                { name: 'street', title: 'Street Address', type: 'string' },
+                { name: 'city', title: 'City', type: 'string' },
+                { name: 'state', title: 'State', type: 'string' },
+                { name: 'zipCode', title: 'ZIP Code', type: 'string' },
+                { name: 'country', title: 'Country', type: 'string', initialValue: 'US' },
+              ],
+              preview: {
+                select: { title: 'label', subtitle: 'street' },
+              },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'leadForm',
+      title: 'Lead Form Dropdowns',
+      type: 'object',
+      group: 'contact',
+      description:
+        'The two dropdowns on the landing page forms. Leave a list empty to use the built-in one.',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        {
+          name: 'caseTypes',
+          title: 'Types of Case',
+          type: 'array',
+          of: [{ type: 'string' }],
+          description: 'Keep "Other" at the end so nobody is turned away by a list that misses their case.',
+        },
+        {
+          name: 'languages',
+          title: 'Preferred Languages',
+          type: 'array',
+          of: [{ type: 'string' }],
         },
       ],
     },
@@ -51,9 +126,9 @@ export default {
       group: 'contact',
       options: { collapsible: true, collapsed: true },
       fields: [
-        { name: 'weekdays', title: 'Weekdays (schema.org)', type: 'string', initialValue: 'Mo-Fr 09:00-17:00' },
-        { name: 'weekdaysDisplay', title: 'Weekdays (shown on site)', type: 'string', initialValue: 'Monday – Friday, 9:00 AM – 5:00 PM' },
-        { name: 'weekend', title: 'Weekend', type: 'string', initialValue: 'Closed' },
+        { name: 'weekdays', title: 'Hours (schema.org)', type: 'string', initialValue: 'Mo-Su 00:00-23:59' },
+        { name: 'weekdaysDisplay', title: 'Hours (shown on site)', type: 'string', initialValue: 'Open 24 hours, 7 days a week' },
+        { name: 'weekend', title: 'Weekend', type: 'string', initialValue: 'Open' },
       ],
     },
     {
@@ -290,8 +365,16 @@ export default {
       group: 'brand',
       description: 'Used across the site wherever these numbers appear.',
       fields: [
-        { name: 'casesHandled', title: 'Cases Handled', type: 'number', initialValue: 500 },
-        { name: 'yearsExperience', title: 'Years of Experience', type: 'number', initialValue: 8 },
+        { name: 'casesHandled', title: 'Cases Handled', type: 'number', initialValue: 700 },
+        {
+          name: 'recoveredLabel',
+          title: 'Amount Recovered',
+          type: 'string',
+          initialValue: 'Millions',
+          description:
+            'Shown large, in place of a years-in-practice figure. "Millions" is safe; a specific number is a results claim and has to be accurate and provable.',
+        },
+        { name: 'yearsExperience', title: 'Years of Experience', type: 'number', initialValue: 8, description: 'No longer shown in the stats; kept for anywhere else that wants it.' },
         { name: 'countiesServed', title: 'Counties Served', type: 'number', initialValue: 7 },
         { name: 'clientSatisfaction', title: 'Client Satisfaction (%)', type: 'number', initialValue: 100 },
       ],

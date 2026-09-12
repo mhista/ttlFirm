@@ -8,7 +8,7 @@ import { FIRM, telHref } from "@/lib/siteNav";
 /**
  * Utility bar that sits above the main navigation.
  * Was solid amber; it is now the deepest navy in the palette so the accent
- * colour is spent on actions rather than on a decorative strip.
+ * color is spent on actions rather than on a decorative strip.
  * Hidden below `sm` — on a phone the same details live in the menu drawer
  * and the sticky call button.
  */

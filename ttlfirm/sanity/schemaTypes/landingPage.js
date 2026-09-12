@@ -267,6 +267,16 @@ export default {
             },
             { name: 'poster', title: 'Poster Image', type: 'image', description: 'The still shown before someone presses play.' },
             {
+              name: 'attorneyPhoto',
+              title: 'Attorney Photo',
+              type: 'image',
+              options: { hotspot: true },
+              description:
+                'Set this and her photo becomes the frame, with the play control in the corner — press it and the film plays in the same box. Upright, roughly 4:5.',
+            },
+            { name: 'attorneyName', title: 'Name Shown On Photo', type: 'string' },
+            { name: 'attorneyRole', title: 'Title Shown On Photo', type: 'string' },
+            {
               name: 'orientation',
               title: 'Shape',
               type: 'string',

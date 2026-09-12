@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FaEnvelope, FaPhone, FaLocationDot, FaArrowRightLong } from "react-icons/fa6";
 import { buildSocialLinks } from "@components/common/mediaButtons";
 import { useSiteSettings } from "@/lib/siteSettingsContext";
-import { PRACTICE_AREAS, LEGAL_LINKS, FIRM, telHref } from "@/lib/siteNav";
+import { PRACTICE_AREAS, LEGAL_LINKS, FIRM, telHref, getOffices } from "@/lib/siteNav";
 
 /**
  * Footer.
@@ -45,30 +45,10 @@ const Footer = () => {
     notices.smsNotice ||
     "Consent to receive text messages from The Turuchi Law Firm is optional and is not a condition of purchasing services, retaining the firm, or receiving legal services. Message and data rates may apply and message frequency varies. Reply STOP to opt out or HELP for help. No mobile opt-in or text message consent will be shared with third parties or affiliates for marketing or promotional purposes.";
 
-  const addressLines = contact.address?.street
-    ? [
-        contact.address.street,
-        [
-          contact.address.city,
-          [contact.address.state, contact.address.zipCode].filter(Boolean).join(" "),
-        ]
-          .filter(Boolean)
-          .join(", "),
-      ].filter(Boolean)
-    : [FIRM.addressLine1, FIRM.addressLine2];
-
-  const mapsUrl = contact.address?.street
-    ? `https://maps.google.com/?q=${encodeURIComponent(
-        [
-          contact.address.street,
-          contact.address.city,
-          contact.address.state,
-          contact.address.zipCode,
-        ]
-          .filter(Boolean)
-          .join(" ")
-      )}`
-    : FIRM.mapsUrl;
+  // The firm has more than one address; getOffices() is the single place that
+  // turns whatever the CMS holds into a list the footer, the contact page and
+  // the structured data all render the same way.
+  const offices = getOffices(contact);
 
   const companyLinks = [
     { href: "/", label: "Home" },
@@ -209,21 +189,41 @@ const Footer = () => {
               </a>
             </li>
             <li>
-              <a
-                href={mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-3 text-navy-200 transition-colors hover:text-accent-400"
-              >
-                <FaLocationDot className="mt-1 shrink-0 text-xs text-accent-500" aria-hidden="true" />
-                <span>
-                  {addressLines.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
-                </span>
-              </a>
+              {offices.map((office, i) => (
+                <a
+                  key={office.mapsUrl}
+                  href={office.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-start gap-3 text-navy-200 transition-colors hover:text-accent-400 ${
+                    i > 0 ? "mt-4" : ""
+                  }`}
+                >
+                  <FaLocationDot
+                    className="mt-1 shrink-0 text-xs text-accent-500"
+                    aria-hidden="true"
+                  />
+                  <span>
+                    {/* Only labelled once there is more than one — a lone
+                        address does not need telling which office it is. */}
+                    {offices.length > 1 && office.label && (
+                      <span className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-accent-400">
+                        {office.label}
+                      </span>
+                    )}
+                    {office.lines.map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))}
+                    {office.note && (
+                      <span className="mt-0.5 block text-[12px] italic text-navy-300">
+                        {office.note}
+                      </span>
+                    )}
+                  </span>
+                </a>
+              ))}
             </li>
           </ul>
         </div>

@@ -1,8 +1,31 @@
 import { EmailClient, KnownEmailSendStatus } from "@azure/communication-email";
+import { client } from "@/lib/sanity.client";
 
 const connectionString = process.env.ACS_CONNECTION_STRING;
 const senderAddress = process.env.SENDER_EMAIL_ADDRESS;
-const recipient = process.env.LEAD_RECIPIENT_EMAIL || "info@turuchilawfirm.com";
+const fallbackRecipient = process.env.LEAD_RECIPIENT_EMAIL || "info@turuchilawfirm.com";
+
+/**
+ * Where enquiries land.
+ *
+ * Every contact form AND every message from the "Text us!" widget comes
+ * through this route, so this one address is the answer to "where does the
+ * text go" — it goes to an inbox, as an email.
+ *
+ * The firm can change it themselves in Site Settings → Contact without a
+ * deploy. If Sanity is unreachable the server's own setting is used rather
+ * than the send being abandoned: losing a lead is far worse than sending it to
+ * yesterday's address.
+ */
+async function resolveRecipient() {
+  try {
+    const to = await client.fetch(`*[_type == "siteSettings"][0].contact.leadEmail`);
+    if (typeof to === "string" && to.includes("@")) return to.trim();
+  } catch (error) {
+    console.error("Could not read the lead recipient from Sanity:", error?.message);
+  }
+  return fallbackRecipient;
+}
 
 const escapeHtml = (value = "") =>
   String(value)
@@ -28,7 +51,22 @@ export const POST = async (req) => {
     smsConsent = false,
     source = "Website form",
     consentTimestamp = new Date().toISOString(),
+    // Intake fields — only the landing page forms send these, so every one of
+    // them is optional and simply omitted from the email when absent.
+    caseType = "",
+    incidentDate = "",
+    treatedByDoctor = "",
+    preferredLanguage = "",
   } = payload || {};
+
+  // Rows that appear in the notification only when they were actually filled
+  // in. A form that grows should never mean an email full of empty labels.
+  const intakeRows = [
+    ["Case type", caseType],
+    ["Date of incident", incidentDate],
+    ["Seen a doctor", treatedByDoctor],
+    ["Preferred language", preferredLanguage],
+  ].filter(([, value]) => value);
 
   // Email is optional for the Text Us widget, which only collects a mobile
   // number — so it is not part of the required set.
@@ -67,6 +105,7 @@ export const POST = async (req) => {
     `Name: ${name}`,
     `Phone: ${phone}`,
     email ? `Email: ${email}` : "Email: (not provided)",
+    ...intakeRows.map(([label, value]) => `${label}: ${value}`),
     "",
     "Message:",
     message,
@@ -87,6 +126,12 @@ export const POST = async (req) => {
         <tr><td style="padding:6px 0;width:110px;color:#4A5568;">Name</td><td style="padding:6px 0;font-weight:600;">${escapeHtml(name)}</td></tr>
         <tr><td style="padding:6px 0;color:#4A5568;">Phone</td><td style="padding:6px 0;font-weight:600;"><a href="tel:${escapeHtml(phone)}" style="color:#1C5389;">${escapeHtml(phone)}</a></td></tr>
         <tr><td style="padding:6px 0;color:#4A5568;">Email</td><td style="padding:6px 0;font-weight:600;">${email ? `<a href="mailto:${escapeHtml(email)}" style="color:#1C5389;">${escapeHtml(email)}</a>` : "&mdash;"}</td></tr>
+        ${intakeRows
+          .map(
+            ([label, value]) =>
+              `<tr><td style="padding:6px 0;color:#4A5568;">${escapeHtml(label)}</td><td style="padding:6px 0;font-weight:600;">${escapeHtml(value)}</td></tr>`
+          )
+          .join("")}
       </table>
 
       <div style="margin-top:18px;background:#F5F7FA;border-left:3px solid #D98324;border-radius:6px;padding:16px;">
@@ -132,7 +177,7 @@ export const POST = async (req) => {
 
   const emailMessage = {
     senderAddress,
-    recipients: { to: [{ address: recipient }] },
+    recipients: { to: [{ address: await resolveRecipient() }] },
     replyTo: email ? [{ address: email, displayName: name }] : undefined,
     content: {
       subject: `New ${smsConsent ? "[SMS OPT-IN] " : ""}enquiry — ${name}`,
@@ -142,8 +187,9 @@ export const POST = async (req) => {
   };
 
   try {
-    const client = new EmailClient(connectionString);
-    const poller = await client.beginSend(emailMessage);
+    // Named to avoid shadowing the Sanity client imported at the top.
+    const emailClient = new EmailClient(connectionString);
+    const poller = await emailClient.beginSend(emailMessage);
     const result = await poller.pollUntilDone();
 
     if (result.status === KnownEmailSendStatus.Succeeded) {

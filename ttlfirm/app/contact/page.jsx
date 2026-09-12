@@ -1,5 +1,6 @@
 import { client } from "@/lib/sanity.client";
 import { contactPageQuery, siteSettingsQuery } from "@/lib/sanity.queries";
+import { getOffices } from "@/lib/siteNav";
 import Section2 from "@components/common/section2";
 import ContactUs from "@components/pages/home/contactUs";
 import PageHeader from "@components/pages/header";
@@ -55,11 +56,14 @@ export async function generateMetadata() {
   };
 }
 
-// Generate contact schema
+// Generate contact schema.
+// `address` takes an array when a business has more than one location, and the
+// first entry is the one Google treats as primary — which is why getOffices()
+// keeps the main address at the front.
 function generateContactSchema(siteSettings) {
   const contact = siteSettings?.contact || {};
-  const address = contact?.address || {};
-  
+  const offices = getOffices(contact);
+
   return {
     "@context": "https://schema.org",
     "@type": "ContactPage",
@@ -70,15 +74,8 @@ function generateContactSchema(siteSettings) {
       "name": "Turuchi Law Firm, LLC",
       "telephone": contact.phone || "+17322106410",
       "email": contact.email || "info@turuchilawfirm.com",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": address.street || "111 Town Square Pl",
-        "addressLocality": address.city || "Jersey City",
-        "addressRegion": address.state || "NJ",
-        "postalCode": address.zipCode || "07310",
-        "addressCountry": address.country || "US"
-      }
-    }
+      "address": offices.length === 1 ? offices[0].postal : offices.map((o) => o.postal),
+    },
   };
 }
 

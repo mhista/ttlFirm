@@ -116,8 +116,12 @@ export const LpHero = ({ data, phone }) => {
             <div className="rounded-xl border border-surface-line bg-white p-5 shadow-widget md:p-6">
               <Form
                 density="compact"
-                heading={data.formHeading || "Free case review"}
-                subheading={data.formSubheading}
+                intake
+                heading={data.formHeading || "Get your free case review"}
+                subheading={
+                  data.formSubheading ||
+                  "Takes about 60 seconds. A member of our team will call you back shortly."
+                }
                 submitLabel="Get My Free Case Review"
                 source={`Landing page — ${data.heading || "hero"}`}
               />
@@ -307,6 +311,15 @@ export const LpVideo = ({ data, phone }) => {
   const poster = data.poster?.asset?.url || "/assets/videos/film-poster.jpg";
   const portrait = data.orientation !== "landscape";
 
+  // A "meet your attorney" block should lead with her face. When a photo is
+  // set it becomes the frame, with the play control in the corner; pressing it
+  // plays the film in the same box.
+  // Falls back to the photo shipped with the site, so a landing page created
+  // tomorrow already leads with her face.
+  const photo = data.attorneyPhoto?.asset?.url || "/assets/images/attorney-portrait.jpg";
+  const photoName = data.attorneyName || "Turuchi S. Iheanachor, Esq.";
+  const photoRole = data.attorneyRole || "Founder & Managing Attorney";
+
   return (
     <section className="bg-navy-900">
       <div className="container-x section-y">
@@ -347,10 +360,40 @@ export const LpVideo = ({ data, phone }) => {
           <Reveal className="lg:col-span-6" delay={120}>
             <div
               className={`relative mx-auto overflow-hidden rounded-2xl border border-white/15 bg-navy-950 shadow-widget ${
-                portrait ? "max-w-[330px]" : "max-w-full"
+                photo && !playing ? "max-w-[380px]" : portrait ? "max-w-[330px]" : "max-w-full"
               }`}
             >
-              {playing ? (
+              {!playing && photo ? (
+                <button
+                  type="button"
+                  onClick={() => setPlaying(true)}
+                  aria-label="Play video"
+                  className="group relative block w-full"
+                >
+                  <img src={photo} alt={photoName} className="aspect-[4/5] w-full object-cover" />
+                  <span
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-navy-950/85 to-transparent"
+                    aria-hidden="true"
+                  />
+                  <span className="absolute inset-x-5 bottom-5 text-left">
+                    <span className="block font-display text-[17px] font-semibold leading-tight text-white">
+                      {photoName}
+                    </span>
+                    <span className="mt-0.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-accent-400">
+                      {photoRole}
+                    </span>
+                  </span>
+                  <span className="absolute right-4 top-4 flex items-center gap-2.5 rounded-full bg-navy-950/70 py-2 pl-2 pr-4 backdrop-blur-sm transition-colors group-hover:bg-accent-500">
+                    <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+                      <span className="absolute inset-0 rounded-full bg-white/20 animate-pulse-ring" aria-hidden="true" />
+                      <FaPlay className="relative ml-0.5 text-[11px] text-white transition-colors group-hover:text-navy-950" aria-hidden="true" />
+                    </span>
+                    <span className="font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-colors group-hover:text-navy-950">
+                      Watch our film
+                    </span>
+                  </span>
+                </button>
+              ) : playing ? (
                 <video
                   src={src}
                   poster={poster}
@@ -520,6 +563,7 @@ export const LpForm = ({ data }) => (
         className="mx-auto mt-10 max-w-2xl rounded-xl border border-surface-line bg-white p-6 shadow-card md:p-8"
       >
         <Form
+          intake
           heading={data.formHeading || "Request a free case review"}
           subheading={data.formSubheading}
           submitLabel="Get My Free Case Review"

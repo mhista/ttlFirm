@@ -5,7 +5,34 @@ import SmsConsent from "@components/common/smsConsent";
 import { useSiteSettings } from "@/lib/siteSettingsContext";
 import { trackLead } from "@/lib/trackLead";
 
-const EMPTY = { name: "", phone: "", email: "", message: "" };
+const EMPTY = {
+  firstName: "",
+  lastName: "",
+  name: "",
+  phone: "",
+  email: "",
+  message: "",
+  caseType: "",
+  incidentDate: "",
+  treatedByDoctor: "",
+  preferredLanguage: "",
+};
+
+/* Shipped defaults for the intake dropdowns. Site Settings → Lead Form
+   replaces either list; these are what renders when it is left empty. */
+const DEFAULT_CASE_TYPES = [
+  "Car accident",
+  "Truck or 18-wheeler accident",
+  "Motorcycle accident",
+  "Uber, Lyft or rideshare accident",
+  "Pedestrian or bicycle accident",
+  "Slip, trip or fall",
+  "Injured at work",
+  "Wrongful death",
+  "Other",
+];
+const DEFAULT_LANGUAGES = ["English", "Spanish", "Other"];
+const DOCTOR_OPTIONS = ["Yes", "No", "Not yet"];
 const COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes, matching the message shown.
 
 /**
@@ -33,6 +60,14 @@ const Form = ({
    * it is a worse lead.
    */
   density = "comfortable",
+  /**
+   * The long intake used on the landing pages: first and last name apart, case
+   * type, date of the incident, whether they have seen a doctor, and the
+   * language they would rather be called in. Those answers are what let the
+   * firm triage an ad lead before picking up the phone, which is the whole
+   * point of a paid landing page. The website's own contact form stays short.
+   */
+  intake = false,
 }) => {
   const siteSettings = useSiteSettings();
   const disclaimer =
@@ -48,6 +83,10 @@ const Form = ({
 
   const isDark = tone === "dark";
   const isCompact = density === "compact";
+
+  const leadForm = siteSettings?.leadForm || {};
+  const caseTypes = leadForm.caseTypes?.length ? leadForm.caseTypes : DEFAULT_CASE_TYPES;
+  const languages = leadForm.languages?.length ? leadForm.languages : DEFAULT_LANGUAGES;
 
   // A landing page renders this component twice — once in the hero and once in
   // the closing section — so the field ids have to be unique per instance or
@@ -99,6 +138,11 @@ const Form = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          // The notification email and the CRM both want one name field, so
+          // the two inputs are joined here rather than everywhere downstream.
+          name: intake
+            ? [formData.firstName, formData.lastName].filter(Boolean).join(" ").trim()
+            : formData.name,
           smsConsent,
           source,
           consentTimestamp: new Date().toISOString(),
@@ -157,6 +201,15 @@ const Form = ({
     isCompact ? "py-2.5" : "py-3.5",
   ].join(" ");
 
+  // A native <select> keeps the platform picker — on a phone that is a full
+  // height wheel rather than a cramped custom dropdown, which is what the
+  // majority of ad traffic is using.
+  const selectClass = `${inputClass} appearance-none bg-[length:16px] bg-[right_0.9rem_center] bg-no-repeat pr-10 ${
+    isDark ? "select-caret-light" : "select-caret-dark"
+  }`;
+
+  const gap = isCompact ? "gap-3.5" : "gap-5";
+
   return (
     <div className="w-full">
       {heading && (
@@ -179,22 +232,56 @@ const Form = ({
       )}
 
       <form onSubmit={handleSubmit} className={`flex w-full flex-col ${isCompact ? "gap-3.5" : "gap-5"} ${heading ? (isCompact ? "mt-4" : "mt-6") : ""}`} noValidate={false}>
-        <div>
-          <label htmlFor={fieldId("name")} className={labelClass}>
-            Full name
-          </label>
-          <input
-            id={fieldId("name")}
-            name="name"
-            type="text"
-            autoComplete="name"
-            required
-            placeholder="Jane Doe"
-            value={formData.name}
-            onChange={handleChange}
-            className={inputClass}
-          />
-        </div>
+        {intake ? (
+          <div className={`grid sm:grid-cols-2 ${gap}`}>
+            <div>
+              <label htmlFor={fieldId("firstName")} className={labelClass}>
+                First name
+              </label>
+              <input
+                id={fieldId("firstName")}
+                name="firstName"
+                type="text"
+                autoComplete="given-name"
+                required
+                value={formData.firstName}
+                onChange={handleChange}
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label htmlFor={fieldId("lastName")} className={labelClass}>
+                Last name
+              </label>
+              <input
+                id={fieldId("lastName")}
+                name="lastName"
+                type="text"
+                autoComplete="family-name"
+                required
+                value={formData.lastName}
+                onChange={handleChange}
+                className={inputClass}
+              />
+            </div>
+          </div>
+        ) : (
+          <div>
+            <label htmlFor={fieldId("name")} className={labelClass}>
+              Full name
+            </label>
+            <input
+              id={fieldId("name")}
+              name="name"
+              type="text"
+              autoComplete="name"
+              required
+              value={formData.name}
+              onChange={handleChange}
+              className={inputClass}
+            />
+          </div>
+        )}
 
         <div className={`grid sm:grid-cols-2 ${isCompact ? "gap-3.5" : "gap-5"}`}>
           <div>
@@ -208,7 +295,6 @@ const Form = ({
               inputMode="tel"
               autoComplete="tel"
               required
-              placeholder="(732) 210-6410"
               value={formData.phone}
               onChange={handleChange}
               className={inputClass}
@@ -224,13 +310,102 @@ const Form = ({
               type="email"
               autoComplete="email"
               required
-              placeholder="you@example.com"
               value={formData.email}
               onChange={handleChange}
               className={inputClass}
             />
           </div>
         </div>
+
+        {/* ------------------------------------------------------- intake
+            Landing pages only. Every one of these is what lets the firm triage
+            an ad lead before the call — and the date and the doctor question
+            in particular are what separate a claim worth taking from one that
+            is already out of time. */}
+        {intake && (
+          <>
+            <div className={`grid sm:grid-cols-2 ${gap}`}>
+              <div>
+                <label htmlFor={fieldId("caseType")} className={labelClass}>
+                  Type of case
+                </label>
+                <select
+                  id={fieldId("caseType")}
+                  name="caseType"
+                  required
+                  value={formData.caseType}
+                  onChange={handleChange}
+                  className={selectClass}
+                >
+                  <option value="">Select one</option>
+                  {caseTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor={fieldId("incidentDate")} className={labelClass}>
+                  Date of incident
+                </label>
+                <input
+                  id={fieldId("incidentDate")}
+                  name="incidentDate"
+                  type="date"
+                  /* Nothing in the future, and nothing so old it cannot be a
+                     live claim — a typo here is otherwise invisible. */
+                  max={new Date().toISOString().slice(0, 10)}
+                  min="1990-01-01"
+                  value={formData.incidentDate}
+                  onChange={handleChange}
+                  className={inputClass}
+                />
+              </div>
+            </div>
+
+            <div className={`grid sm:grid-cols-2 ${gap}`}>
+              <div>
+                <label htmlFor={fieldId("treatedByDoctor")} className={labelClass}>
+                  Seen a doctor?
+                </label>
+                <select
+                  id={fieldId("treatedByDoctor")}
+                  name="treatedByDoctor"
+                  value={formData.treatedByDoctor}
+                  onChange={handleChange}
+                  className={selectClass}
+                >
+                  <option value="">Select one</option>
+                  {DOCTOR_OPTIONS.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor={fieldId("preferredLanguage")} className={labelClass}>
+                  Preferred language
+                </label>
+                <select
+                  id={fieldId("preferredLanguage")}
+                  name="preferredLanguage"
+                  value={formData.preferredLanguage}
+                  onChange={handleChange}
+                  className={selectClass}
+                >
+                  <option value="">Select one</option>
+                  {languages.map((language) => (
+                    <option key={language} value={language}>
+                      {language}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* SMS consent sits directly beneath the phone field, per the
             carrier registration requirements. */}

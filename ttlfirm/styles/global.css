@@ -208,6 +208,20 @@
    vertical scrollbar was present. */
 .main { width: 100%; min-height: 100vh; margin: 0; padding: 0; }
 
+/* ------------------------------------------------------------ select caret
+   `appearance-none` is needed to make a <select> match the text inputs, and it
+   takes the platform arrow with it. These put one back as a background image
+   so no extra element is needed inside the control. */
+.select-caret-dark {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230F3057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+}
+.select-caret-light {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23E9A94A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+}
+/* An empty date input shows its own placeholder text in some browsers; keep it
+   the same muted tone as the other fields rather than near-black. */
+input[type="date"] { min-height: 1.5em; }
+
 /* ---------------------------------------------------------------- reveals
    Scroll-in motion, from two sources that share one set of rules:
 
