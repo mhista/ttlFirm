@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { FaCheck, FaArrowRightLong } from "react-icons/fa6";
 import { FilmCard, PortraitPlayer } from "@components/common/filmPlayer";
+import AttorneyBio from "@components/common/attorneyBio";
+import { ATTORNEY_HEADING, ATTORNEY_ROLE } from "@/lib/attorneyBio.mjs";
 
 const DEFAULT_BULLETS = [
   "One attorney from the first call to settlement",
@@ -33,14 +35,15 @@ const FilmSection = ({ content, film }) => {
   const portrait = content?.portrait?.asset?.url || "/assets/images/attorney-portrait.jpg";
   const portraitName = content?.portraitName || "Turuchi S. Iheanachor, Esq.";
   const portraitRole = content?.portraitRole || "Founder & Managing Attorney";
-  const sectionLabel = content?.sectionLabel || "Meet the firm";
-  const heading = content?.heading || "See who will actually handle your case";
-  const description =
-    content?.description ||
-    "Not a call center, and not a case manager you never chose. Turuchi Iheanachor reviews every case that comes in, and she is the one who handles it. A minute with her, outside the courthouse where she works.";
+  const sectionLabel = content?.sectionLabel || "Meet your attorney";
+  const heading = content?.heading || ATTORNEY_HEADING;
+  const role = content?.roleLine || ATTORNEY_ROLE;
+  // Her own bio. Sanity overrides it; the shipped copy is in lib/attorneyBio.js
+  // so the homepage, the landing pages and the profile page cannot drift.
+  const paragraphs = content?.paragraphs?.length ? content.paragraphs : null;
   const bullets = content?.bullets?.length ? content.bullets : DEFAULT_BULLETS;
-  const ctaText = content?.ctaText || "Meet Attorney Turuchi Iheanachor";
-  const ctaLink = content?.ctaLink || "/profile";
+  const ctaText = content?.ctaText || "Request a Free Case Review";
+  const ctaLink = content?.ctaLink || "/contact";
 
   return (
     <div className="container-x section-y">
@@ -68,7 +71,15 @@ const FilmSection = ({ content, film }) => {
           </div>
 
           <h2 className="h-section mt-5">{heading}</h2>
-          <p className="lede mt-5 max-w-xl">{description}</p>
+          {role && (
+            <p className="mt-2 font-sans text-[13px] font-bold uppercase tracking-[0.16em] text-accent-600">
+              {role}
+            </p>
+          )}
+
+          <div className="mt-6 max-w-2xl">
+            <AttorneyBio paragraphs={paragraphs} collapseAfter={2} />
+          </div>
 
           <ul className="mt-8 flex flex-col gap-3">
             {bullets.map((bullet) => (

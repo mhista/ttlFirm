@@ -19,6 +19,10 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// One copy of the attorney's bio, shared with the site itself so the landing
+// pages and the homepage can never fall out of step.
+import { ATTORNEY_BIO } from "../lib/attorneyBio.mjs";
+
 const here = dirname(fileURLToPath(import.meta.url));
 const outDir = resolve(here, "..", "seed");
 
@@ -489,6 +493,8 @@ const carAccident = {
       ],
       orientation: "portrait",
       autoplay: false,
+      showBio: true,
+      bioParagraphs: ATTORNEY_BIO,
       ctaText: "Get My Free Case Review",
       ctaLink: "#lead-form",
     }),
@@ -659,6 +665,8 @@ const workInjury = {
       ],
       orientation: "portrait",
       autoplay: false,
+      showBio: true,
+      bioParagraphs: ATTORNEY_BIO,
       ctaText: "Get My Free Consultation",
       ctaLink: "#lead-form",
     }),

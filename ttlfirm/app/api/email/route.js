@@ -201,7 +201,22 @@ export const POST = async (req) => {
     // setTimeout after the response had already been returned — on a
     // serverless runtime that callback is never guaranteed to run, and it
     // referenced a variable that was out of scope, so it always threw.
-    console.error("Error sending lead email:", error);
+    //
+    // Log enough to diagnose from the host's log viewer without opening the
+    // code: a bare "Failed to send" tells whoever is on call nothing, and the
+    // three things that actually go wrong (a rotated key, an unlinked sender
+    // domain, a rejected reply-to) each have a distinct signature here.
+    console.error("Lead email failed to send.", {
+      code: error?.code || error?.statusCode || "none",
+      message: error?.message,
+      senderAddress,
+      hadReplyTo: Boolean(email),
+      details: error?.details,
+    });
+    console.error(
+      "Run `node scripts/email-doctor.mjs --send you@example.com` to reproduce this " +
+        "with Azure's own error message."
+    );
     return Response.json(
       { success: false, message: "Failed to send message" },
       { status: 500 }

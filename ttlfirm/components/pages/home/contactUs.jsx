@@ -18,7 +18,7 @@ const ContactUs = ({ contact, content }) => {
   const email = contact?.email || FIRM.email;
 
   const offices = getOffices(contact);
-  const whatsapp = contact?.whatsapp?.trim();
+  const whatsapp = contact?.whatsapp?.trim() || FIRM.whatsapp;
 
   const heading = content?.heading || "Tell us what happened";
   const eyebrow = content?.sectionLabel || "Get in touch";

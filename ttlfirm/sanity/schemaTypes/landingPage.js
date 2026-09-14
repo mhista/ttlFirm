@@ -277,6 +277,21 @@ export default {
             { name: 'attorneyName', title: 'Name Shown On Photo', type: 'string' },
             { name: 'attorneyRole', title: 'Title Shown On Photo', type: 'string' },
             {
+              name: 'showBio',
+              title: 'Show the biography',
+              type: 'boolean',
+              initialValue: true,
+              description: 'Turn off to use this section as a plain video block.',
+            },
+            {
+              name: 'bioParagraphs',
+              title: 'Biography',
+              type: 'array',
+              of: [{ type: 'text', rows: 5 }],
+              description:
+                'One entry per paragraph. The first two show, the rest sit behind "Read her full bio". Leave empty to use the bio shipped with the site.',
+            },
+            {
               name: 'orientation',
               title: 'Shape',
               type: 'string',

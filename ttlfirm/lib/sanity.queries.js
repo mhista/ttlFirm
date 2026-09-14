@@ -803,6 +803,8 @@ export const homePageQuery = `
       portrait { asset->{ _id, url } },
       portraitName,
       portraitRole,
+      roleLine,
+      paragraphs,
       bullets,
       ctaText,
       ctaLink
@@ -1112,6 +1114,8 @@ const landingSectionProjection = `
   attorneyPhoto { asset->{ _id, url } },
   attorneyName,
   attorneyRole,
+  showBio,
+  bioParagraphs,
   orientation,
   autoplay,
   items[] { value, label, icon, title, description, question, answer },

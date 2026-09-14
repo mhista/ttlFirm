@@ -22,6 +22,8 @@ import {
 } from "react-icons/fa";
 
 import Form from "@components/common/form";
+import AttorneyBio from "@components/common/attorneyBio";
+import { ATTORNEY_ROLE } from "@/lib/attorneyBio.mjs";
 import Reveal from "@components/common/reveal";
 import CountUp from "@components/common/countUp";
 import AmbientVideo from "@components/common/ambientVideo";
@@ -318,7 +320,12 @@ export const LpVideo = ({ data, phone }) => {
   // tomorrow already leads with her face.
   const photo = data.attorneyPhoto?.asset?.url || "/assets/images/attorney-portrait.jpg";
   const photoName = data.attorneyName || "Turuchi S. Iheanachor, Esq.";
-  const photoRole = data.attorneyRole || "Founder & Managing Attorney";
+  const photoRole = data.attorneyRole || ATTORNEY_ROLE;
+  // Her full bio, when this section is being used as the "meet your attorney"
+  // block. Sanity overrides the paragraphs; `showBio` turns it off for a
+  // section that is only meant to be a video.
+  const showBio = data.showBio !== false;
+  const bioParagraphs = data.bioParagraphs?.length ? data.bioParagraphs : null;
 
   return (
     <section className="bg-navy-900">
@@ -333,7 +340,18 @@ export const LpVideo = ({ data, phone }) => {
               </div>
             )}
             {data.heading && <h2 className="h-section-on-dark mt-4">{data.heading}</h2>}
+            {showBio && photoRole && (
+              <p className="mt-2 font-sans text-[13px] font-bold uppercase tracking-[0.16em] text-accent-400">
+                {photoRole}
+              </p>
+            )}
             {data.description && <p className="lede-on-dark mt-5">{data.description}</p>}
+
+            {showBio && (
+              <div className="mt-6">
+                <AttorneyBio paragraphs={bioParagraphs} collapseAfter={2} tone="dark" />
+              </div>
+            )}
 
             {data.bullets?.length > 0 && (
               <ul className="mt-7 flex flex-col gap-3">

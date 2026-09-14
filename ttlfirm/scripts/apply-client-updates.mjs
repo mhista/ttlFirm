@@ -45,6 +45,11 @@ const SITE_SETTINGS = [
     why: '"Is it possible for the text to be routed as an email that comes into info@turuchilawfirm.com?"',
   },
   {
+    path: "contact.whatsapp",
+    value: "848-228-6402",
+    why: '"We have a WhatsApp number… I need you to add WhatsApp somewhere here"',
+  },
+  {
     path: "contact.address.note",
     value: "By appointment only",
     why: '"In front of this Jersey City address, put By Appointment Only"',

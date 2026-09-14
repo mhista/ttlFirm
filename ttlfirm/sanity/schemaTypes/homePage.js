@@ -478,6 +478,15 @@ export default {
         },
         { name: 'portraitName', title: 'Name Shown On Photo', type: 'string' },
         { name: 'portraitRole', title: 'Title Shown On Photo', type: 'string' },
+        { name: 'roleLine', title: 'Title Under The Heading', type: 'string' },
+        {
+          name: 'paragraphs',
+          title: 'Biography',
+          type: 'array',
+          of: [{ type: 'text', rows: 5 }],
+          description:
+            'One entry per paragraph. The first two are shown and the rest sit behind "Read her full bio" — all of it is still in the page for Google. Leave empty to use the bio shipped with the site.',
+        },
         {
           name: 'bullets',
           title: 'Bullets',

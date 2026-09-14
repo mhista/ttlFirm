@@ -71,6 +71,7 @@ export const FIRM = {
   shortName: "Turuchi Law Firm",
   phoneDisplay: "732-210-6410",
   phoneHref: "+17322106410",
+  whatsapp: "848-228-6402",
   email: "info@turuchilawfirm.com",
   addressLine1: "111 Town Square Pl, Ste 1238 #492165",
   addressLine2: "Jersey City, NJ 07310",

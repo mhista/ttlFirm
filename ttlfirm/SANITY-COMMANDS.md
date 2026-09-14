@@ -67,6 +67,7 @@ What it sets:
 | Hours | Open 24 hours, 7 days a week | "my hours are 24/7" |
 | Cases Handled | 700 | "I've handled way more than that now" |
 | Amount Recovered | Millions | "remove the 8 years, write Millions Recovered" |
+| WhatsApp Number | 848-228-6402 | "we have a WhatsApp number" |
 | Hero heading + description | The shortened version | the hero copy she was shown |
 
 ---
@@ -114,9 +115,32 @@ won't be there.
 
 ## Still needs doing by hand
 
-- **The WhatsApp number** — Site Settings → Contact → WhatsApp Number. The link
-  appears on the contact page the moment it's filled in, and nowhere until then.
 - **The Google reviews** — waiting on her.
+
+---
+
+## If email isn't arriving
+
+The site does **not** use SMTP. It uses Azure Communication Services Email,
+which is an HTTPS API — there is no port, no SMTP username, and nothing a mail
+client would recognise, so SMTP settings are the wrong place to look.
+
+```bash
+node scripts/email-doctor.mjs                      # check the configuration
+node scripts/email-doctor.mjs --send you@email.com # send a real test
+```
+
+The second one prints Azure's own error, which is what actually identifies the
+cause. In order of how often it turns out to be each:
+
+1. The environment variables are set locally but not on the host — `.env.local`
+   is never deployed, and the host needs its own copy plus a redeploy.
+2. The sender domain is Verified in the Email Communication Service but never
+   **connected** to the Communication Service. They are two Azure resources and
+   the link is a separate step.
+3. `SENDER_EMAIL_ADDRESS` isn't the exact MailFrom address Azure shows.
+4. It sent, and went to Junk — Azure-managed `*.azurecomm.net` domains have no
+   sending reputation.
 
 ## Checking it worked
 
