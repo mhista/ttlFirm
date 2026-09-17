@@ -63,7 +63,7 @@ What it sets:
 |---|---|---|
 | Where Enquiries Are Sent | info@turuchilawfirm.com | "route the text as an email to info@" |
 | Site Title | The Turuchi Law Firm, LLC | "the arrows should both say 'The Turuchi Law Firm, LLC'" |
-| Main Address | 3 Gateway Center, 12th Floor, Suite 1201, Newark, NJ 07102 | "completely remove the Jersey city address… this is the new physical address" |
+| Main Address | 3 Gateway Center, 12th Floor, Newark, NJ 07102 | "completely remove the Jersey city address… this is the new physical address" |
 | Main Address → Note | *(cleared)* | "By appointment only" was Jersey City's note |
 | Other Offices | 30 Knightsbridge Road, Suite 525, Piscataway, NJ 08854 | "please include my other address" |
 | Hours | Open 24 hours, 7 days a week | "my hours are 24/7" |

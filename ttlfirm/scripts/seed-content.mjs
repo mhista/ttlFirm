@@ -193,7 +193,7 @@ const privacyPolicy = {
     section("13. Contact Information", blocks(
       p("If you have questions about this Privacy Policy or about how your information is handled, contact us:"),
       p("**The Turuchi Law Firm, LLC**"),
-      p("3 Gateway Center, 12th Floor, Suite 1201, Newark, NJ 07102"),
+      p("3 Gateway Center, 12th Floor, Newark, NJ 07102"),
       p("732-210-6410 · Info@turuchilawfirm.com")
     ), { anchor: "contact" }),
   ],
@@ -341,7 +341,7 @@ const terms = {
     section("20. Contact Information", blocks(
       p("Questions about these Terms, the website, or the SMS program may be directed to:"),
       p("**The Turuchi Law Firm, LLC**"),
-      p("3 Gateway Center, 12th Floor, Suite 1201, Newark, NJ 07102"),
+      p("3 Gateway Center, 12th Floor, Newark, NJ 07102"),
       p("732-210-6410 · Info@turuchilawfirm.com")
     ), { anchor: "contact" }),
   ],

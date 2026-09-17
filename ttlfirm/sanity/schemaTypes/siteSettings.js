@@ -34,7 +34,7 @@ export default {
           title: 'WhatsApp Number',
           type: 'string',
           description:
-            'Digits and country code, e.g. +1 732 210 6410. Leave empty and no WhatsApp link is shown anywhere.',
+            'Shown on the site exactly as typed. The wa.me link adds the country code automatically, so a plain 10-digit US number like 848-228-6402 works. For a number outside the US, type it with a leading + (e.g. +234 801 234 5678) and it is used exactly as given. Leave empty and no WhatsApp link appears anywhere.',
         },
         { name: 'email', title: 'Email Address', type: 'string', validation: (R) => R.required().email() },
         {

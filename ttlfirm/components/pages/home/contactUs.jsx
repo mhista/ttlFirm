@@ -4,7 +4,7 @@ import { FaEnvelope, FaPhone, FaLocationDot, FaClock, FaWhatsapp } from "react-i
 import Form from "@components/common/form";
 import { buildSocialLinks } from "@components/common/mediaButtons";
 import { useSiteSettings } from "@/lib/siteSettingsContext";
-import { FIRM, telHref, getOffices } from "@/lib/siteNav";
+import { FIRM, telHref, getOffices, whatsappHref } from "@/lib/siteNav";
 
 /**
  * Contact block: firm details on the left, lead form on the right.
@@ -43,8 +43,9 @@ const ContactUs = ({ contact, content }) => {
             icon: FaWhatsapp,
             label: "WhatsApp",
             value: whatsapp,
-            // wa.me wants digits only, no plus and no spaces.
-            href: `https://wa.me/${whatsapp.replace(/[^\d]/g, "")}`,
+            // whatsappHref adds the country code. Building this inline is what
+            // broke it before — see the note on that helper.
+            href: whatsappHref(whatsapp),
             external: true,
           },
         ]

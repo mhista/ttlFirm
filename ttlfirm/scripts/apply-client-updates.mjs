@@ -77,8 +77,12 @@ const SITE_SETTINGS = [
      real staffed office. */
   {
     path: "contact.address.street",
-    value: "3 Gateway Center, 12th Floor, Suite 1201",
-    why: '"This is the new physical address for the firm: 3 Gateway Center, 12th floor, Suite 1201, Newark, NJ 07102"',
+    value: "3 Gateway Center, 12th Floor",
+    // The suite number came out a day later: "Pls remove this suite no just
+    // leave it at 12th floor". Changed HERE and not only in the Studio,
+    // because re-running this script would otherwise put the suite back over
+    // a hand-edit.
+    why: '"Pls remove this suite no just leave it at 12th floor"',
   },
   { path: "contact.address.city", value: "Newark", why: "the same" },
   { path: "contact.address.state", value: "NJ", why: "the same" },

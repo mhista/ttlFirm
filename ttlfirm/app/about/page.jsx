@@ -70,7 +70,7 @@ function generateLawFirmSchema(data) {
     "telephone": "+17322106410",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "3 Gateway Center, 12th Floor, Suite 1201",
+      "streetAddress": "3 Gateway Center, 12th Floor",
       "addressLocality": "Newark",
       "addressRegion": "NJ",
       "postalCode": "07102"

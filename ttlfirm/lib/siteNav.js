@@ -77,10 +77,10 @@ export const FIRM = {
   phoneHref: "+17322106410",
   whatsapp: "848-228-6402",
   email: "info@turuchilawfirm.com",
-  addressLine1: "3 Gateway Center, 12th Floor, Suite 1201",
+  addressLine1: "3 Gateway Center, 12th Floor",
   addressLine2: "Newark, NJ 07102",
   mapsUrl:
-    "https://maps.google.com/?q=3+Gateway+Center+Suite+1201+Newark+NJ+07102",
+    "https://maps.google.com/?q=3+Gateway+Center+Newark+NJ+07102",
 };
 
 /**
@@ -93,7 +93,7 @@ export const FIRM = {
 export const FIRM_OFFICES = [
   {
     label: "Newark",
-    street: "3 Gateway Center, 12th Floor, Suite 1201",
+    street: "3 Gateway Center, 12th Floor",
     city: "Newark",
     state: "NJ",
     zipCode: "07102",
@@ -153,3 +153,43 @@ export const getOffices = (contact) => {
 /** Turns whatever the CMS holds into a `tel:` safe string. */
 export const telHref = (phone) =>
   `tel:${String(phone || FIRM.phoneHref).replace(/[^\d+]/g, "")}`;
+
+/**
+ * Builds a wa.me link, and the country code is the whole point.
+ *
+ * THE BUG THIS FIXES: the link was built as
+ * `https://wa.me/${whatsapp.replace(/[^\d]/g, "")}`, which turned
+ * "848-228-6402" into "8482286402" — ten digits, no country code. wa.me
+ * requires a number in FULL INTERNATIONAL format, so WhatsApp read the
+ * leading "84" as the country code (Vietnam), got a number that does not
+ * exist, and told everyone who tapped it that the number was not found. The
+ * number was always fine; the URL was not.
+ *
+ * So the digits are normalised before they go in the URL:
+ *
+ *   "+1 848 228 6402"  → 18482286402   already international, keep it
+ *   "1-848-228-6402"   → 18482286402   11 digits starting with 1, keep it
+ *   "848-228-6402"     → 18482286402   10 digits → North American, add the 1
+ *   "+44 20 7946 0000" → 442079460000  any other + number passes through
+ *
+ * A number stored with a leading "+" is trusted as already international and
+ * is never given a second country code. Anything else that is not a plain
+ * 10- or 11-digit NANP number passes through untouched, on the basis that
+ * guessing at it would be worse than leaving it alone.
+ */
+export const whatsappHref = (whatsapp, { defaultCountryCode = "1" } = {}) => {
+  const raw = String(whatsapp || FIRM.whatsapp || "").trim();
+  if (!raw) return null;
+
+  const explicitlyInternational = raw.startsWith("+");
+  const digits = raw.replace(/[^\d]/g, "");
+  if (!digits) return null;
+
+  let number = digits;
+  if (!explicitlyInternational) {
+    if (digits.length === 10) number = `${defaultCountryCode}${digits}`;
+    // 11 digits already starting with the country code needs nothing doing.
+  }
+
+  return `https://wa.me/${number}`;
+};

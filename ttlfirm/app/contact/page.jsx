@@ -38,7 +38,7 @@ export async function generateMetadata() {
   
   return {
     title: seo.metaTitle || "Contact Us | Free Consultation",
-    description: seo.metaDescription || `Get a free legal consultation. Call ${contact.phone || '732-210-6410'} or visit us at ${contact.address?.street || '3 Gateway Center, 12th Floor, Suite 1201'}, ${contact.address?.city || 'Newark'}, NJ. Available for personal injury and workers' compensation cases.`,
+    description: seo.metaDescription || `Get a free legal consultation. Call ${contact.phone || '732-210-6410'} or visit us at ${contact.address?.street || '3 Gateway Center, 12th Floor'}, ${contact.address?.city || 'Newark'}, NJ. Available for personal injury and workers' compensation cases.`,
     keywords: seo.keywords || [
       "contact Turuchi Law Firm",
       "free legal consultation NJ",
