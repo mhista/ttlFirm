@@ -141,10 +141,10 @@ export default {
       fields: [
         {
           name: 'googleReviewUrl',
-          title: 'Write-a-review link',
+          title: 'Write-a-review link (not used on the site)',
           type: 'url',
           description:
-            'The short link from Google Business Profile → Ask for reviews. It looks like https://g.page/r/XXXX/review and opens the review box in one tap. Without it the buttons fall back to a Google search for the firm.',
+            'Kept for the firm\'s own use — this is the link to text or email a client (Google Business Profile → Ask for reviews). The website deliberately does NOT send anyone here: both "Leave a review" buttons scroll to the form on the reviews page, so the firm reads every review before it is published.',
         },
         {
           name: 'googleProfileUrl',
@@ -243,7 +243,14 @@ export default {
         { name: 'ctaButtonText', title: 'CTA Bar Button Text', type: 'string', initialValue: 'Request a Case Review' },
         { name: 'tagline', title: 'Footer Blurb', type: 'text', rows: 4 },
         { name: 'creditName', title: 'Built By — Name', type: 'string', initialValue: 'Kymaa Digital Solutions' },
-        { name: 'creditUrl', title: 'Built By — Link', type: 'url', initialValue: 'https://www.kymaa.tech' },
+        {
+          name: 'creditUrl',
+          title: 'Built By — Link',
+          type: 'url',
+          initialValue: 'https://www.instagram.com/kymaatech',
+          description:
+            'Currently the Kymaa Instagram, while kymaa.tech is being built. Change it here when the site is live.',
+        },
         {
           name: 'legalLinks',
           title: 'Legal Links',

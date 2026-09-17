@@ -36,7 +36,11 @@ const Footer = () => {
     f.tagline ||
     "A New Jersey firm representing injured people and injured workers. Every case is handled personally by an attorney who has sat on the insurance company's side of the table and knows how they value a claim.";
   const creditName = f.creditName || "Kymaa Digital Solutions";
-  const creditUrl = f.creditUrl || "https://www.kymaa.tech";
+  // Points at the Instagram account rather than kymaa.tech until that site is
+  // finished — a credit link that lands on a holding page or a 404 is worse
+  // than no credit at all. Swap it back in Site Settings → Footer → Built By
+  // once the site is live; no deploy needed.
+  const creditUrl = f.creditUrl || "https://www.instagram.com/kymaatech";
   const legalLinks = f.legalLinks?.length ? f.legalLinks : LEGAL_LINKS;
   const attorneyAdvertising =
     notices.attorneyAdvertising ||

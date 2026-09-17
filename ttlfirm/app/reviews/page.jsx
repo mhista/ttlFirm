@@ -1,5 +1,5 @@
 import Script from "next/script";
-import { FaStar, FaArrowUpRightFromSquare } from "react-icons/fa6";
+import { FaStar } from "react-icons/fa6";
 import { client } from "@/lib/sanity.client";
 import { allReviewsQuery, siteSettingsQuery } from "@/lib/sanity.queries";
 import { FIRM } from "@/lib/siteNav";
@@ -87,15 +87,29 @@ const ReviewsPage = async () => {
     ? rated.reduce((sum, r) => sum + Number(r.rating), 0) / rated.length
     : 0;
 
-  // The one-tap "write a review" link from the firm's Google Business Profile
-  // (Business Profile → Ask for reviews). Until it is set in the Studio, the
-  // button falls back to a search for the firm, which still gets someone to
-  // the right place — just with one extra tap.
-  const googleReviewUrl =
+  // NOTE: reviews are collected HERE, not on Google.
+  //
+  // The firm's decision — every review left through this site, so the firm
+  // reads it before it is published rather than watching it appear on a
+  // profile it does not control. Both "leave a review" buttons therefore
+  // scroll to the form on this page; there is no write-a-review link out to
+  // Google anywhere on the site.
+  //
+  // The Google links that REMAIN are read-only, and they stay for a reason:
+  // Google's display rules require anyone showing reviews from a Business
+  // Profile to link back to the source so a reader can verify one. That is
+  // attribution for reviews already being displayed, not an invitation to go
+  // and write another. If the mirrored Google reviews are ever removed from
+  // this page, these can go with them.
+  const googleProfileUrl =
+    siteSettings?.reviews?.googleProfileUrl ||
     siteSettings?.reviews?.googleReviewUrl ||
     "https://www.google.com/search?q=The+Turuchi+Law+Firm+LLC";
-  const googleProfileUrl =
-    siteSettings?.reviews?.googleProfileUrl || googleReviewUrl;
+
+  // The form's anchor. `[id] { scroll-margin-top }` in global.css already
+  // offsets for the sticky header, and scroll-behavior is smooth, so a plain
+  // hash link lands in the right place without any JavaScript.
+  const FORM_ANCHOR = "leave-a-review";
 
   const schema = buildReviewSchema(reviews);
 
@@ -135,15 +149,9 @@ const ReviewsPage = async () => {
                 </div>
               </div>
 
-              <a
-                href={googleReviewUrl}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="btn-primary"
-              >
+              <a href={`#${FORM_ANCHOR}`} className="btn-primary">
                 <FaStar className="text-xs" aria-hidden="true" />
-                Leave a Google review
-                <FaArrowUpRightFromSquare className="text-[9px]" aria-hidden="true" />
+                Leave a review
               </a>
             </Reveal>
           </div>
@@ -207,7 +215,10 @@ const ReviewsPage = async () => {
       </section>
 
       {/* ------------------------------------------------------- leave one */}
-      <section className="bg-surface-alt">
+      {/* The button at the top of the page scrolls here. No second button in
+          this section — the form is directly beneath the heading, so one that
+          scrolled to itself would be noise. */}
+      <section id={FORM_ANCHOR} className="bg-surface-alt">
         <div className="container-x section-y">
           <Reveal className="mx-auto max-w-2xl text-center">
             <div className="flex items-center justify-center gap-3">
@@ -217,21 +228,10 @@ const ReviewsPage = async () => {
             </div>
             <h2 className="h-section mt-5">Tell us how it went</h2>
             <p className="lede mt-5">
-              A Google review helps the next injured person find the firm, and takes
-              about thirty seconds. If you would rather write to us directly, the form
-              below comes straight to the office.
+              A few sentences from someone who has been through it is the most useful
+              thing the next injured person can read. It takes about a minute, and it
+              comes straight to the office.
             </p>
-
-            <a
-              href={googleReviewUrl}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              className="btn-primary mt-8"
-            >
-              <FaStar className="text-xs" aria-hidden="true" />
-              Review us on Google
-              <FaArrowUpRightFromSquare className="text-[9px]" aria-hidden="true" />
-            </a>
           </Reveal>
 
           <Reveal delay={100} className="mx-auto mt-12 max-w-2xl">

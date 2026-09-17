@@ -70,6 +70,7 @@ What it sets:
 | Cases Handled | 700 | "I've handled way more than that now" |
 | Amount Recovered | Millions | "remove the 8 years, write Millions Recovered" |
 | WhatsApp Number | 848-228-6402 | "we have a WhatsApp number" |
+| Built By → Link | instagram.com/kymaatech | "use the instagram account till the website is fully built" |
 | Hero heading + description | The shortened version | the hero copy she was shown |
 
 ---

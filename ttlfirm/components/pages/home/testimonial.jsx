@@ -36,13 +36,26 @@ const TestimonialCarousel = ({ testimonials = [], content }) => {
     const el = swiperRef.current;
     if (!el || !slides.length) return;
 
+    // NO PAGINATION DOTS, AND NO autoHeight — both were causing the same
+    // problem from two directions.
+    //
+    // Swiper positions the dots absolutely against the container, so with
+    // `autoHeight` resizing that container to whatever slide is showing, they
+    // moved every time the carousel advanced. Google reviews made it obvious:
+    // they run from one line to a full paragraph, so the block jumped by
+    // a couple of hundred pixels and dragged everything below it up and down.
+    //
+    // Dropping `autoHeight` lets Swiper stretch every slide in view to the
+    // tallest one, so the row is a fixed height and nothing below it moves.
+    // The dots then have nothing to do that the arrows underneath don't
+    // already do, so they are gone rather than merely pinned in place.
     Object.assign(el, {
       loop: slides.length > 2,
       slidesPerView: 1,
       spaceBetween: 24,
-      autoHeight: true,
+      autoHeight: false,
       autoplay: { delay: 6000, disableOnInteraction: true },
-      pagination: { clickable: true },
+      pagination: false,
       breakpoints: {
         768: { slidesPerView: 2, spaceBetween: 24 },
         1280: { slidesPerView: 3, spaceBetween: 28 },
@@ -71,14 +84,19 @@ const TestimonialCarousel = ({ testimonials = [], content }) => {
 
       {/* Carousel */}
       <div className="relative mt-12" data-aos="fade-up">
-        <swiper-container ref={swiperRef} init="false" class="pb-12">
+        <swiper-container ref={swiperRef} init="false">
           {slides.map((t) => (
             <swiper-slide key={t._id} class="h-auto">
               <figure className="flex h-full flex-col rounded-xl border border-surface-line bg-white p-7 shadow-card">
                 <FaQuoteLeft className="text-2xl text-accent-500/35" aria-hidden="true" />
 
                 <blockquote className="mt-5 flex-1">
-                  <p className="text-[15px] leading-relaxed text-ink-muted">{t.testimonial}</p>
+                  {/* Clamped: now that every card in a row is the same height,
+                      one long Google review would otherwise set that height
+                      for all of them. The full text is on /reviews. */}
+                  <p className="line-clamp-[8] text-[15px] leading-relaxed text-ink-muted">
+                    {t.testimonial}
+                  </p>
                   {/* Same rule as the review cards: a review captured in part
                       says so and links to the original, rather than passing a
                       fragment off as everything the client wrote. */}

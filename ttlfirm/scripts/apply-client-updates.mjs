@@ -105,6 +105,11 @@ const SITE_SETTINGS = [
     why: '"Please include my other address: 30 Knightsbridge Road, Suite 525, Piscataway, NJ 08854"',
   },
   {
+    path: "footer.creditUrl",
+    value: "https://www.instagram.com/kymaatech",
+    why: '"change it to use the instagram account, till the website is fully built"',
+  },
+  {
     path: "businessHours.weekdaysDisplay",
     value: "Open 24 hours, 7 days a week",
     why: '"my hours are 24/7. Please change this to 24/7"',
