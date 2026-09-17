@@ -358,6 +358,36 @@ export default {
       ],
     },
 
+    // -------------------------------------------------------- OFFICE PHOTOS
+    // Photographs only — no map embed and nothing that creates a Google
+    // listing. Leave the fields empty to use the Newark photos and copy
+    // shipped with the site.
+    {
+      name: 'officeSection',
+      title: 'Office Photos',
+      type: 'object',
+      group: 'sections',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        { name: 'enabled', title: 'Show Section', type: 'boolean', initialValue: true },
+        { name: 'heading', title: 'Heading', type: 'string' },
+        { name: 'description', title: 'Description', type: 'text', rows: 3 },
+        {
+          name: 'photos',
+          title: 'Photos',
+          type: 'array',
+          validation: Rule => Rule.max(2),
+          of: [
+            {
+              type: 'image',
+              options: { hotspot: true },
+              fields: [{ name: 'alt', title: 'Alt Text', type: 'string' }],
+            },
+          ],
+        },
+      ],
+    },
+
     // ---------------------------------------------------------------- BLOG
     {
       name: 'blogSection',
@@ -517,6 +547,7 @@ export default {
               { title: 'Why Trust Us', value: 'whyChooseUs' },
               { title: 'Consultation Band', value: 'consultation' },
               { title: 'Testimonials', value: 'testimonials' },
+              { title: 'Office Photos', value: 'office' },
               { title: 'Blog', value: 'blog' },
               { title: 'Contact', value: 'contact' },
             ],

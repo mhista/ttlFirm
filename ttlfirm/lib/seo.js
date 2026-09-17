@@ -19,7 +19,7 @@ export function generateLocalBusinessSchema(item, county) {
   return {
     "@context": "https://schema.org",
     "@type": "LegalService",
-    name: `${item.title || item.name} - ${county?.name || "New Jersey"} - Turuchi Law Firm`,
+    name: `${item.title || item.name} - ${county?.name || "New Jersey"} - The Turuchi Law Firm, LLC`,
     description: item.seo?.metaDescription || item.excerpt || '',
     url: url,
     image: item.image
@@ -29,10 +29,10 @@ export function generateLocalBusinessSchema(item, county) {
     email: "info@turuchilawfirm.com",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "111 Town Square Pl",
-      addressLocality: "Jersey City",
+      streetAddress: "3 Gateway Center, 12th Floor, Suite 1201",
+      addressLocality: "Newark",
       addressRegion: "NJ",
-      postalCode: "07310",
+      postalCode: "07102",
       addressCountry: "US",
     },
     areaServed: county
@@ -49,7 +49,7 @@ export function generateLocalBusinessSchema(item, county) {
           name: "New Jersey",
         },
     priceRange: "$$",
-    openingHours: "Mo-Fr 09:00-17:00",
+    openingHours: "Mo-Su 00:00-23:59",
   };
 }
 
@@ -73,7 +73,7 @@ export function generateArticleSchema(blog) {
       : undefined,
     publisher: {
       "@type": "Organization",
-      name: "Turuchi Law Firm",
+      name: "The Turuchi Law Firm, LLC",
       logo: {
         "@type": "ImageObject",
         url: "https://turuchilawfirm.com/assets/images/logo.png",

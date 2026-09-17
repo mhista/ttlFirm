@@ -24,7 +24,7 @@ export const metadata = {
     "workplace injury attorney New Jersey",
   ],
   openGraph: {
-    title: "Practice Areas | Turuchi Law Firm",
+    title: "Practice Areas | The Turuchi Law Firm, LLC",
     description:
       "Focused representation in personal injury and workers' compensation for clients across New Jersey.",
     url: "https://turuchilawfirm.com/practice",

@@ -600,8 +600,33 @@ export const featuredBlogsQuery = `
   }
 `;
 
+/**
+ * Which testimonials the site shows — and why it is written the long way.
+ *
+ * Both halves of this filter have to tolerate a MISSING field, because this
+ * dataset has documents older than the fields being tested.
+ *
+ *   status == "active"   drops every testimonial that has no `status` at all.
+ *                        `initialValue` in a schema only applies to documents
+ *                        created after the field existed, so anything added
+ *                        before it is invisible to this filter. Verified with
+ *                        groq-js: a document with no `status` does not match.
+ *                        That is a real cause of "the older reviews are gone",
+ *                        and it predates the review work.
+ *
+ *   approved             is newer still, so the same applies.
+ *
+ * So each half accepts the value it wants OR the field being absent, using
+ * defined() rather than a negated comparison. Deliberately verbose: the terse
+ * version is the one that quietly hides a client's words.
+ *
+ * Only an explicit `status: "hidden"` or `approved: false` takes a review off
+ * the site — both of which mean a person chose that.
+ */
+const VISIBLE_REVIEW =
+  '(status == "active" || !defined(status)) && (approved == true || !defined(approved))';
 export const testimonialsQuery = `
-  *[_type == "testimonial" && status == "active"] | order(order asc) {
+  *[_type == "testimonial" && ${VISIBLE_REVIEW}] | order(order asc) {
     _id,
     name,
     role,
@@ -615,12 +640,59 @@ export const testimonialsQuery = `
     testimonial,
     rating,
     caseType,
-    featured
+    featured,
+    source,
+    sourceUrl,
+    relativeDate,
+    dateSubmitted,
+    truncated,
+    translatedFrom,
+    ownerReply
+  }
+`;
+
+/**
+ * Every review, newest first — for the /reviews page, which shows the lot
+ * rather than a curated handful.
+ */
+export const allReviewsQuery = `
+  *[_type == "testimonial" && ${VISIBLE_REVIEW}]
+    | order(dateSubmitted desc, order asc) {
+    _id,
+    name,
+    role,
+    image {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
+    testimonial,
+    rating,
+    caseType,
+    featured,
+    source,
+    sourceUrl,
+    relativeDate,
+    dateSubmitted,
+    truncated,
+    translatedFrom,
+    ownerReply
+  }
+`;
+
+/** The counts and average printed above the reviews. */
+export const reviewStatsQuery = `
+  {
+    "total": count(*[_type == "testimonial" && ${VISIBLE_REVIEW}]),
+    "google": count(*[_type == "testimonial" && ${VISIBLE_REVIEW} && source == "google"]),
+    "ratings": *[_type == "testimonial" && ${VISIBLE_REVIEW}].rating
   }
 `;
 
 export const featuredTestimonialsQuery = `
-  *[_type == "testimonial" && status == "active" && featured == true] | order(order asc) [0...6] {
+  *[_type == "testimonial" && ${VISIBLE_REVIEW} && featured == true] | order(order asc) [0...6] {
     _id,
     name,
     role,
@@ -675,6 +747,12 @@ export const siteSettingsQuery = `
       weekdays,
       weekdaysDisplay,
       weekend
+    },
+    reviews {
+      googleReviewUrl,
+      googleProfileUrl,
+      placeId,
+      locationName
     },
     social {
       facebook,
@@ -854,6 +932,17 @@ export const homePageQuery = `
       description,
       disclaimer
     },
+    officeSection {
+      enabled,
+      heading,
+      description,
+      "photos": photos[]{
+        "src": asset->url,
+        alt,
+        "width": asset->metadata.dimensions.width,
+        "height": asset->metadata.dimensions.height
+      }
+    },
     blogSection {
       enabled,
       sectionLabel,
@@ -980,6 +1069,16 @@ export const contactPageQuery = `
       embedUrl,
       latitude,
       longitude
+    },
+    officeGallery {
+      heading,
+      description,
+      "photos": photos[]{
+        "src": asset->url,
+        alt,
+        "width": asset->metadata.dimensions.width,
+        "height": asset->metadata.dimensions.height
+      }
     },
     seo {
       metaTitle,
@@ -1130,6 +1229,12 @@ const landingSectionProjection = `
     rating,
     caseType,
     image { asset->{ _id, url }, alt }
+  },
+  photos[] {
+    "src": asset->url,
+    alt,
+    "width": asset->metadata.dimensions.width,
+    "height": asset->metadata.dimensions.height
   }
 `;
 

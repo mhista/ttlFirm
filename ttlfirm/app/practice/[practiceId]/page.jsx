@@ -22,11 +22,18 @@ import { filterRetiredAreas, RETIRED_PRACTICE_SLUGS } from "@/lib/siteNav";
 export const revalidate = 60;
 
 // Generate static paths using SLUGS
+// A CMS outage at deploy time should not fail the build. Every route here
+// has `revalidate` and leaves `dynamicParams` at its default, so an empty list
+// means the pages render on first request and are cached from then on —
+// slower for one visitor, rather than a site that will not deploy at all.
 export async function generateStaticParams() {
-  const practiceAreas = filterRetiredAreas(await client.fetch(practiceAreasQuery));
-  return practiceAreas.map((area) => ({
-    practiceId: area.slug.current,
-  }));
+  try {
+    const practiceAreas = filterRetiredAreas((await client.fetch(practiceAreasQuery)) || []);
+    return practiceAreas.map((area) => ({ practiceId: area.slug.current }));
+  } catch (error) {
+    console.error("Could not list practice areas for the build:", error.message);
+    return [];
+  }
 }
 
 // Generate metadata
@@ -41,9 +48,11 @@ export async function generateMetadata({ params }) {
   }
 
   return {
+    // The page name leads, for the same sitelink reason as /profile — and the
+    // firm name is left off because the root layout's title template appends
+    // it already.
     title:
-      practiceArea.seo?.metaTitle ||
-      `${practiceArea.name} Attorney NJ | Turuchi Law Firm`,
+      practiceArea.seo?.metaTitle || `${practiceArea.name} | New Jersey Attorney`,
     description:
       practiceArea.seo?.metaDescription ||
       practiceArea.excerpt ||

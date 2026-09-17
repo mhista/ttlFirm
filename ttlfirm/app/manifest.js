@@ -1,7 +1,7 @@
 export default function manifest() {
   return {
-    name: 'Turuchi Law Firm',
-    short_name: 'Turuchi Law',
+    name: 'The Turuchi Law Firm, LLC',
+    short_name: 'Turuchi Law Firm',
     description: "New Jersey personal injury and workers' compensation representation. Free consultation.",
     start_url: '/',
     display: 'standalone',

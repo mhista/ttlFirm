@@ -3,6 +3,7 @@ import { contactPageQuery, siteSettingsQuery } from "@/lib/sanity.queries";
 import { getOffices } from "@/lib/siteNav";
 import Section2 from "@components/common/section2";
 import ContactUs from "@components/pages/home/contactUs";
+import OfficeGallery from "@components/common/officeGallery";
 import PageHeader from "@components/pages/header";
 import Script from "next/script";
 
@@ -36,18 +37,18 @@ export async function generateMetadata() {
   const contact = siteSettings?.contact || {};
   
   return {
-    title: seo.metaTitle || "Contact Us | Free Consultation | Turuchi Law Firm NJ",
-    description: seo.metaDescription || `Get a free legal consultation. Call ${contact.phone || '732-210-6410'} or visit us at ${contact.address?.street || '111 Town Square Pl'}, ${contact.address?.city || 'Jersey City'}, NJ. Available for personal injury and workers' compensation cases.`,
+    title: seo.metaTitle || "Contact Us | Free Consultation",
+    description: seo.metaDescription || `Get a free legal consultation. Call ${contact.phone || '732-210-6410'} or visit us at ${contact.address?.street || '3 Gateway Center, 12th Floor, Suite 1201'}, ${contact.address?.city || 'Newark'}, NJ. Available for personal injury and workers' compensation cases.`,
     keywords: seo.keywords || [
       "contact Turuchi Law Firm",
       "free legal consultation NJ",
-      "Jersey City lawyer",
+      "Newark NJ lawyer",
       "law firm contact",
       "schedule consultation"
     ],
     openGraph: {
-      title: seo.metaTitle || "Contact Turuchi Law Firm | Free Consultation",
-      description: seo.metaDescription || `Call ${contact.phone} for a free case evaluation. Located in Jersey City, serving all of New Jersey.`,
+      title: seo.metaTitle || "Contact The Turuchi Law Firm, LLC | Free Consultation",
+      description: seo.metaDescription || `Call ${contact.phone} for a free case evaluation. Located in Newark, serving all of New Jersey.`,
       url: "https://turuchilawfirm.com/contact"
     },
     alternates: {
@@ -67,11 +68,11 @@ function generateContactSchema(siteSettings) {
   return {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    "name": "Contact Turuchi Law Firm",
+    "name": "Contact The Turuchi Law Firm, LLC",
     "url": "https://turuchilawfirm.com/contact",
     "mainEntity": {
       "@type": "LegalService",
-      "name": "Turuchi Law Firm, LLC",
+      "name": "The Turuchi Law Firm, LLC",
       "telephone": contact.phone || "+17322106410",
       "email": contact.email || "info@turuchilawfirm.com",
       "address": offices.length === 1 ? offices[0].postal : offices.map((o) => o.postal),
@@ -113,6 +114,15 @@ const Contact = async () => {
           />
         </Section2>
         
+        {/* Photographs of the building. Her note: "I want to add pictures of
+            the exterior of my office to the website. Do not pin it to Google,
+            I am just adding it as a photo." */}
+        <OfficeGallery
+          contact={siteSettings?.contact}
+          heading={contactPage?.officeGallery?.heading}
+          description={contactPage?.officeGallery?.description}
+        />
+
         {/* Optional: Office Hours */}
         {contactPage?.officeHours?.enabled && (
           <Section2>

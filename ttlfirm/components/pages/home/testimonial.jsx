@@ -26,12 +26,18 @@ const StarRating = ({ rating = 5 }) => (
 const TestimonialCarousel = ({ testimonials = [], content }) => {
   const swiperRef = useRef(null);
 
+  // Google reviews feed this carousel too, and two of the firm's reviewers
+  // left a star rating with no words. A slide holding a quotation mark and an
+  // empty space is worse than one slide fewer, so textless reviews are skipped
+  // here — they still count on /reviews, where the rating is stated in words.
+  const slides = testimonials.filter((t) => t.testimonial?.trim());
+
   useEffect(() => {
     const el = swiperRef.current;
-    if (!el || !testimonials.length) return;
+    if (!el || !slides.length) return;
 
     Object.assign(el, {
-      loop: testimonials.length > 2,
+      loop: slides.length > 2,
       slidesPerView: 1,
       spaceBetween: 24,
       autoHeight: true,
@@ -43,9 +49,9 @@ const TestimonialCarousel = ({ testimonials = [], content }) => {
       },
     });
     el.initialize();
-  }, [testimonials.length]);
+  }, [slides.length]);
 
-  if (!testimonials?.length) return null;
+  if (!slides.length) return null;
 
   return (
     <div className="container-x section-y">
@@ -66,13 +72,26 @@ const TestimonialCarousel = ({ testimonials = [], content }) => {
       {/* Carousel */}
       <div className="relative mt-12" data-aos="fade-up">
         <swiper-container ref={swiperRef} init="false" class="pb-12">
-          {testimonials.map((t) => (
+          {slides.map((t) => (
             <swiper-slide key={t._id} class="h-auto">
               <figure className="flex h-full flex-col rounded-xl border border-surface-line bg-white p-7 shadow-card">
                 <FaQuoteLeft className="text-2xl text-accent-500/35" aria-hidden="true" />
 
                 <blockquote className="mt-5 flex-1">
                   <p className="text-[15px] leading-relaxed text-ink-muted">{t.testimonial}</p>
+                  {/* Same rule as the review cards: a review captured in part
+                      says so and links to the original, rather than passing a
+                      fragment off as everything the client wrote. */}
+                  {t.truncated && t.sourceUrl && (
+                    <a
+                      href={t.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      className="mt-3 inline-block font-sans text-[11px] font-bold uppercase tracking-[0.1em] text-navy-800 transition-colors hover:text-accent-600"
+                    >
+                      Read the full review on Google
+                    </a>
+                  )}
                 </blockquote>
 
                 <figcaption className="mt-6 border-t border-surface-line pt-5">
@@ -96,8 +115,10 @@ const TestimonialCarousel = ({ testimonials = [], content }) => {
                       <span className="block truncate font-sans text-sm font-bold text-navy-900">
                         {t.name}
                       </span>
-                      {t.role && (
-                        <span className="block truncate text-xs text-ink-soft">{t.role}</span>
+                      {(t.relativeDate || t.role) && (
+                        <span className="block truncate text-xs text-ink-soft">
+                          {[t.role, t.relativeDate].filter(Boolean).join(" · ")}
+                        </span>
                       )}
                       {t.caseType && (
                         <span className="mt-1.5 inline-block rounded-full bg-navy-50 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-navy-700">

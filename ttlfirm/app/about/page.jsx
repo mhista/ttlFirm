@@ -30,7 +30,7 @@ export async function generateMetadata() {
   const seo = data?.seo || {};
   
   return {
-    title: seo.metaTitle || "About Turuchi Law Firm | Experienced New Jersey Attorneys",
+    title: seo.metaTitle || "About the Firm | Experienced New Jersey Attorneys",
     description: seo.metaDescription || "Learn about our commitment to justice, compassion, and exceptional legal representation. Serving New Jersey with focused representation in personal injury and workers' compensation.",
     keywords: seo.keywords || [
       "about Turuchi Law Firm",
@@ -40,7 +40,7 @@ export async function generateMetadata() {
       "compassionate lawyers"
     ],
     openGraph: {
-      title: seo.metaTitle || "About Us | Turuchi Law Firm",
+      title: seo.metaTitle || "About Us | The Turuchi Law Firm, LLC",
       description: seo.metaDescription || "Unwavering commitment to justice. Expert legal representation across New Jersey.",
       url: "https://turuchilawfirm.com/about",
       images: seo.ogImage ? [
@@ -64,16 +64,16 @@ function generateLawFirmSchema(data) {
   return {
     "@context": "https://schema.org",
     "@type": "LegalService",
-    "name": "Turuchi Law Firm, LLC",
+    "name": "The Turuchi Law Firm, LLC",
     "description": whoWeAre?.content?.[0]?.children?.[0]?.text || "Focused representation in personal injury and workers' compensation matters.",
     "url": "https://turuchilawfirm.com/about",
     "telephone": "+17322106410",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "111 Town Square Pl",
-      "addressLocality": "Jersey City",
+      "streetAddress": "3 Gateway Center, 12th Floor, Suite 1201",
+      "addressLocality": "Newark",
       "addressRegion": "NJ",
-      "postalCode": "07310"
+      "postalCode": "07102"
     }
   };
 }

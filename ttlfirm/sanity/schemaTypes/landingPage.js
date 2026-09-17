@@ -370,6 +370,34 @@ export default {
           preview: { select: { title: 'heading' }, prepare: ({ title }) => ({ title: `CTA — ${title || ''}` }) },
         },
 
+        // ----------------------------------------------------- OFFICE PHOTOS
+        // The Newark building. A campaign page has no nav, so a photo of a
+        // real office is the only reassurance a visitor gets that the firm is
+        // a real place. Leave everything empty to use the shipped photos.
+        {
+          type: 'object',
+          name: 'lpOffice',
+          title: 'Office Photos',
+          fields: [
+            { name: 'heading', title: 'Heading', type: 'string' },
+            { name: 'description', title: 'Description', type: 'text', rows: 3 },
+            {
+              name: 'photos',
+              title: 'Photos',
+              type: 'array',
+              validation: (R) => R.max(2),
+              of: [
+                {
+                  type: 'image',
+                  options: { hotspot: true },
+                  fields: [{ name: 'alt', title: 'Alt Text', type: 'string' }],
+                },
+              ],
+            },
+          ],
+          preview: { prepare: () => ({ title: 'Office Photos' }) },
+        },
+
         // ------------------------------------------------------------- FORM
         {
           type: 'object',

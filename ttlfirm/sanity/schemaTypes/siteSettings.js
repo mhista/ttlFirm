@@ -131,6 +131,44 @@ export default {
         { name: 'weekend', title: 'Weekend', type: 'string', initialValue: 'Open' },
       ],
     },
+    // ------------------------------------------------------------- REVIEWS
+    {
+      name: 'reviews',
+      title: 'Reviews',
+      type: 'object',
+      group: 'contact',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        {
+          name: 'googleReviewUrl',
+          title: 'Write-a-review link',
+          type: 'url',
+          description:
+            'The short link from Google Business Profile → Ask for reviews. It looks like https://g.page/r/XXXX/review and opens the review box in one tap. Without it the buttons fall back to a Google search for the firm.',
+        },
+        {
+          name: 'googleProfileUrl',
+          title: 'Link to the Google profile',
+          type: 'url',
+          description: 'Where "see them on Google" points. Usually the Maps listing.',
+        },
+        {
+          name: 'placeId',
+          title: 'Google Place ID',
+          type: 'string',
+          description:
+            'Only needed if reviews are ever pulled through the Places API. Find it with Google\'s Place ID Finder.',
+        },
+        {
+          name: 'locationName',
+          title: 'Business Profile location name',
+          type: 'string',
+          description:
+            'For the review sync — the resource name from the Business Profile API, e.g. accounts/123/locations/456. See REVIEWS.md.',
+        },
+      ],
+    },
+
     {
       name: 'social',
       title: 'Social Media Links',

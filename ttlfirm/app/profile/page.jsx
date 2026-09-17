@@ -30,17 +30,29 @@ export async function generateMetadata() {
   const attorney = data?.attorney || {};
   
   return {
-    title: seo.metaTitle || `${attorney.name}, ${attorney.credentials} | Founder & Managing Attorney | NJ Lawyer`,
-    description: seo.metaDescription || `Meet ${attorney.name}, experienced NJ attorney with focused practice in personal injury and workers' compensation. Former insurance defense attorney now fighting for clients.`,
+    // Leads with "Attorney Profile" deliberately. Google derives a sitelink's
+    // label largely from the target page's title and the anchor text pointing
+    // at it, and "Attorney Profile" is the label the client asked to see under
+    // the firm's result — so the page says it first, and the footer link uses
+    // the same words.
+    title:
+      seo.metaTitle ||
+      `Attorney Profile | ${[
+        attorney.name || "Turuchi S. Iheanachor",
+        attorney.credentials || "Esq.",
+      ]
+        .filter(Boolean)
+        .join(", ")}`,
+    description: seo.metaDescription || `Meet ${attorney.name || "Turuchi S. Iheanachor"}, experienced NJ attorney with focused practice in personal injury and workers' compensation. Former insurance defense attorney now fighting for clients.`,
     keywords: seo.keywords || [
-      attorney.name,
+      attorney.name || "Turuchi S. Iheanachor",
       "New Jersey attorney",
       "personal injury lawyer NJ",
       "workers compensation lawyer",
       "experienced NJ lawyer"
     ],
     openGraph: {
-      title: seo.metaTitle || `Attorney ${attorney.name} | Turuchi Law Firm`,
+      title: seo.metaTitle || `Attorney ${attorney.name || "Turuchi S. Iheanachor"} | The Turuchi Law Firm, LLC`,
       description: seo.metaDescription || "Results-driven attorney with proven expertise.",
       url: "https://turuchilawfirm.com/profile",
       images: seo.ogImage ? [

@@ -18,15 +18,20 @@ export default async function sitemap() {
       changeFrequency: "weekly",
       priority: 0.9,
     })),
-    { url: `${baseUrl}/profile`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/about`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/blog`, changeFrequency: "daily", priority: 0.8 },
+    // The attorney profile is one of the two pages the client wants Google to
+    // surface, so it sits with the practice pages rather than below them.
+    { url: `${baseUrl}/profile`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${baseUrl}/contact`, changeFrequency: "monthly", priority: 0.8 },
-    // Legal pages must be crawlable — the A2P registration review checks that
-    // the Privacy Policy is publicly reachable.
-    { url: `${baseUrl}/privacy-policy`, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${baseUrl}/terms-and-conditions`, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${baseUrl}/disclaimer`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${baseUrl}/reviews`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${baseUrl}/about`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/blog`, changeFrequency: "daily", priority: 0.7 },
+    // Legal pages must stay crawlable — the A2P registration review checks
+    // that the Privacy Policy is publicly reachable — but they are kept at the
+    // bottom of the priority list so nothing here argues for showing them as
+    // sitelinks ahead of the pages above.
+    { url: `${baseUrl}/privacy-policy`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${baseUrl}/terms-and-conditions`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${baseUrl}/disclaimer`, changeFrequency: "yearly", priority: 0.1 },
   ].map((page) => ({ lastModified: now, ...page }));
 
   try {

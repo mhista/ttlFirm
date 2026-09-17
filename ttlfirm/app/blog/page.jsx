@@ -111,21 +111,25 @@ import Sidebar from "@/components/blog/Sidebar";
 import PageHeader from "@/components/pages/header";
 
 export const metadata = {
-  title: "Legal Blog | Turuchi Law Firm",
+  title: "Legal Insights",
   description:
     "Expert legal insights, news, and advice from experienced attorneys.",
 };
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
+// Every other page in this app degrades to empty rather than throwing when
+// Sanity is unreachable; this one was the exception, and a CMS outage during a
+// deploy took the whole build down with it. Each list falls back on its own,
+// so a failure fetching tags still leaves the posts on the page.
 async function getData() {
   const [blogs, categories, tags] = await Promise.all([
-    client.fetch(blogsQuery),
-    client.fetch(categoriesQuery),
-    client.fetch(tagsQuery),
+    client.fetch(blogsQuery).catch(() => []),
+    client.fetch(categoriesQuery).catch(() => []),
+    client.fetch(tagsQuery).catch(() => []),
   ]);
 
-  return { blogs, categories, tags };
+  return { blogs: blogs || [], categories: categories || [], tags: tags || [] };
 }
 
 export default async function BlogPage() {

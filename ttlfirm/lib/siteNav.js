@@ -57,6 +57,7 @@ export const MAIN_NAV = [
   },
   { href: "/profile", label: "Attorney Profile" },
   { href: "/about", label: "About" },
+  { href: "/reviews", label: "Reviews" },
   { href: "/blog", label: "Blog" },
 ];
 
@@ -67,30 +68,35 @@ export const LEGAL_LINKS = [
 ];
 
 export const FIRM = {
-  name: "The Turuchi Law Firm",
-  shortName: "Turuchi Law Firm",
+  // The registered name, and what search results, schema.org and the legal
+  // pages have to say. `shortName` is for places where the full legal name
+  // would wrap awkwardly — the logo lockup, a breadcrumb, an email subject.
+  name: "The Turuchi Law Firm, LLC",
+  shortName: "The Turuchi Law Firm",
   phoneDisplay: "732-210-6410",
   phoneHref: "+17322106410",
   whatsapp: "848-228-6402",
   email: "info@turuchilawfirm.com",
-  addressLine1: "111 Town Square Pl, Ste 1238 #492165",
-  addressLine2: "Jersey City, NJ 07310",
+  addressLine1: "3 Gateway Center, 12th Floor, Suite 1201",
+  addressLine2: "Newark, NJ 07102",
   mapsUrl:
-    "https://maps.google.com/?q=111+Town+Square+Pl+Jersey+City+NJ+07310",
+    "https://maps.google.com/?q=3+Gateway+Center+Suite+1201+Newark+NJ+07102",
 };
 
 /**
  * The offices, as shipped. Anything in Site Settings → Contact replaces this
  * entirely — it is only here so a fresh install is never address-less.
+ *
+ * Newark is the firm's physical office as of September 2026 and replaced the
+ * Jersey City address outright — do not reintroduce Jersey City anywhere.
  */
 export const FIRM_OFFICES = [
   {
-    label: "Jersey City",
-    note: "By appointment only",
-    street: "111 Town Square Pl, Ste 1238 #492165",
-    city: "Jersey City",
+    label: "Newark",
+    street: "3 Gateway Center, 12th Floor, Suite 1201",
+    city: "Newark",
     state: "NJ",
-    zipCode: "07310",
+    zipCode: "07102",
     country: "US",
   },
   {

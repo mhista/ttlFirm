@@ -25,6 +25,7 @@ import Form from "@components/common/form";
 import AttorneyBio from "@components/common/attorneyBio";
 import { ATTORNEY_ROLE } from "@/lib/attorneyBio.mjs";
 import Reveal from "@components/common/reveal";
+import OfficeGallery from "@components/common/officeGallery";
 import CountUp from "@components/common/countUp";
 import AmbientVideo from "@components/common/ambientVideo";
 import { telHref } from "@/lib/siteNav";
@@ -592,6 +593,28 @@ export const LpForm = ({ data }) => (
   </section>
 );
 
+/* ---------------------------------------------------------- office photos */
+/**
+ * The Newark building, on a landing page.
+ *
+ * A campaign page is the one place a visitor has no nav and no way to poke
+ * around for reassurance, so a photograph of a real office does more work here
+ * than it does on the site proper. Same component as the homepage and contact
+ * page — one place to change the copy or swap the pictures.
+ *
+ * `contact` comes down from the page so the address matches Site Settings; if
+ * a section is rendered without it, OfficeGallery falls back to the shipped
+ * offices rather than showing nothing.
+ */
+export const LpOffice = ({ data = {}, contact }) => (
+  <OfficeGallery
+    contact={contact}
+    heading={data.heading}
+    description={data.description}
+    photos={data.photos}
+  />
+);
+
 export const SECTION_COMPONENTS = {
   lpHero: LpHero,
   lpTrustBar: LpTrustBar,
@@ -603,4 +626,5 @@ export const SECTION_COMPONENTS = {
   lpRichText: LpRichText,
   lpCta: LpCta,
   lpForm: LpForm,
+  lpOffice: LpOffice,
 };

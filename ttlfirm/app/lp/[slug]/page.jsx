@@ -126,7 +126,11 @@ const LandingPage = async ({ params }) => {
       </header>
 
       <main>
-        <LandingRenderer sections={page.sections || []} phone={phone} />
+        <LandingRenderer
+          sections={page.sections || []}
+          phone={phone}
+          contact={siteSettings?.contact}
+        />
       </main>
 
       {/* Minimal footer: the compliance notices, and nothing else. */}

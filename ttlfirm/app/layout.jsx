@@ -26,8 +26,9 @@ const SITE_DESCRIPTION =
 export const metadata = {
   metadataBase: new URL("https://turuchilawfirm.com"),
   title: {
-    default: "New Jersey Personal Injury & Workers' Compensation Lawyer | The Turuchi Law Firm",
-    template: "%s | Turuchi Law Firm",
+    default:
+      "New Jersey Personal Injury & Workers' Compensation Lawyer | The Turuchi Law Firm, LLC",
+    template: "%s | The Turuchi Law Firm, LLC",
   },
   description: SITE_DESCRIPTION,
   keywords: [
@@ -36,11 +37,11 @@ export const metadata = {
     "car accident lawyer New Jersey",
     "slip and fall attorney NJ",
     "work injury lawyer New Jersey",
-    "Jersey City personal injury attorney",
+    "Newark personal injury attorney",
   ],
-  authors: [{ name: "Turuchi Law Firm" }],
-  creator: "Turuchi Law Firm",
-  publisher: "Turuchi Law Firm",
+  authors: [{ name: "The Turuchi Law Firm, LLC" }],
+  creator: "The Turuchi Law Firm, LLC",
+  publisher: "The Turuchi Law Firm, LLC",
   formatDetection: { email: false, address: false, telephone: false },
   verification: {
     google: "your-google-verification-code",
@@ -49,16 +50,17 @@ export const metadata = {
     type: "website",
     locale: "en_US",
     url: "https://turuchilawfirm.com",
-    siteName: "Turuchi Law Firm",
-    title: "New Jersey Personal Injury & Workers' Compensation Lawyer | The Turuchi Law Firm",
+    siteName: "The Turuchi Law Firm, LLC",
+    title:
+      "New Jersey Personal Injury & Workers' Compensation Lawyer | The Turuchi Law Firm, LLC",
     description: SITE_DESCRIPTION,
     images: [
-      { url: "/assets/images/logo.png", width: 1200, height: 630, alt: "Turuchi Law Firm" },
+      { url: "/assets/images/logo.png", width: 1200, height: 630, alt: "The Turuchi Law Firm, LLC" },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Turuchi Law Firm",
+    title: "The Turuchi Law Firm, LLC",
     description: SITE_DESCRIPTION,
     creator: "@turuchilawfirm",
     images: ["/assets/images/logo.png"],

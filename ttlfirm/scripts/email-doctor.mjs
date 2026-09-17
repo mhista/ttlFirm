@@ -31,6 +31,10 @@
  * This script tells you which of those it is.
  */
 import { EmailClient, KnownEmailSendStatus } from "@azure/communication-email";
+import { loadEnv } from "./load-env.mjs";
+
+// Same reason as the other scripts: a plain node run does not read .env.local.
+loadEnv();
 
 const c = {
   ok: (s) => `\x1b[32m${s}\x1b[0m`,

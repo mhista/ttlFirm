@@ -50,17 +50,30 @@ const Footer = () => {
   // the structured data all render the same way.
   const offices = getOffices(contact);
 
+  // NOTE ON ORDER AND CONTENTS — this list is an SEO lever, not just a menu.
+  //
+  // Google builds the sitelinks under a search result partly from how often
+  // and how prominently a page is linked from the rest of the site. The old
+  // version of this list carried Privacy Policy and Terms & Conditions, which
+  // ALSO appear in the legal notice paragraph and again in the colophon: three
+  // site-wide links each, more than any real page had. That is why the firm's
+  // result was showing Legal Disclaimer and Terms & Conditions as sitelinks
+  // instead of the pages that win work.
+  //
+  // So the legal pages are now linked twice per page instead of three times
+  // (still crawlable, still prominent enough for the A2P registration, which
+  // only requires the Privacy Policy be publicly reachable), and the two pages
+  // the client wants surfaced — Personal Injury and Attorney Profile — lead
+  // the list with their exact page titles as the anchor text.
   const companyLinks = [
-    { href: "/", label: "Home" },
-    { href: "/practice", label: "Practice Areas" },
+    { href: "/practice/personal-injury-lawyer-in-new-jersey", label: "Personal Injury" },
     { href: "/profile", label: "Attorney Profile" },
+    { href: "/practice", label: "Practice Areas" },
     { href: "/about", label: "About the Firm" },
+    { href: "/contact", label: "Contact Us" },
+    { href: "/reviews", label: "Client Reviews" },
     { href: "/blog", label: "Legal Insights" },
-    { href: "/contact", label: "Contact" },
-    // Also carried in the colophon — the A2P registration wants the Privacy
-    // Policy prominent, not buried in the small print.
-    { href: "/privacy-policy", label: "Privacy Policy" },
-    { href: "/terms-and-conditions", label: "Terms & Conditions" },
+    { href: "/", label: "Home" },
   ];
 
   return (
@@ -93,7 +106,7 @@ const Footer = () => {
             src="/assets/images/logo.png"
             width={160}
             height={80}
-            alt="The Turuchi Law Firm"
+            alt={FIRM.name}
             className="h-16 w-auto"
           />
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-navy-200">
@@ -253,7 +266,7 @@ const Footer = () => {
       {/* ----------------------------------------------------------- Colophon */}
       <div className="border-t border-white/10 bg-navy-900">
         <div className="container-x flex flex-col gap-3 py-6 text-xs text-navy-200 md:flex-row md:items-center md:justify-between">
-          <p>&copy; {year} The Turuchi Law Firm. All rights reserved.</p>
+          <p>&copy; {year} {FIRM.name}. All rights reserved.</p>
 
           <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
             {legalLinks.map((link) => (

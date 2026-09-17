@@ -11,9 +11,15 @@
  *   node scripts/apply-client-updates.mjs            # show what would change
  *   node scripts/apply-client-updates.mjs --apply    # write it
  *
- * Needs a write token:
- *   Windows   set SANITY_WRITE_TOKEN=sk...
- *   mac/Linux export SANITY_WRITE_TOKEN=sk...
+ * Needs a write token. Easiest is to put it in `.env.local` once:
+ *
+ *     SANITY_WRITE_TOKEN=sk...
+ *
+ * or set it for a single terminal:
+ *
+ *   PowerShell  $env:SANITY_WRITE_TOKEN="sk..."
+ *   cmd.exe     set SANITY_WRITE_TOKEN=sk...
+ *   mac/Linux   export SANITY_WRITE_TOKEN=sk...
  *
  * Create one at sanity.io/manage → your project → API → Tokens → Editor.
  *
@@ -21,6 +27,11 @@
  * herself in between survives. Re-running it is harmless.
  */
 import { createClient } from "@sanity/client";
+import { loadEnv } from "./load-env.mjs";
+
+// `node scripts/…` does not read .env.local the way `next dev` does, so do it
+// here — otherwise the token has to be re-exported in every new terminal.
+loadEnv();
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "5lgtr8bc";
 const DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
@@ -50,9 +61,32 @@ const SITE_SETTINGS = [
     why: '"We have a WhatsApp number… I need you to add WhatsApp somewhere here"',
   },
   {
+    // Top-level, not under contact. This is the name the homepage's
+    // schema.org LegalService uses, which is one of the things Google reads
+    // when it decides what to print as the result heading.
+    path: "title",
+    value: "The Turuchi Law Firm, LLC",
+    why: '"The arrows should both say \'The Turuchi Law Firm, LLC\'"',
+  },
+  /* ------------------------------------------------------ the new address
+     The Jersey City address is gone, not demoted: "Please completely remove
+     the Jersey city address from the website." Patching the four address
+     fields replaces it outright, because the footer, the contact page and both
+     schema.org builders all read this one object. The `note` is blanked at the
+     same time — "By appointment only" belonged to Jersey City, and Newark is a
+     real staffed office. */
+  {
+    path: "contact.address.street",
+    value: "3 Gateway Center, 12th Floor, Suite 1201",
+    why: '"This is the new physical address for the firm: 3 Gateway Center, 12th floor, Suite 1201, Newark, NJ 07102"',
+  },
+  { path: "contact.address.city", value: "Newark", why: "the same" },
+  { path: "contact.address.state", value: "NJ", why: "the same" },
+  { path: "contact.address.zipCode", value: "07102", why: "the same" },
+  {
     path: "contact.address.note",
-    value: "By appointment only",
-    why: '"In front of this Jersey City address, put By Appointment Only"',
+    value: "",
+    why: '"By appointment only" was the Jersey City note and does not follow the firm to Newark',
   },
   {
     path: "contact.additionalOffices",
@@ -117,10 +151,22 @@ async function main() {
   console.log(APPLY ? c.warn("Mode: APPLY — this will write.\n") : c.dim("Mode: preview only. Add --apply to write.\n"));
 
   if (!TOKEN) {
-    console.log(c.bad("No SANITY_WRITE_TOKEN set."));
-    console.log("Create an Editor token at sanity.io/manage → API → Tokens, then:");
-    console.log(c.dim("  Windows    set SANITY_WRITE_TOKEN=sk..."));
-    console.log(c.dim("  mac/Linux  export SANITY_WRITE_TOKEN=sk...\n"));
+    console.log(c.bad("No SANITY_WRITE_TOKEN found."));
+    console.log("");
+    console.log("1. Create one at " + c.b("sanity.io/manage") + " → the 5lgtr8bc project");
+    console.log("   → API → Tokens → Add API token → permission " + c.b("Editor") + ".");
+    console.log("   It is shown once, so copy it before closing the dialog.");
+    console.log("");
+    console.log("2. Then either add this line to " + c.b(".env.local") + " (recommended —");
+    console.log("   it is gitignored, and every script here picks it up):");
+    console.log("");
+    console.log(c.dim("     SANITY_WRITE_TOKEN=sk..."));
+    console.log("");
+    console.log("   or set it for this terminal only:");
+    console.log("");
+    console.log(c.dim("     PowerShell  $env:SANITY_WRITE_TOKEN=\"sk...\""));
+    console.log(c.dim("     cmd.exe     set SANITY_WRITE_TOKEN=sk..."));
+    console.log(c.dim("     mac/Linux   export SANITY_WRITE_TOKEN=sk...\n"));
     process.exit(1);
   }
 

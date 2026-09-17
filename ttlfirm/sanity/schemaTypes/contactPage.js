@@ -157,6 +157,54 @@ export default {
       ]
     },
 
+    // OFFICE PHOTOS
+    // Photographs of the building, on the page only. Deliberately NOT a map
+    // embed and nothing that creates a Google listing — her instruction was
+    // "do not pin it to Google, I am just adding it as a photo".
+    {
+      name: 'officeGallery',
+      title: 'Office Photos',
+      type: 'object',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        {
+          name: 'heading',
+          title: 'Heading',
+          type: 'string',
+          description: 'Leave empty to use "Come and see us at 3 Gateway Center".'
+        },
+        {
+          name: 'description',
+          title: 'Description',
+          type: 'text',
+          rows: 3,
+          description: 'Leave empty to use the shipped copy about the Newark office.'
+        },
+        {
+          name: 'photos',
+          title: 'Photos',
+          type: 'array',
+          description:
+            'Two exterior photos. Leave empty to use the ones supplied with the site.',
+          validation: Rule => Rule.max(2),
+          of: [
+            {
+              type: 'image',
+              options: { hotspot: true },
+              fields: [
+                {
+                  name: 'alt',
+                  title: 'Alt Text',
+                  type: 'string',
+                  description: 'Describe the photo for screen readers and search engines.'
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
     // SEO
     {
       name: 'seo',

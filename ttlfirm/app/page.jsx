@@ -23,6 +23,7 @@ import Consultation from "@components/pages/home/consult";
 import TestimonialCarousel from "@components/pages/home/testimonial";
 import BlogSection from "@components/pages/home/blogSection";
 import ContactUs from "@components/pages/home/contactUs";
+import OfficeGallery from "@components/common/officeGallery";
 
 export const revalidate = 60;
 
@@ -35,8 +36,13 @@ async function getHomePageData() {
   }
 }
 
+// The homepage <title> is the single biggest influence on the heading Google
+// prints for the site, so it ends in the full registered name — the client's
+// note was that the result should read "The Turuchi Law Firm, LLC", not
+// "Turuchi Law Firm". og:site_name and the WebSite schema below say the same
+// thing, because Google cross-checks all three before settling on a name.
 const fallbackTitle =
-  "New Jersey Personal Injury & Workers' Compensation Lawyer | The Turuchi Law Firm";
+  "New Jersey Personal Injury & Workers' Compensation Lawyer | The Turuchi Law Firm, LLC";
 const fallbackDescription =
   "New Jersey personal injury and workers' compensation attorney representing injured people and injured workers. Free consultation, no fee unless we recover.";
 
@@ -59,19 +65,19 @@ export async function generateMetadata() {
       "truck accident attorney New Jersey",
       "slip and fall attorney NJ",
       "work injury lawyer New Jersey",
-      "Jersey City personal injury attorney",
+      "Newark personal injury attorney",
     ],
     openGraph: {
       title: seo.metaTitle || fallbackTitle,
       description: seo.metaDescription || fallbackDescription,
       url: "https://turuchilawfirm.com",
-      siteName: "Turuchi Law Firm",
+      siteName: "The Turuchi Law Firm, LLC",
       images: [
         {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: "Turuchi Law Firm — New Jersey Personal Injury Attorney",
+          alt: "The Turuchi Law Firm, LLC — New Jersey Personal Injury Attorney",
         },
       ],
       locale: "en_US",
@@ -94,7 +100,10 @@ function buildOrganizationSchema(siteSettings) {
   return {
     "@context": "https://schema.org",
     "@type": "LegalService",
+    "@id": "https://turuchilawfirm.com/#organization",
     name: siteSettings?.title || "The Turuchi Law Firm, LLC",
+    legalName: "The Turuchi Law Firm, LLC",
+    alternateName: ["The Turuchi Law Firm", "Turuchi Law Firm"],
     image: "https://turuchilawfirm.com/assets/images/logo.png",
     url: "https://turuchilawfirm.com",
     telephone: contact.phone || FIRM.phoneHref,
@@ -105,7 +114,7 @@ function buildOrganizationSchema(siteSettings) {
     // schema.org takes an array once there is more than one location, and
     // reads the first as primary.
     address: offices.length === 1 ? offices[0].postal : offices.map((o) => o.postal),
-    geo: { "@type": "GeoCoordinates", latitude: "40.7178", longitude: "-74.0431" },
+    geo: { "@type": "GeoCoordinates", latitude: "40.7350", longitude: "-74.1724" },
     areaServed: [{ "@type": "State", name: "New Jersey" }],
     priceRange: "$$",
     knowsAbout: ["Personal Injury Law", "Workers' Compensation Law"],
@@ -114,15 +123,76 @@ function buildOrganizationSchema(siteSettings) {
       name: "Turuchi S. Iheanachor",
       jobTitle: "Founder & Managing Attorney",
     },
+    // She asked for 24/7 — this is the machine-readable half of that.
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "09:00",
-        closes: "17:00",
+        dayOfWeek: [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ],
+        opens: "00:00",
+        closes: "23:59",
       },
     ],
     sameAs: Object.values(siteSettings?.social || {}).filter(Boolean),
+  };
+}
+
+/**
+ * The site's identity, and the pages it wants Google to surface.
+ *
+ * Two jobs, both asked for by the client:
+ *
+ * 1. WebSite.name is one of the signals Google uses for the *site name* line
+ *    printed above a result — the line her screenshots had as "Turuchi Law
+ *    Firm". It has to agree with og:site_name and the <title> suffix, which it
+ *    now does; Google ignores a name that only one of the three claims.
+ *
+ * 2. SiteNavigationElement tells Google which pages the site itself considers
+ *    its main ones. Sitelinks cannot be set — Google chooses them, and there
+ *    is no markup, no Search Console setting and no file that forces a
+ *    particular six. What can be done is to stop contradicting the preference:
+ *    name the pages here, link them most prominently in the footer (see the
+ *    note on `companyLinks` there), and keep the legal pages low in the
+ *    sitemap. That is the whole of the honest lever. It typically takes a few
+ *    weeks of recrawling to show up.
+ */
+function buildSiteSchema(siteSettings) {
+  const name = siteSettings?.title || FIRM.name;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://turuchilawfirm.com/#website",
+        url: "https://turuchilawfirm.com",
+        name,
+        alternateName: ["The Turuchi Law Firm", "Turuchi Law Firm"],
+        publisher: { "@id": "https://turuchilawfirm.com/#organization" },
+        inLanguage: "en-US",
+      },
+      ...[
+        { name: "Personal Injury", url: "/practice/personal-injury-lawyer-in-new-jersey" },
+        { name: "Attorney Profile", url: "/profile" },
+        { name: "Workers' Compensation", url: "/practice/new-jersey-workers-compensation-attorney" },
+        { name: "Practice Areas", url: "/practice" },
+        { name: "About Us", url: "/about" },
+        { name: "Contact Us", url: "/contact" },
+      ].map((item, i) => ({
+        "@type": "SiteNavigationElement",
+        "@id": `https://turuchilawfirm.com/#nav-${i + 1}`,
+        position: i + 1,
+        name: item.name,
+        url: `https://turuchilawfirm.com${item.url}`,
+      })),
+    ],
   };
 }
 
@@ -134,6 +204,7 @@ const DEFAULT_ORDER = [
   "whyChooseUs",
   "consultation",
   "testimonials",
+  "office",
   "blog",
   "contact",
 ];
@@ -226,6 +297,17 @@ const Home = async () => {
         />
       </Section1>
     ),
+    // Photographs of the Newark building. Same component the contact page
+    // uses, so the copy and the photos are edited in one place.
+    office: on("officeSection") && (
+      <OfficeGallery
+        key="office"
+        contact={contact}
+        heading={homePage?.officeSection?.heading}
+        description={homePage?.officeSection?.description}
+        photos={homePage?.officeSection?.photos}
+      />
+    ),
     blog: on("blogSection") && (
       <Section2 key="blog">
         <BlogSection content={homePage?.blogSection} />
@@ -245,6 +327,14 @@ const Home = async () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(buildOrganizationSchema(siteSettings)),
+        }}
+      />
+
+      <Script
+        id="site-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildSiteSchema(siteSettings)),
         }}
       />
 

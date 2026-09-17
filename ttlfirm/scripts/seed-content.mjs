@@ -192,8 +192,8 @@ const privacyPolicy = {
 
     section("13. Contact Information", blocks(
       p("If you have questions about this Privacy Policy or about how your information is handled, contact us:"),
-      p("**The Turuchi Law Firm**"),
-      p("111 Town Square Pl, Ste 1238 #492165, Jersey City, NJ 07310"),
+      p("**The Turuchi Law Firm, LLC**"),
+      p("3 Gateway Center, 12th Floor, Suite 1201, Newark, NJ 07102"),
       p("732-210-6410 · Info@turuchilawfirm.com")
     ), { anchor: "contact" }),
   ],
@@ -340,8 +340,8 @@ const terms = {
 
     section("20. Contact Information", blocks(
       p("Questions about these Terms, the website, or the SMS program may be directed to:"),
-      p("**The Turuchi Law Firm**"),
-      p("111 Town Square Pl, Ste 1238 #492165, Jersey City, NJ 07310"),
+      p("**The Turuchi Law Firm, LLC**"),
+      p("3 Gateway Center, 12th Floor, Suite 1201, Newark, NJ 07102"),
       p("732-210-6410 · Info@turuchilawfirm.com")
     ), { anchor: "contact" }),
   ],
@@ -557,6 +557,15 @@ const carAccident = {
       ],
     }),
 
+    // The Newark office. A landing page has no nav and no footer address, so
+    // this is the only thing on the page that shows the firm is a real place
+    // with a real door.
+    sec("lpOffice", {
+      heading: "A real office, in downtown Newark",
+      description:
+        "The firm is on the 12th floor of 3 Gateway Center, a few minutes from Newark Penn Station. You are welcome to come in — though most of our clients never need to, because we come to them.",
+    }),
+
     sec("lpCta", {
       heading: "Find out what your claim is actually worth",
       description:
@@ -727,6 +736,15 @@ const workInjury = {
             "Sometimes. You generally cannot sue your employer, but if a third party — a contractor, a driver, an equipment manufacturer — contributed to your injury, you may have a separate claim against them.",
         }),
       ],
+    }),
+
+    // The Newark office. A landing page has no nav and no footer address, so
+    // this is the only thing on the page that shows the firm is a real place
+    // with a real door.
+    sec("lpOffice", {
+      heading: "A real office, in downtown Newark",
+      description:
+        "The firm is on the 12th floor of 3 Gateway Center, a few minutes from Newark Penn Station. You are welcome to come in — though most of our clients never need to, because we come to them.",
     }),
 
     sec("lpCta", {

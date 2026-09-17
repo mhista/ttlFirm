@@ -62,7 +62,9 @@ What it sets:
 | Field | To | From her review |
 |---|---|---|
 | Where Enquiries Are Sent | info@turuchilawfirm.com | "route the text as an email to info@" |
-| Main Address → Note | By appointment only | "in front of this Jersey City address" |
+| Site Title | The Turuchi Law Firm, LLC | "the arrows should both say 'The Turuchi Law Firm, LLC'" |
+| Main Address | 3 Gateway Center, 12th Floor, Suite 1201, Newark, NJ 07102 | "completely remove the Jersey city address… this is the new physical address" |
+| Main Address → Note | *(cleared)* | "By appointment only" was Jersey City's note |
 | Other Offices | 30 Knightsbridge Road, Suite 525, Piscataway, NJ 08854 | "please include my other address" |
 | Hours | Open 24 hours, 7 days a week | "my hours are 24/7" |
 | Cases Handled | 700 | "I've handled way more than that now" |
@@ -115,7 +117,53 @@ won't be there.
 
 ## Still needs doing by hand
 
-- **The Google reviews** — waiting on her.
+- **The Google Business Profile.** The Newark address is on the site, but the
+  firm's *profile* is hers to claim and verify — and until it exists there is
+  nowhere for anyone to leave a review. See `GOOGLE-REVIEWS.md`, which covers
+  the claiming step, the review link, when to ask, what to send, and how to
+  reply without a confidentiality problem.
+- **The office photos are shipped with the site** (`office-gateway-street.jpg`
+  and `office-gateway-tower.jpg`, both upscaled from the ones she sent). They
+  appear in the new "Our office" band on the Contact page. To swap them later:
+  Studio → Contact Page → Office Photos. Nothing about them touches Google —
+  they are photographs on the page, which is what she asked for.
+- **The sitelinks.** She wants Personal Injury and Attorney Profile showing
+  under the firm's search result instead of Legal Disclaimer and Terms &
+  Conditions. Google chooses those itself; there is no setting. What has been
+  done is everything that legitimately influences it — see the next section —
+  and it takes a few weeks of recrawling to show. Submitting the sitemap in
+  Search Console speeds it up.
+
+---
+
+## About the search result
+
+Two of her notes were about how the firm looks in Google rather than on the
+site, so it is worth being clear about what is and is not controllable.
+
+**The name.** "The Turuchi Law Firm, LLC" is now the `<title>` suffix on every
+page, the `og:site_name`, the `WebSite` and `LegalService` schema name, and the
+Site Title in Sanity. Google cross-checks those before it settles on a name, so
+they all had to agree — they now do. The remaining piece is outside the site:
+the **Google Business Profile** name must match exactly too, or Google keeps
+preferring the profile's version.
+
+**The sitelinks.** Those six links under the result are picked by Google. The
+honest levers, all now pulled:
+
+- the footer's Explore column leads with Personal Injury and Attorney Profile,
+  using those exact words as the anchor text
+- Privacy Policy and Terms are no longer in that column — they were linked
+  three times on every page (column, legal notice, colophon), more than any
+  real page, which is the likeliest reason Google picked them
+- `/profile` is now priority 0.9 in the sitemap, the legal pages 0.1–0.2
+- the `/profile` and practice-area titles now *lead* with the page name, since
+  sitelink labels come from the title and the anchor text pointing at it
+- a `SiteNavigationElement` block on the homepage names the six pages the firm
+  would like surfaced, in order
+
+None of that is a guarantee — anyone who promises one is selling something —
+but it stops the site arguing for the legal pages, which it previously was.
 
 ---
 

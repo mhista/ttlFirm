@@ -29,7 +29,15 @@ export const revalidate = 60;
 // which meant the Sanity query always came back empty and the page 404'd
 // regardless of what's published in the CMS.
 export async function generateStaticParams() {
-  const practiceAreas = await client.fetch(practiceAreasQuery);
+  // A CMS outage at deploy time should not fail the build — see the note on
+  // the other generateStaticParams in this app.
+  let practiceAreas = [];
+  try {
+    practiceAreas = (await client.fetch(practiceAreasQuery)) || [];
+  } catch (error) {
+    console.error("Could not list sub-services for the build:", error.message);
+    return [];
+  }
 
   const paths = [];
   for (const area of practiceAreas) {

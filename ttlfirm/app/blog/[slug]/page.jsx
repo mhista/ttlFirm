@@ -13,11 +13,18 @@ import PortableTextComponents from "@/components/blog/PortableTextComponents";
 export const revalidate = 60;
 
 // Generate static paths for all blog posts
+// A CMS outage at deploy time should not fail the build. Every route here
+// has `revalidate` and leaves `dynamicParams` at its default, so an empty list
+// means the pages render on first request and are cached from then on —
+// slower for one visitor, rather than a site that will not deploy at all.
 export async function generateStaticParams() {
-  const blogs = await client.fetch(blogsQuery);
-  return blogs.map((blog) => ({
-    slug: blog.slug.current,
-  }));
+  try {
+    const blogs = (await client.fetch(blogsQuery)) || [];
+    return blogs.map((blog) => ({ slug: blog.slug.current }));
+  } catch (error) {
+    console.error("Could not list blog posts for the build:", error.message);
+    return [];
+  }
 }
 
 // Generate metadata for SEO - FIX: Await params

@@ -11,6 +11,9 @@
 import { readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadEnv } from "./load-env.mjs";
+
+loadEnv();
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
