@@ -67,6 +67,44 @@ export default defineConfig({
               ),
 
             S.divider(),
+
+            // LEGAL PAGES
+            S.listItem()
+              .title('⚖️ Legal Pages')
+              .child(
+                S.documentTypeList('legalPage')
+                  .title('Privacy Policy, Terms & Disclaimer')
+              ),
+
+            // LANDING PAGES
+            S.listItem()
+              .title('🎯 Landing Pages')
+              .child(
+                S.list()
+                  .title('Campaign Landing Pages')
+                  .items([
+                    S.listItem()
+                      .title('Live')
+                      .child(
+                        S.documentList()
+                          .title('Live Landing Pages')
+                          .filter('_type == "landingPage" && published == true'),
+                      ),
+                    S.listItem()
+                      .title('Drafts')
+                      .child(
+                        S.documentList()
+                          .title('Draft Landing Pages')
+                          .filter('_type == "landingPage" && published != true'),
+                      ),
+                    S.divider(),
+                    S.listItem()
+                      .title('All Landing Pages')
+                      .child(S.documentTypeList('landingPage').title('All Landing Pages')),
+                  ]),
+              ),
+
+            S.divider(),
             // Blog Section
             S.listItem()
               .title('Blog')
@@ -171,13 +209,12 @@ export default defineConfig({
                                   ),
                               ),
                             S.listItem()
-                              .title('Immigration')
+                              .title("Workers' Compensation")
                               .child(
                                 S.documentList()
-                                  .title('Immigration')
-                                  .filter('_type == "testimonial" && caseType == "immigration"'),
+                                  .title("Workers' Compensation")
+                                  .filter('_type == "testimonial" && caseType == "workers-compensation"'),
                               ),
-                            // Add more case types as needed
                           ]),
                       ),
                   ]),

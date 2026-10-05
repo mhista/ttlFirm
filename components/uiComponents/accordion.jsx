@@ -2,60 +2,65 @@
 import { useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 
-const Accordion = ({usePadding, title, accordionData}) => {
-  const [activeIndex, setActiveIndex] = useState(null);
+const Accordion = ({ usePadding, title, accordionData = [] }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const toggleAccordion = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
-
-  
+  if (!accordionData.length) return null;
 
   return (
-   <div className={`flex flex-col  w-full ${usePadding? "p-8" : ""}   sm:pt-0 mt-4 md:mt-0 transition-all`}>
-    <h1 className=" font-lora  text-3xl mb-5 tracking-widest">
-              {title}
-            </h1>
-            <hr className="w-full h-[0.5px] bg-amber-600 mt-2"/>
-    <div className="flex flex-col sm:items-center w-full sm:px-10 md:px-0 transition-all ">
-    
-      {accordionData.map((item, index) => (
-        <div key={index} className="w-full overflow-hidden  py-6">
-          {/* Accordion Header */}
-          <div
-            className={` flex justify-between items-center px-4 py-2 cursor-pointer gap-2  ${
-              activeIndex === index ? "bg-gray-50 text-black rounded-t-lg  shadow-sm" : ""
-            }`}
-            onClick={() => toggleAccordion(index)}
-          >
-            <span
-              className={`transition-all duration-700 ${
-                activeIndex !== index ? "text-lg" : ""
-              } font-medium font-lora`}
-            >
-              {item.title}
-            </span>
-            <span
-              className={`text-lg  transform transition-transform duration-700 `}
-            >
-              {activeIndex === index ? (
-                <FaMinus className="opacity-70" />
-              ) : (
-                <FaPlus className="opacity-70" />
-              )}
-            </span>
-          </div>
+    <div className={`w-full ${usePadding ? "p-6 sm:p-8" : ""}`}>
+      {title && (
+        <>
+          <h2 className="font-display text-2xl font-bold text-navy-900 md:text-3xl">{title}</h2>
+          <span className="mt-4 block h-px w-12 bg-accent-500" aria-hidden="true" />
+        </>
+      )}
 
-          {/* Accordion Content */}
-          {activeIndex === index && (
-            <div className="transition-all duration-700 shadow-sm rounded-b-lg px-4 py-2 bg-gray-50 text-gray-700">
-              {item.content}
+      <div className={`divide-y divide-surface-line ${title ? "mt-6" : ""}`}>
+        {accordionData.map((item, index) => {
+          const open = activeIndex === index;
+          return (
+            <div key={item.title || index}>
+              <button
+                type="button"
+                aria-expanded={open}
+                onClick={() => setActiveIndex(open ? null : index)}
+                className="flex w-full items-center justify-between gap-4 py-5 text-left transition-colors hover:text-accent-600"
+              >
+                <span
+                  className={`font-sans text-[15px] font-semibold leading-snug md:text-base ${
+                    open ? "text-accent-600" : "text-navy-900"
+                  }`}
+                >
+                  {item.title}
+                </span>
+                <span
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors ${
+                    open
+                      ? "border-accent-500 bg-accent-500 text-navy-950"
+                      : "border-surface-line text-navy-700"
+                  }`}
+                >
+                  {open ? <FaMinus className="text-[10px]" /> : <FaPlus className="text-[10px]" />}
+                </span>
+              </button>
+
+              <div
+                className={`grid transition-all duration-300 ease-out ${
+                  open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <p className="pb-6 pr-10 text-[15px] leading-relaxed text-ink-muted">
+                    {item.content}
+                  </p>
+                </div>
+              </div>
             </div>
-          )}
-          <hr className="w-full h-[0.5px] bg-gray-200 mt-4"/>
-        </div>
-      ))}
-    </div></div>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 

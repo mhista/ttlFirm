@@ -1,47 +1,33 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { FaAngleUp  } from "react-icons/fa6";
+import { useState, useEffect } from "react";
+import { FaAngleUp } from "react-icons/fa6";
 
+/**
+ * Back-to-top control.
+ * Anchored bottom-LEFT so it no longer sits underneath the Text Us widget,
+ * and rendered as a real <button> so it is reachable by keyboard.
+ */
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Track scroll position
   useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.scrollY > 200) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    window.addEventListener("scroll", toggleVisibility);
-
-    // Cleanup the event listener on component unmount
-    return () => window.removeEventListener("scroll", toggleVisibility);
+    const toggle = () => setIsVisible(window.scrollY > 400);
+    window.addEventListener("scroll", toggle, { passive: true });
+    toggle();
+    return () => window.removeEventListener("scroll", toggle);
   }, []);
 
-  // Scroll to top function
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth", // Smooth scrolling
-    });
-  };
-
   return (
-    <> {isVisible && (<div 
-          onClick={scrollToTop}
-    className="fixed bottom-5 right-5 bg-amber-600 rounded-lg p-3 shadow-lg z-[80] cursor-pointer"
+    <button
+      type="button"
+      aria-label="Back to top"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      className={`fixed bottom-5 left-4 z-[80] flex h-11 w-11 items-center justify-center rounded-lg border border-white/15 bg-navy-900 text-white shadow-widget transition-all duration-300 hover:bg-navy-800 sm:bottom-6 sm:left-6 ${
+        isVisible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"
+      }`}
     >
-     
-        <FaAngleUp
-          className=" z-20 font-semibold text-xl text-[#1f385b]"
-        />
-    </div>
-      )}
-
-    </>
+      <FaAngleUp className="text-lg" aria-hidden="true" />
+    </button>
   );
 };
 

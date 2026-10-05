@@ -6,11 +6,18 @@ import PageHeader from "@/components/pages/header";
 
 export const revalidate = 60;
 
+// A CMS outage at deploy time should not fail the build. Every route here
+// has `revalidate` and leaves `dynamicParams` at its default, so an empty list
+// means the pages render on first request and are cached from then on —
+// slower for one visitor, rather than a site that will not deploy at all.
 export async function generateStaticParams() {
-  const tags = await client.fetch(tagsQuery);
-  return tags.map((tag) => ({
-    slug: tag.slug.current,
-  }));
+  try {
+    const tags = (await client.fetch(tagsQuery)) || [];
+    return tags.map((tag) => ({ slug: tag.slug.current }));
+  } catch (error) {
+    console.error("Could not list blog tags for the build:", error.message);
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }) {
@@ -66,7 +73,7 @@ export default async function TagPage({ params }) {
         <div className="flex flex-col w-full items-center gap-10 z-[60]">
           {blogs.length === 0 ? (
             <div className="text-center py-20">
-              <h2 className="text-2xl font-lora text-gray-600">
+              <h2 className="text-2xl font-display text-ink-muted">
                 No posts with this tag yet.
               </h2>
             </div>

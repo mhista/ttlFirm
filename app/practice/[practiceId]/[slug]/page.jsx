@@ -18,6 +18,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import SEOHead from "@/components/SEOHead";
 import { generateLocalBusinessSchema } from "@/lib/seo";
 import TailoredCTA from "@/components/common/TailoredCTA"; // NEW
+import { filterRetiredAreas, RETIRED_PRACTICE_SLUGS } from "@/lib/siteNav";
 
 export const revalidate = 60;
 
@@ -28,7 +29,15 @@ export const revalidate = 60;
 // which meant the Sanity query always came back empty and the page 404'd
 // regardless of what's published in the CMS.
 export async function generateStaticParams() {
-  const practiceAreas = await client.fetch(practiceAreasQuery);
+  // A CMS outage at deploy time should not fail the build — see the note on
+  // the other generateStaticParams in this app.
+  let practiceAreas = [];
+  try {
+    practiceAreas = (await client.fetch(practiceAreasQuery)) || [];
+  } catch (error) {
+    console.error("Could not list sub-services for the build:", error.message);
+    return [];
+  }
 
   const paths = [];
   for (const area of practiceAreas) {
@@ -85,7 +94,13 @@ async function getPracticeAreas() {
 }
 
 export default async function SubServicePage({ params }) {
-  const { slug: subServiceSlug } = await params;
+  const { slug: subServiceSlug, practiceId } = await params;
+
+  // Sub-services under a retired practice area must 404 too.
+  if (RETIRED_PRACTICE_SLUGS.includes(practiceId)) {
+    notFound();
+  }
+
   const [subService, practiceAreas] = await Promise.all([
     getSubService(subServiceSlug),
     getPracticeAreas(),
@@ -129,17 +144,17 @@ export default async function SubServicePage({ params }) {
           <div className="absolute inset-0 flex flex-col justify-center items-center text-white z-10">
             {/* Breadcrumbs */}
             <nav className="flex gap-2 text-sm mb-4">
-              <Link href="/" className="hover:text-amber-600">
+              <Link href="/" className="hover:text-accent-500">
                 Home
               </Link>
               <span>/</span>
-              <Link href="/practice" className="hover:text-amber-600">
+              <Link href="/practice" className="hover:text-accent-500">
                 Practice Areas
               </Link>
               <span>/</span>
               <Link
                 href={`/practice/${subService.practiceArea?.slug.current}`}
-                className="hover:text-amber-600"
+                className="hover:text-accent-500"
               >
                 {subService.practiceArea?.name}
               </Link>
@@ -147,7 +162,7 @@ export default async function SubServicePage({ params }) {
               <span>{subService.title}</span>
             </nav>
 
-            <h1 className="font-lora text-4xl md:text-5xl font-bold text-center px-4">
+            <h1 className="font-display text-4xl md:text-5xl font-bold text-center px-4">
               {subService.title}
             </h1>
           </div>
@@ -170,7 +185,7 @@ export default async function SubServicePage({ params }) {
             {/* Process Steps */}
             {subService.process && subService.process.length > 0 && (
               <div>
-                <h2 className="font-lora text-3xl font-bold mb-6">
+                <h2 className="font-display text-3xl font-bold mb-6">
                   Our Process
                 </h2>
                 <div className="space-y-6">
@@ -179,11 +194,11 @@ export default async function SubServicePage({ params }) {
                       key={index}
                       className="flex gap-4 p-6 bg-white rounded-lg shadow-md"
                     >
-                      <div className="flex-shrink-0 w-12 h-12 bg-amber-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                      <div className="flex-shrink-0 w-12 h-12 bg-accent-500 text-white rounded-full flex items-center justify-center font-bold text-xl">
                         {index + 1}
                       </div>
                       <div>
-                        <h3 className="font-lora text-xl font-semibold mb-2">
+                        <h3 className="font-display text-xl font-semibold mb-2">
                           {step.title}
                         </h3>
                         <p className="text-gray-700">{step.description}</p>
@@ -198,16 +213,16 @@ export default async function SubServicePage({ params }) {
             {subService.countyContent &&
               subService.countyContent.length > 0 && (
                 <div className="mt-8">
-                  <h2 className="font-lora text-3xl font-bold mb-6">
+                  <h2 className="font-display text-3xl font-bold mb-6">
                     County-Specific Information
                   </h2>
                   <div className="space-y-6">
                     {subService.countyContent.map((item, index) => (
                       <div
                         key={index}
-                        className="border-l-4 border-amber-600 pl-6"
+                        className="border-l-4 border-accent-500 pl-6"
                       >
-                        <h3 className="font-lora text-2xl font-semibold mb-4">
+                        <h3 className="font-display text-2xl font-semibold mb-4">
                           {item.county.name}
                         </h3>
                         {item.localStats && (
@@ -243,7 +258,7 @@ export default async function SubServicePage({ params }) {
             {subService.relatedServices &&
               subService.relatedServices.length > 0 && (
                 <div className="mt-8">
-                  <h2 className="font-lora text-3xl font-bold mb-6">
+                  <h2 className="font-display text-3xl font-bold mb-6">
                     Related Services
                   </h2>
                   <div className="grid md:grid-cols-2 gap-6">
@@ -253,7 +268,7 @@ export default async function SubServicePage({ params }) {
                         href={`/practice/${subService.practiceArea?.slug.current}/${service.slug.current}`}
                         className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition group"
                       >
-                        <h3 className="font-lora text-xl font-semibold mb-2 group-hover:text-amber-600 transition">
+                        <h3 className="font-display text-xl font-semibold mb-2 group-hover:text-accent-500 transition">
                           {service.title}
                         </h3>
                         <p className="text-gray-600 line-clamp-2">
@@ -269,13 +284,13 @@ export default async function SubServicePage({ params }) {
           {/* Sidebar */}
           <div className="w-full md:w-[30%] p-8">
             <div className="w-full flex flex-col gap-5 md:sticky md:top-24">
-              <h2 className="font-lora text-2xl font-medium">Practice Areas</h2>
+              <h2 className="font-display text-2xl font-medium">Practice Areas</h2>
               {practiceAreas.map((area) => (
                 <div className="w-full flex flex-col gap-4" key={area._id}>
-                  <hr className="w-full h-[1.5px] bg-amber-600 opacity-20" />
+                  <hr className="w-full h-[1.5px] bg-accent-500 opacity-20" />
                   <Link
                     href={`/practice/${area.slug.current}`}
-                    className="hover:ml-4 hover:text-amber-600 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-base"
+                    className="hover:ml-4 hover:text-accent-500 hover:opacity-80 flex flex-row transition-all duration-300 gap-3 items-center font-medium text-base"
                   >
                     <FaArrowRightLong className="text-xs" />
                     <span>{area.name}</span>

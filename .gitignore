@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Transfer tarballs used to move work onto this machine — build artefacts of
+# the handoff process, not project source. 18MB that would otherwise sit in
+# git history forever.
+_retired/*.tar.gz
+/*.tar.gz
+_to_delete/
