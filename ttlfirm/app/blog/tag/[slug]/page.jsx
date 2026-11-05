@@ -4,7 +4,7 @@ import BlogCard from "@/components/blog/BlogCard";
 import Sidebar from "@/components/blog/Sidebar";
 import PageHeader from "@/components/pages/header";
 
-export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
+export const revalidate = false; // no timed refresh; updates come from a redeploy or /api/revalidate
 
 // A CMS outage at deploy time should not fail the build. Every route here
 // has `revalidate` and leaves `dynamicParams` at its default, so an empty list

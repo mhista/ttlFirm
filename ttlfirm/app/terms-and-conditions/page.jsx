@@ -7,7 +7,7 @@ import { client } from "@/lib/sanity.client";
 import { legalPageBySlugQuery } from "@/lib/sanity.queries";
 import CmsLegalPage from "@components/pages/legal/cmsLegalPage";
 
-export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
+export const revalidate = false; // no timed refresh; updates come from a redeploy or /api/revalidate
 
 async function getDoc() {
   try {

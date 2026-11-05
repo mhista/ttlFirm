@@ -19,7 +19,7 @@ import Script from "next/script";
 import TailoredCTA from "@/components/common/TailoredCTA"; // NEW
 import { filterRetiredAreas, RETIRED_PRACTICE_SLUGS } from "@/lib/siteNav";
 
-export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
+export const revalidate = false; // no timed refresh; updates come from a redeploy or /api/revalidate
 
 // Generate static paths using SLUGS
 // A CMS outage at deploy time should not fail the build. Every route here

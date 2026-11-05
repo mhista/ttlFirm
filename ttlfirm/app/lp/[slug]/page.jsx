@@ -14,7 +14,7 @@ import { FIRM, telHref, LEGAL_LINKS } from "@/lib/siteNav";
 import LandingRenderer from "@components/pages/landing/landingRenderer";
 import Tracking from "@components/common/tracking";
 
-export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
+export const revalidate = false; // no timed refresh; updates come from a redeploy or /api/revalidate
 
 async function getPage(slug) {
   try {

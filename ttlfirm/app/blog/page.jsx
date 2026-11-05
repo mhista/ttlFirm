@@ -116,7 +116,7 @@ export const metadata = {
     "Expert legal insights, news, and advice from experienced attorneys.",
 };
 
-export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
+export const revalidate = false; // no timed refresh; updates come from a redeploy or /api/revalidate
 
 // Every other page in this app degrades to empty rather than throwing when
 // Sanity is unreachable; this one was the exception, and a CMS outage during a

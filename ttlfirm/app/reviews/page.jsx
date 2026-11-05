@@ -9,7 +9,7 @@ import Reveal from "@components/common/reveal";
 import ReviewCard, { Stars } from "@components/common/reviewCard";
 import ReviewForm from "@components/pages/reviews/reviewForm";
 
-export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
+export const revalidate = false; // no timed refresh; updates come from a redeploy or /api/revalidate
 
 export const metadata = {
   title: "Client Reviews",

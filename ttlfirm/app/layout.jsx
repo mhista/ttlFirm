@@ -18,7 +18,7 @@ import { SiteSettingsProvider } from "@/lib/siteSettingsContext";
 // the Nav, StickyNav, and Footer on every page — fetch once here and hand
 // it down via context instead of every page re-fetching it. `revalidate`
 // here also acts as a floor for every route in the app.
-export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
+export const revalidate = false; // no timed refresh; updates come from a redeploy or /api/revalidate
 
 const SITE_DESCRIPTION =
   "New Jersey personal injury and workers' compensation attorney. We represent injured people against insurance companies across New Jersey. Free consultation, no fee unless we recover.";
