@@ -7,7 +7,7 @@ import OfficeGallery from "@components/common/officeGallery";
 import PageHeader from "@components/pages/header";
 import Script from "next/script";
 
-export const revalidate = 60;
+export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
 
 // Fetch page data
 async function getPageData() {

@@ -10,7 +10,7 @@ import { notFound } from "next/navigation";
 import BlogCard from "@/components/blog/BlogCard";
 import PortableTextComponents from "@/components/blog/PortableTextComponents";
 
-export const revalidate = 60;
+export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
 
 // Generate static paths for all blog posts
 // A CMS outage at deploy time should not fail the build. Every route here

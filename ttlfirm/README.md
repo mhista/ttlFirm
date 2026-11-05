@@ -39,7 +39,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 Content is managed in Sanity (studio lives in `/sanity`). Pages fetch their
 content server-side via `lib/sanity.client.js` + queries in
-`lib/sanity.queries.js`, and re-fetch every `revalidate` (60s, set per-page
+`lib/sanity.queries.js`, and re-fetch every `revalidate` (1 hour, set per-page
 and as a floor in `app/layout.jsx`).
 
 Site-wide info (phone, email, address, social links, stats) lives in the

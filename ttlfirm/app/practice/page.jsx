@@ -9,7 +9,7 @@ import { client } from "@/lib/sanity.client";
 import { practiceAreasQuery, siteSettingsQuery } from "@/lib/sanity.queries";
 import { filterRetiredAreas } from "@/lib/siteNav";
 
-export const revalidate = 60;
+export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
 
 export const metadata = {
   title: "Practice Areas | NJ Personal Injury & Workers' Compensation Lawyer",

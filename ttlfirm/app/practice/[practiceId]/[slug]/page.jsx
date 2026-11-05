@@ -20,7 +20,7 @@ import { generateLocalBusinessSchema } from "@/lib/seo";
 import TailoredCTA from "@/components/common/TailoredCTA"; // NEW
 import { filterRetiredAreas, RETIRED_PRACTICE_SLUGS } from "@/lib/siteNav";
 
-export const revalidate = 60;
+export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
 
 // Generate static paths
 // NOTE: this route lives at app/practice/[practiceId]/[slug]/page.jsx, so

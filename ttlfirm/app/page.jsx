@@ -25,7 +25,7 @@ import BlogSection from "@components/pages/home/blogSection";
 import ContactUs from "@components/pages/home/contactUs";
 import OfficeGallery from "@components/common/officeGallery";
 
-export const revalidate = 60;
+export const revalidate = 3600; // an hour; Sanity edits show instantly via /api/revalidate
 
 async function getHomePageData() {
   try {
